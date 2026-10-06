@@ -91,3 +91,4 @@
 .experience-contributions h4{font-family:'Space Grotesk';font-size:14px;font-weight:500;margin:0 0 8px}
 .experience-contributions p{font-size:12px;line-height:1.75;color:var(--muted);margin:0}
 @media(max-width:650px){.experience-tabs button{gap:5px;padding:10px 3px;font-size:10px}.experience-header{gap:12px;align-items:flex-start}.experience-header>img,.experience-people{width:60px;height:60px}.experience-header h3{font-size:21px}.experience-tabs{margin-bottom:20px}}
+.desktop-avatar:focus,.desktop-avatar:focus-visible{outline:none}
