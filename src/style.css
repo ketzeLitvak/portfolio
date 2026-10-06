@@ -28,3 +28,8 @@
 .project-icon-tile{background:#fff;overflow:hidden;border-color:#ffffff50!important}
 .project-icon-tile img{display:block;width:100%;height:100%;padding:6px;object-fit:contain}
 @media(max-width:650px){.app-grid{top:170px;left:5%;width:90%;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:none;grid-auto-flow:row;gap:16px 10px;max-height:calc(100% - 280px);padding:4px 3px 16px}.app-icon{gap:7px}}
+
+.project-list>.notice{padding:0 10px}
+.quick-section .project-list{padding:0}
+.quick-section .folder-head,.quick-section .project-row{padding-left:0;padding-right:0}
+.quick-section .project-list>.notice{padding:0}
