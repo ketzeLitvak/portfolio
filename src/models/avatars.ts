@@ -39,7 +39,8 @@ export const avatarEyebrows: Record<EyebrowVariant, Text> = {
 };
 
 export interface AvatarConfig { name: string; shape: string; expression: ExpressionName; eyes: EyeVariant; mouth: MouthVariant; eyebrows: EyebrowVariant; color: string; }
-export interface SavedAvatar extends AvatarConfig { id: string; }
+export interface AvatarPosition { x: number; y: number; }
+export interface SavedAvatar extends AvatarConfig { id: string; position?: AvatarPosition; }
 export function isAvatarConfig(value: unknown): value is AvatarConfig {
   if (!value || typeof value !== 'object') return false;
   const p = value as Record<string, unknown>;
