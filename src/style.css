@@ -21,7 +21,7 @@
 .project-banner-logo{width:76px;height:76px;padding:9px;background:#fff;border-radius:12px;box-shadow:0 2px 8px #0002}.project-banner:after{border-color:#ffffff20;box-shadow:0 0 0 35px #ffffff05,0 0 0 70px #ffffff03}@media(max-width:650px){.project-banner-logo{width:60px;height:60px;padding:7px}}
 
 /* Desktop shortcuts share a compact, scrollable launcher area. */
-.app-grid{top:24px;left:18px;width:184px;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,max-content);grid-auto-flow:column;gap:12px 8px;max-height:calc(100% - 140px);overflow-y:auto;padding:4px 3px 12px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.app-grid{top:24px;left:18px;width:184px;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(6,max-content);grid-auto-flow:column;gap:12px 8px;max-height:calc(100% - 140px);overflow-y:auto;padding:4px 3px 12px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 .app-icon{min-width:0;justify-content:flex-start;gap:8px;border-radius:9px;line-height:1.35}
 .app-icon>span:last-child{max-width:100%;overflow-wrap:anywhere}
 .app-icon:hover,.app-icon:focus-visible{background:color-mix(in srgb,var(--panel) 65%,transparent)}
@@ -33,3 +33,34 @@
 .quick-section .project-list{padding:0}
 .quick-section .folder-head,.quick-section .project-row{padding-left:0;padding-right:0}
 .quick-section .project-list>.notice{padding:0}
+
+.i-search{background:#dac8aa}
+.search-view h2{font-size:32px;margin-bottom:12px}
+.project-search-input{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;background:var(--bar);padding:0 12px;margin:22px 0 16px;color:var(--muted)}
+.project-search-input:focus-within{border-color:var(--orange)}
+.project-search-input input{width:100%;min-width:0;border:0;background:none;color:var(--ink);font:inherit;font-size:13px;padding:14px 0;outline:none}
+.project-search-input input::-webkit-search-cancel-button{display:none}
+.project-search-input>svg{flex-shrink:0}
+.project-search-input button{display:grid;place-items:center;border:0;background:none;padding:5px;color:var(--muted)}
+.search-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.search-filters label{font-size:10px;color:var(--muted)}
+.search-filters label>span{display:block;position:relative;margin-top:7px}
+.search-filters select{appearance:none;width:100%;padding:10px 32px 10px 10px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink);font-size:11px;cursor:pointer}
+.search-filters label>span>svg{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none}
+.search-results-heading{display:flex;align-items:center;justify-content:space-between;margin:23px 0 12px;color:var(--muted);font-size:10px}
+.search-results-heading p{margin:0}
+.search-results-heading button{display:flex;align-items:center;gap:5px;background:none;border:0;color:var(--muted);font-size:10px;padding:5px}
+.search-result{display:flex;align-items:flex-start;gap:14px;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:15px;margin-bottom:10px}
+.search-result:hover{background:var(--bar);border-color:var(--muted)}
+.search-result>img{width:48px;height:48px;object-fit:contain;background:white;padding:5px;border-radius:10px;flex-shrink:0}
+.search-result>svg{margin-left:auto;flex-shrink:0;color:var(--muted)}
+.search-result-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
+.search-result-title{font-family:'Space Grotesk';font-size:17px;overflow-wrap:anywhere}
+.search-result-description{font-size:11px;color:var(--muted)}
+.search-result-category{font-size:9px;color:var(--muted)}
+.search-result-stack{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.search-result-stack>span{font-size:9px;border:1px solid var(--line);border-radius:20px;padding:3px 7px}
+.search-empty{text-align:center;padding:28px 10px;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
+.search-empty h3{font-size:22px;margin:14px 0 10px;color:var(--ink)}
+.search-empty p{font-size:12px;line-height:1.6}
+@media(max-width:650px){.search-filters{grid-template-columns:1fr;gap:12px}.search-view h2{font-size:28px}.search-result{padding:12px;gap:10px}.dock{gap:3px;padding:8px}.dock .icon-tile{width:36px;height:36px}.search-result>img{width:42px;height:42px}}

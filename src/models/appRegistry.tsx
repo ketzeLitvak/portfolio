@@ -1,9 +1,10 @@
-import { ArrowUpRight, FolderOpen, UserRound, Smile, Braces, Mail, LayoutGrid } from 'lucide-react';
+import { ArrowUpRight, FolderOpen, UserRound, Smile, Braces, Mail, LayoutGrid, Search } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ComponentType } from 'react';
 import type { Text } from './types';
 import type { ViewProps } from './viewProps';
 import { projects } from './projects';
+import { ProjectSearchView } from '../views/ProjectSearchView';
 import { WelcomeView } from '../views/WelcomeView';
 import { ProjectListView, ProjectDetailView, projectIcons } from '../views/ProjectViews';
 import { ProfileView, ContactView, QuickView } from '../views/ProfileViews';
@@ -11,6 +12,7 @@ import { AvatarView, ToolsView } from '../views/PlaygroundViews';
 export interface AppDefinition { title: Text; icon: LucideIcon; view: ComponentType<ViewProps>; launcher?: boolean; }
 export const appRegistry: Record<string, AppDefinition> = {
   welcome: { title: ['Start here', 'Empezá acá'], icon: ArrowUpRight, view: WelcomeView, launcher: true },
+  search: { title: ['Search', 'Buscador'], icon: Search, view: ProjectSearchView, launcher: true },
   projects: { title: ['Projects', 'Proyectos'], icon: FolderOpen, view: ProjectListView, launcher: true },
   profile: { title: ['About me', 'Sobre mí'], icon: UserRound, view: ProfileView, launcher: true },
   avatar: { title: ['Avatar lab', 'Avatar lab'], icon: Smile, view: AvatarView, launcher: true },
