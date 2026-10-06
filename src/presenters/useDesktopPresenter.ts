@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Language, Theme, WindowState } from '../models/types';
 import { readPreference, savePreference } from '../models/types';
 export function useDesktopPresenter() {
+  const [activeMenu, setActiveMenu] = useState<'language' | 'theme' | null>(null);
+  useEffect(() => { const outside = (event: PointerEvent) => { if (event.target instanceof Element && !event.target.closest('.system-option')) setActiveMenu(null); }; document.addEventListener('pointerdown', outside); return () => document.removeEventListener('pointerdown', outside); }, []);
   const [language, setLanguage] = useState<Language>(() => readPreference('portfolio-language', 'en') === 'es' ? 'es' : 'en');
   const [theme, setTheme] = useState<Theme>(() => { const saved = readPreference('portfolio-theme', 'dark'); return saved === 'light' || saved === 'auto' ? saved : 'dark'; });
   const [systemDark, setSystemDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -31,7 +33,7 @@ export function useDesktopPresenter() {
   const maximize = useCallback((id: string) => setWindows(previous => previous.map(w => w.id === id ? { ...w, maximized: !w.maximized } : w)), []);
   const move = useCallback((id: string, left: number, top: number, width: number) => setWindows(previous => previous.map(w => w.id === id ? { ...w, left: Math.max(0, Math.min(innerWidth - width, left)), top: Math.max(0, Math.min(innerHeight - 190, top)) } : w)), []);
   const resize = useCallback((id: string, width: number, height: number) => setWindows(previous => previous.map(w => w.id === id && !w.maximized && (w.width !== width || w.height !== height) ? { ...w, width, height } : w)), []);
-  useEffect(() => { const onKey = (event: KeyboardEvent) => { if (event.key !== 'Escape') return; const top = windows.filter(w => !w.minimized).sort((a, b) => b.z - a.z)[0]; if (top) close(top.id); }; document.addEventListener('keydown', onKey); return () => document.removeEventListener('keydown', onKey); }, [windows, close]);
-  return { language, theme, dark, setLanguage, setTheme, clock, windows, focus, open, close, minimize, maximize, move, resize };
+  useEffect(() => { const onKey = (event: KeyboardEvent) => { if (event.key !== 'Escape') return; if (activeMenu) { setActiveMenu(null); return; } const top = windows.filter(w => !w.minimized).sort((a, b) => b.z - a.z)[0]; if (top) close(top.id); }; document.addEventListener('keydown', onKey); return () => document.removeEventListener('keydown', onKey); }, [windows, close, activeMenu]);
+  return { activeMenu, setActiveMenu, language, theme, dark, setLanguage, setTheme, clock, windows, focus, open, close, minimize, maximize, move, resize };
 }
 export type DesktopPresenter = ReturnType<typeof useDesktopPresenter>;
