@@ -31,7 +31,7 @@ export const experiences: ExperienceEntry[] = [
   {
     id: 'leadership', tab: ['Leadership', 'Liderazgo'], organization: ['Círculo Social Hebreo Argentino', 'Círculo Social Hebreo Argentino'],
     role: ['Youth leadership & nonformal education', 'Liderazgo juvenil y educación no formal'],
-    period: ['January 2021 — December 2025', 'Enero 2021 — Diciembre 2025'],
+    period: ['January 2021 — December 2025', 'Enero 2021 — Diciembre 2025'], logo: './assets/circulo-logo.jpg',
     summary: ['Five years planning and facilitating educational activities for children, combining group leadership, play and learning.', 'Cinco años planificando y coordinando actividades educativas para chicos, combinando conducción de grupos, juego y aprendizaje.'],
     contributions: [
       { title: ['Activities with a purpose', 'Actividades con propósito'], description: ['Planned and facilitated educational activities that promoted teamwork and values through play.', 'Planifiqué y coordiné actividades educativas que promovían el trabajo en equipo y los valores a través del juego.'] },
