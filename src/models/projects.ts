@@ -2,6 +2,7 @@ import type { Project } from "./types";
 export const projects: Record<string, Project> = {
   "chilta": {
     "title": "Chilta",
+    "logo": "./assets/chilta-logo.png",
     "color": "#388697",
     "symbol": "↗",
     "subtitle": [
@@ -33,6 +34,7 @@ export const projects: Record<string, Project> = {
   },
   "radix": {
     "title": "Radix",
+    "logo": "./assets/radix-logo.png",
     "color": "#718459",
     "symbol": "◈",
     "subtitle": [
@@ -66,6 +68,7 @@ export const projects: Record<string, Project> = {
   },
   "gira": {
     "title": "GiraFutbolera",
+    "logo": "./assets/gira-logo.png",
     "color": "#bf704e",
     "symbol": "↔",
     "subtitle": [
@@ -92,6 +95,7 @@ export const projects: Record<string, Project> = {
   },
   "faceshape": {
     "title": "faceshape-react",
+    "logo": "./assets/faceshape-icon.svg",
     "color": "#b58f45",
     "symbol": "☺",
     "subtitle": [
@@ -120,6 +124,7 @@ export const projects: Record<string, Project> = {
   },
   "ketze": {
     "title": "Ketze Tools",
+    "logo": "./assets/ketze-tools-logo.png",
     "color": "#598e94",
     "symbol": "{ }",
     "subtitle": [
@@ -141,7 +146,6 @@ export const projects: Record<string, Project> = {
     "stack": [
       "Next.js"
     ],
-    "url": "https://ketze.com.ar",
-    "extra": "tools"
+    "url": "https://ketze.com.ar"
   }
 };

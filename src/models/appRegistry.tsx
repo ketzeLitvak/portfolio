@@ -14,7 +14,7 @@ export const appRegistry: Record<string, AppDefinition> = {
   projects: { title: ['Projects', 'Proyectos'], icon: FolderOpen, view: ProjectListView, launcher: true },
   profile: { title: ['About me', 'Sobre mí'], icon: UserRound, view: ProfileView, launcher: true },
   avatar: { title: ['Avatar lab', 'Avatar lab'], icon: Smile, view: AvatarView, launcher: true },
-  tools: { title: ['Toolbox', 'Herramientas'], icon: Braces, view: ToolsView, launcher: true },
+  tools: { title: ['Ketze Tools', 'Ketze Tools'], icon: Braces, view: ToolsView, launcher: true },
   contact: { title: ['Let’s talk', 'Hablemos'], icon: Mail, view: ContactView, launcher: true },
   quick: { title: ['Quick view', 'Vista rápida'], icon: LayoutGrid, view: QuickView },
   ...Object.fromEntries(Object.entries(projects).map(([id, project]) => [id, { title: [project.title, project.title] as Text, icon: projectIcons[id], view: (props: ViewProps) => <ProjectDetailView {...props} id={id}/> }]))

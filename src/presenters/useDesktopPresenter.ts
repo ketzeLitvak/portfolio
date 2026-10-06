@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Language, WindowState } from '../models/types';
+import type { Language, Theme, WindowState } from '../models/types';
 import { readPreference, savePreference } from '../models/types';
 export function useDesktopPresenter() {
   const [language, setLanguage] = useState<Language>(() => readPreference('portfolio-language', 'en') === 'es' ? 'es' : 'en');
-  const [dark, setDark] = useState(() => readPreference('portfolio-theme', 'dark') !== 'light');
+  const [theme, setTheme] = useState<Theme>(() => { const saved = readPreference('portfolio-theme', 'dark'); return saved === 'light' || saved === 'auto' ? saved : 'dark'; });
+  const [systemDark, setSystemDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const dark = theme === 'auto' ? systemDark : theme === 'dark';
+  useEffect(() => { const media = window.matchMedia('(prefers-color-scheme: dark)'); const update = () => setSystemDark(media.matches); update(); media.addEventListener('change', update); return () => media.removeEventListener('change', update); }, []);
   const initialWindows = () => window.innerWidth <= 650 ? [] : [
     { id: 'projects', left: window.innerWidth > 1100 ? window.innerWidth - 425 : 150, top: 155, width: 370, height: 495, z: 11, minimized: false, maximized: false },
     { id: 'welcome', left: window.innerWidth > 1100 ? 220 : 150, top: 62, width: 560, height: 445, z: 12, minimized: false, maximized: false }
@@ -12,7 +15,8 @@ export function useDesktopPresenter() {
   const z = useRef(12);
   const [clock, setClock] = useState('');
   useEffect(() => { document.documentElement.lang = language; savePreference('portfolio-language', language); }, [language]);
-  useEffect(() => { document.body.classList.toggle('dark', dark); savePreference('portfolio-theme', dark ? 'dark' : 'light'); }, [dark]);
+  useEffect(() => { document.body.classList.toggle('dark', dark); }, [dark]);
+  useEffect(() => { savePreference('portfolio-theme', theme); }, [theme]);
   useEffect(() => { const update = () => setClock(new Intl.DateTimeFormat(language === 'es' ? 'es-AR' : 'en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Argentina/Buenos_Aires' }).format(new Date())); update(); const timer = setInterval(update, 30000); return () => clearInterval(timer); }, [language]);
   const focus = useCallback((id: string) => { const nextZ = ++z.current; setWindows(previous => previous.map(w => w.id === id ? { ...w, minimized: false, z: nextZ } : w)); }, []);
   const open = useCallback((id: string) => { const nextZ = ++z.current; setWindows(previous => {
@@ -28,6 +32,6 @@ export function useDesktopPresenter() {
   const move = useCallback((id: string, left: number, top: number, width: number) => setWindows(previous => previous.map(w => w.id === id ? { ...w, left: Math.max(0, Math.min(innerWidth - width, left)), top: Math.max(0, Math.min(innerHeight - 190, top)) } : w)), []);
   const resize = useCallback((id: string, width: number, height: number) => setWindows(previous => previous.map(w => w.id === id && !w.maximized && (w.width !== width || w.height !== height) ? { ...w, width, height } : w)), []);
   useEffect(() => { const onKey = (event: KeyboardEvent) => { if (event.key !== 'Escape') return; const top = windows.filter(w => !w.minimized).sort((a, b) => b.z - a.z)[0]; if (top) close(top.id); }; document.addEventListener('keydown', onKey); return () => document.removeEventListener('keydown', onKey); }, [windows, close]);
-  return { language, dark, clock, windows, focus, open, close, minimize, maximize, move, resize, toggleLanguage: () => setLanguage(l => l === 'en' ? 'es' : 'en'), toggleTheme: () => setDark(d => !d) };
+  return { language, theme, dark, setLanguage, setTheme, clock, windows, focus, open, close, minimize, maximize, move, resize };
 }
 export type DesktopPresenter = ReturnType<typeof useDesktopPresenter>;
