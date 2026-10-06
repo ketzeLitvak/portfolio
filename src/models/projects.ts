@@ -1,0 +1,147 @@
+import type { Project } from "./types";
+export const projects: Record<string, Project> = {
+  "chilta": {
+    "title": "Chilta",
+    "color": "#388697",
+    "symbol": "↗",
+    "subtitle": [
+      "Live commerce, end to end",
+      "Live commerce, de punta a punta"
+    ],
+    "role": [
+      "Sole developer",
+      "Desarrollo individual"
+    ],
+    "description": [
+      "A live shopping platform bringing live streams, chat, events, direct sales and auctions into one experience.",
+      "Una plataforma de live shopping que reúne transmisiones, chat, eventos, ventas directas y subastas."
+    ],
+    "contribution": [
+      "Designed and developed the entire product independently, including the frontend, backend, product catalog and Tiendanube integration.",
+      "Diseñé y desarrollé el producto completo de forma individual: frontend, backend, catálogo e integración con Tiendanube."
+    ],
+    "stack": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Node.js",
+      "LiveKit",
+      "Supabase",
+      "Redis"
+    ],
+    "url": "https://chilta.com.ar"
+  },
+  "radix": {
+    "title": "Radix",
+    "color": "#718459",
+    "symbol": "◈",
+    "subtitle": [
+      "Location intelligence",
+      "Inteligencia de ubicaciones"
+    ],
+    "role": [
+      "Team project · UTN capstone",
+      "Proyecto en equipo · Proyecto final UTN"
+    ],
+    "description": [
+      "A platform for evaluating commercial locations through scoring, map exploration, alerts, reports and simulations. Design began in April 2026; development began around June.",
+      "Una plataforma para evaluar ubicaciones comerciales mediante puntuaciones, mapas, alertas, informes y simulaciones. El diseño comenzó en abril de 2026 y la programación aproximadamente en junio."
+    ],
+    "contribution": [
+      "Built the frontend, a substantial part of the backend and the application design. Contributed ideas to the data infrastructure within the team.",
+      "Desarrollé el frontend, gran parte del backend y el diseño de la aplicación. Aporté ideas a la infraestructura de datos dentro del equipo."
+    ],
+    "stack": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Python",
+      "Supabase"
+    ],
+    "status": [
+      "In development",
+      "En desarrollo"
+    ]
+  },
+  "gira": {
+    "title": "GiraFutbolera",
+    "color": "#bf704e",
+    "symbol": "↔",
+    "subtitle": [
+      "The system behind the game",
+      "El sistema detrás del juego"
+    ],
+    "role": [
+      "Two developers · Four months",
+      "Dos desarrolladores · Cuatro meses"
+    ],
+    "description": [
+      "The public website and complete administration system supporting the business.",
+      "La web pública y el sistema de administración completo que sostiene el negocio."
+    ],
+    "contribution": [
+      "Co-developed the platform with another developer in four months. Built management for teams, matches, tours and business configuration, with Supabase for authentication and the database.",
+      "Desarrollamos la plataforma entre dos programadores en cuatro meses. Construimos la gestión de equipos, partidos, tours y configuraciones del negocio, con Supabase para autenticación y base de datos."
+    ],
+    "stack": [
+      "Next.js",
+      "Supabase"
+    ],
+    "url": "https://girafutbolera.com.ar"
+  },
+  "faceshape": {
+    "title": "faceshape-react",
+    "color": "#b58f45",
+    "symbol": "☺",
+    "subtitle": [
+      "Composable SVG characters",
+      "Personajes SVG combinables"
+    ],
+    "role": [
+      "Open source · AI experiment",
+      "Código abierto · Experimento con IA"
+    ],
+    "description": [
+      "A React library for customizable SVG avatars and animated facial expressions. An experiment using AI exclusively to generate the implementation.",
+      "Una biblioteca React de avatares SVG personalizables y expresiones animadas. Un experimento con implementación generada exclusivamente por IA."
+    ],
+    "contribution": [
+      "Directed iterative development of composable shapes, expressions, documentation and an interactive demo.",
+      "Dirigí el desarrollo iterativo de formas combinables, expresiones, documentación y una demo interactiva."
+    ],
+    "stack": [
+      "React",
+      "TypeScript",
+      "SVG"
+    ],
+    "url": "https://github.com/ketzeLitvak/faceshape-react",
+    "extra": "avatar"
+  },
+  "ketze": {
+    "title": "Ketze Tools",
+    "color": "#598e94",
+    "symbol": "{ }",
+    "subtitle": [
+      "Small tools, useful outcomes",
+      "Pequeñas herramientas, resultados útiles"
+    ],
+    "role": [
+      "Personal project · Since January 2024",
+      "Proyecto personal · Desde enero 2024"
+    ],
+    "description": [
+      "An evolving collection of developer utilities built with Next.js.",
+      "Una colección de utilidades para desarrolladores hecha con Next.js que sigue creciendo."
+    ],
+    "contribution": [
+      "Develop and maintain the website, adding tools as the project evolves.",
+      "Desarrollo y mantengo la web, incorporando herramientas a medida que evoluciona el proyecto."
+    ],
+    "stack": [
+      "Next.js"
+    ],
+    "url": "https://ketze.com.ar",
+    "extra": "tools"
+  }
+};
