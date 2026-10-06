@@ -35,7 +35,7 @@ export const projects: Record<string, Project> = {
   "radix": {
     "title": "Radix",
     "logo": "./assets/radix-logo.png",
-    "color": "#718459",
+    "color": "#00244b",
     "symbol": "◈",
     "subtitle": [
       "Location intelligence",
@@ -69,7 +69,7 @@ export const projects: Record<string, Project> = {
   "gira": {
     "title": "GiraFutbolera",
     "logo": "./assets/gira-logo.png",
-    "color": "#bf704e",
+    "color": "#30b028",
     "symbol": "↔",
     "subtitle": [
       "The system behind the game",
@@ -96,7 +96,7 @@ export const projects: Record<string, Project> = {
   "faceshape": {
     "title": "faceshape-react",
     "logo": "./assets/faceshape-icon.svg",
-    "color": "#b58f45",
+    "color": "#388697",
     "symbol": "☺",
     "subtitle": [
       "Composable SVG characters",
@@ -125,7 +125,7 @@ export const projects: Record<string, Project> = {
   "ketze": {
     "title": "Ketze Tools",
     "logo": "./assets/ketze-tools-logo.png",
-    "color": "#598e94",
+    "color": "#006880",
     "symbol": "{ }",
     "subtitle": [
       "Small tools, useful outcomes",
