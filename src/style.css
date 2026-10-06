@@ -6,3 +6,8 @@
 
 .brand-name{display:flex;flex-direction:column;gap:1px;font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600;line-height:1.05;letter-spacing:-.3px}.brand-ketze{color:#dc2626}.brand-studio{color:var(--ink)}@media(max-width:650px){.brand-name{font-size:13px}}
 .window-actions button{display:grid;place-items:center}.window-title>svg{color:var(--orange)}.dark .window-title>svg{color:#f87171}.project-body>.btn+.btn{margin-left:8px}.project-counter+.arrow{flex-shrink:0}.dock .icon-tile svg{width:23px;height:23px}.brand-name{min-width:49px}@media(max-width:650px){.system-menu #quick span{display:none}}
+.window-content,.window-content *{scrollbar-color:var(--bar) var(--panel);scrollbar-width:thin}
+.window-content::-webkit-scrollbar,.window-content *::-webkit-scrollbar{width:8px;height:8px}
+.window-content::-webkit-scrollbar-track,.window-content *::-webkit-scrollbar-track{background:var(--panel)}
+.window-content::-webkit-scrollbar-thumb,.window-content *::-webkit-scrollbar-thumb{background:var(--bar);border:1px solid var(--line);border-radius:8px}
+.window-content::-webkit-scrollbar-corner,.window-content *::-webkit-scrollbar-corner{background:var(--panel)}
