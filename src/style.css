@@ -21,7 +21,7 @@
 .project-banner-logo{width:76px;height:76px;padding:9px;background:#fff;border-radius:12px;box-shadow:0 2px 8px #0002}.project-banner:after{border-color:#ffffff20;box-shadow:0 0 0 35px #ffffff05,0 0 0 70px #ffffff03}@media(max-width:650px){.project-banner-logo{width:60px;height:60px;padding:7px}}
 
 /* Desktop shortcuts fill columns based on the available screen height. */
-.app-grid{top:24px;left:18px;width:max-content;height:calc(100% - 120px);grid-template-columns:none;grid-template-rows:repeat(auto-fill,96px);grid-auto-columns:88px;grid-auto-flow:column;align-content:start;gap:12px 8px;max-height:none;overflow:visible;padding:4px 3px}
+.app-grid{top:24px;left:18px;width:calc(100% - 36px);height:calc(100% - 120px);grid-template-columns:repeat(auto-fill,88px);grid-template-rows:repeat(auto-fill,96px);grid-auto-columns:88px;grid-auto-flow:column;align-content:start;gap:12px 8px;max-height:none;overflow:visible;padding:4px 3px}
 .app-icon{min-width:0;justify-content:flex-start;gap:8px;border-radius:9px;line-height:1.35}
 .app-icon>span:last-child{max-width:100%;overflow-wrap:anywhere}
 .app-icon:hover,.app-icon:focus-visible{background:color-mix(in srgb,var(--panel) 65%,transparent)}
@@ -99,3 +99,5 @@
 .search-result-kind{font-size:8px;text-transform:uppercase;letter-spacing:.8px;color:var(--orange)}
 
 .contact-link{align-items:center;gap:12px}.contact-link .contact-link-label{display:flex;align-items:center;gap:10px;color:var(--ink)}.contact-link-label>svg{flex-shrink:0;color:var(--muted)}
+
+.app-grid .app-icon{position:relative;touch-action:none;user-select:none;cursor:grab}.app-grid .app-icon[data-dragging=true]{cursor:grabbing;background:var(--glass);box-shadow:var(--shadow)}.app-grid .app-icon[data-dragging=true] .icon-tile{transform:none}.shortcut-drop-target{border:1px dashed var(--orange);background:color-mix(in srgb,var(--orange) 10%,transparent);border-radius:9px;pointer-events:none}
