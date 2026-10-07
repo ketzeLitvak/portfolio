@@ -12,10 +12,10 @@ export const experiences: ExperienceEntry[] = [
     summary: ['Contribute to the design and development of Acquirer in a Box, working across internal tools, backend services and payment security.', 'Participo en el diseño y desarrollo de Acquirer in a Box, trabajando en herramientas internas, servicios backend y seguridad de pagos.'],
     contributions: [
       { title: ['Backend & payment security', 'Backend y seguridad de pagos'], description: ['Developed services with C#/.NET and Python, including payment security services supporting MPoC certification requirements.', 'Desarrollé servicios con C#/.NET y Python, incluidos servicios de seguridad de pagos que acompañan los requisitos de certificación MPoC.'] },
-      { title: ['Interfaces & access control', 'Interfaces y control de acceso'], description: ['Developed the internal backoffice and React microfrontends with TypeScript. Worked with SpiceDB for authorization and access control across services.', 'Desarrollé el backoffice interno y microfrontends React con TypeScript. Trabajé con SpiceDB para autorización y control de acceso entre servicios.'] },
-      { title: ['Quality in the delivery pipeline', 'Calidad en el proceso de entrega'], description: ['Used SonarQube results in CI/CD to review findings and correct issues in the code.', 'Usé los resultados de SonarQube en CI/CD para revisar hallazgos y corregir problemas en el código.'] },
+      { title: ['Backoffice & microfrontends', 'Backoffice y microfrontends'], description: ['Developed the internal backoffice and React microfrontends using TypeScript as part of Acquirer in a Box.', 'Desarrollé el backoffice interno y microfrontends React con TypeScript como parte de Acquirer in a Box.'] },
+      { title: ['Authorization & access control', 'Autorización y control de acceso'], description: ['Contributed to authorization and access control across platform services, working with SpiceDB.', 'Contribuí a la autorización y el control de acceso entre los servicios de la plataforma, trabajando con SpiceDB.'] },
     ],
-    skills: ['C#', '.NET', 'Python', 'React', 'TypeScript', 'SpiceDB', 'SonarQube'],
+    skills: ['C#', '.NET', 'Python', 'React', 'TypeScript', 'SpiceDB'],
   },
   {
     id: 'utn', tab: ['UTN', 'UTN'], organization: ['UTN Buenos Aires', 'UTN Buenos Aires'],
