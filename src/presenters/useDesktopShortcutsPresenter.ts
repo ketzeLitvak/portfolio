@@ -14,20 +14,23 @@ function loadPositions(): { desktop: Positions; mobile: Positions } {
     return { desktop: valid(saved?.desktop), mobile: valid(saved?.mobile) };
   } catch { return { desktop: {}, mobile: {} }; }
 }
-function resolvePositions(ids: string[], saved: Positions, capacity: number): Positions {
+function resolvePositions(ids: string[], saved: Positions, layout: Layout, basicCount: number): Positions {
+  const capacity = layout.columns * layout.rows;
   const result: Positions = {}, used = new Set<number>();
   for (const id of ids) {
     const slot = saved[id];
     if (slot !== undefined && slot < capacity && !used.has(slot)) { result[id] = slot; used.add(slot); }
   }
-  let slot = 0;
-  for (const id of ids) if (result[id] === undefined) {
+  const projectStart = Math.ceil(basicCount / layout.rows) * layout.rows;
+  for (const [index, id] of ids.entries()) if (result[id] === undefined) {
+    const preferred = layout.mobile || index < basicCount ? index : projectStart + index - basicCount;
+    let slot = preferred < capacity && !used.has(preferred) ? preferred : 0;
     while (used.has(slot)) slot++;
     result[id] = slot; used.add(slot);
   }
   return result;
 }
-export function useDesktopShortcutsPresenter(ids: string[], open: (id: string) => void) {
+export function useDesktopShortcutsPresenter(ids: string[], basicCount: number, open: (id: string) => void) {
   const gridRef = useRef<HTMLElement>(null);
   const [layout, setLayout] = useState<Layout>({ columns: 12, rows: 1, mobile: false });
   const [saved, setSaved] = useState(loadPositions);
@@ -44,7 +47,7 @@ export function useDesktopShortcutsPresenter(ids: string[], open: (id: string) =
       const height = grid.clientHeight - parseFloat(css.paddingTop) - parseFloat(css.paddingBottom);
       const next = {
         columns: mobile ? 3 : Math.max(1, Math.floor((width + parseFloat(css.columnGap)) / (88 + parseFloat(css.columnGap)))),
-        rows: mobile ? 4 : Math.max(1, Math.floor((height + parseFloat(css.rowGap)) / (96 + parseFloat(css.rowGap)))),
+        rows: mobile ? 4 : Math.max(1, Math.floor((height + parseFloat(css.rowGap)) / (76 + parseFloat(css.rowGap)))),
         mobile,
       };
       setLayout(previous => previous.columns === next.columns && previous.rows === next.rows && previous.mobile === next.mobile ? previous : next);
@@ -55,7 +58,7 @@ export function useDesktopShortcutsPresenter(ids: string[], open: (id: string) =
   }, []);
   useEffect(() => { savePreference(storageKey, JSON.stringify(saved)); }, [saved]);
   const mode = layout.mobile ? 'mobile' : 'desktop';
-  const positions = useMemo(() => resolvePositions(ids, saved[mode], layout.columns * layout.rows), [ids, saved, mode, layout]);
+  const positions = useMemo(() => resolvePositions(ids, saved[mode], layout, basicCount), [ids, saved, mode, layout, basicCount]);
   const cellStyle = (slot: number): CSSProperties => ({
     gridColumn: layout.mobile ? slot % layout.columns + 1 : Math.floor(slot / layout.rows) + 1,
     gridRow: layout.mobile ? Math.floor(slot / layout.columns) + 1 : slot % layout.rows + 1,
@@ -114,5 +117,5 @@ export function useDesktopShortcutsPresenter(ids: string[], open: (id: string) =
     onLostPointerCapture: () => { dragRef.current = null; setDrag(null); },
     onClick: () => { if (suppressClick.current === id) { suppressClick.current = null; return; } open(id); },
   });
-  return { gridRef, buttonProps, dropStyle: drag?.moved && drag.target !== null ? cellStyle(drag.target) : null };
+  return { gridRef, gridStyle: { gridTemplateRows: `repeat(${layout.rows}, minmax(0, 1fr))` }, buttonProps, dropStyle: drag?.moved && drag.target !== null ? cellStyle(drag.target) : null };
 }
