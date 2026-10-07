@@ -1,6 +1,6 @@
 import { useSavedAvatarsPresenter } from './useSavedAvatarsPresenter';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Language, Theme, WindowState } from '../models/types';
+import type { Language, Theme, WindowState, AppOpenOptions } from '../models/types';
 import { readPreference, savePreference } from '../models/types';
 export function useDesktopPresenter() {
   const avatars = useSavedAvatarsPresenter();
@@ -23,12 +23,12 @@ export function useDesktopPresenter() {
   useEffect(() => { savePreference('portfolio-theme', theme); }, [theme]);
   useEffect(() => { const update = () => setClock(new Intl.DateTimeFormat(language === 'es' ? 'es-AR' : 'en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Argentina/Buenos_Aires' }).format(new Date())); update(); const timer = setInterval(update, 30000); return () => clearInterval(timer); }, [language]);
   const focus = useCallback((id: string) => { const nextZ = ++z.current; setWindows(previous => previous.map(w => w.id === id ? { ...w, minimized: false, z: nextZ } : w)); }, []);
-  const open = useCallback((id: string) => { const nextZ = ++z.current; setWindows(previous => {
-    if (previous.some(w => w.id === id)) return previous.map(w => w.id === id ? { ...w, minimized: false, z: nextZ } : w);
+  const open = useCallback((id: string, options?: AppOpenOptions) => { const nextZ = ++z.current; const target = id === 'experience' && options?.experience ? { experienceTarget: { id: options.experience, revision: nextZ } } : {}; setWindows(previous => {
+    if (previous.some(w => w.id === id)) return previous.map(w => w.id === id ? { ...w, ...target, minimized: false, z: nextZ } : w);
     const count = previous.length; let left = Math.min(190 + count * 34, Math.max(150, innerWidth - 690)); let top = Math.min(35 + count * 24, innerHeight - 260); let width = 660; let height = 510;
     if (id === 'welcome') { left = innerWidth > 1100 ? 220 : 150; top = 62; width = 560; height = 445; }
     if (id === 'projects') { width = 370; height = 495; if (innerWidth > 1100) { left = innerWidth - 425; top = 155; } }
-    return [...previous, { id, left, top, width, height, z: nextZ, minimized: false, maximized: false }];
+    return [...previous, { id, left, top, width, height, z: nextZ, minimized: false, maximized: false, ...target }];
   }); }, []);
   const close = useCallback((id: string) => setWindows(previous => previous.filter(w => w.id !== id)), []);
   const minimize = useCallback((id: string) => setWindows(previous => previous.map(w => w.id === id ? { ...w, minimized: true } : w)), []);
