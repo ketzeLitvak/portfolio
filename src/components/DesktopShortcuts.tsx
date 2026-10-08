@@ -1,19 +1,13 @@
-import { launcherApps } from '../models/appRegistry';
-import { projects } from '../models/projects';
-import { translate } from '../models/types';
-import type { Language } from '../models/types';
-import { useDesktopShortcutsPresenter } from '../presenters/useDesktopShortcutsPresenter';
-const apps = launcherApps.filter(([id]) => id !== 'tools');
-const projectEntries = Object.entries(projects);
-const ids = [...apps.map(([id]) => id), ...projectEntries.map(([id]) => id)];
+import { desktopApps as apps, desktopProjects as projectEntries } from '../models/desktopShortcuts';
+import { translate, type Language } from '../models/types';
+import type { useDesktopShortcutsPresenter } from '../presenters/useDesktopShortcutsPresenter';
 export function DesktopShortcuts({
   language,
-  open,
+  presenter: p,
 }: {
   language: Language;
-  open: (id: string) => void;
+  presenter: ReturnType<typeof useDesktopShortcutsPresenter>;
 }) {
-  const p = useDesktopShortcutsPresenter(ids, apps.length, open);
   return (
     <section
       ref={p.gridRef}

@@ -209,7 +209,9 @@ export function useDesktopShortcutsPresenter(
       open(id);
     },
   });
+  const reset = () => setSaved((value) => ({ ...value, [mode]: {} }));
   return {
+    reset,
     gridRef,
     gridStyle: { gridTemplateRows: `repeat(${layout.rows}, minmax(0, 1fr))` },
     buttonProps,

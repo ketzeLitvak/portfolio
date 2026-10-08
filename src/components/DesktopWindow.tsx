@@ -24,6 +24,7 @@ export function DesktopWindow({
       ref={p.ref}
       className={`window ${state.minimized ? 'minimized' : ''} ${state.maximized ? 'maximized' : ''} ${focused ? 'focused' : ''}`}
       data-app={state.id}
+      tabIndex={-1}
       role="region"
       aria-label={title}
       style={{

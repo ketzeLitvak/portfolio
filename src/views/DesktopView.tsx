@@ -1,3 +1,18 @@
+import {
+  ArrowUpRight,
+  ExternalLink,
+  RotateCcw,
+  Search,
+  Minus,
+  Square,
+  Copy,
+  X,
+  PanelTop,
+} from 'lucide-react';
+import type { MouseEvent } from 'react';
+import { appRegistry } from '../models/appRegistry';
+import { projects } from '../models/projects';
+import { DesktopContextMenu } from '../components/DesktopContextMenu';
 import { LayoutGrid, Sun, Moon, Monitor, Languages, Check } from 'lucide-react';
 import { translate } from '../models/types';
 import { launcherApps } from '../models/appRegistry';
@@ -8,8 +23,71 @@ import { DesktopWindow } from '../components/DesktopWindow';
 export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
   const t = (en: string, es: string) => translate(p.language, [en, es]);
   const topZ = Math.max(0, ...p.windows.filter((w) => !w.minimized).map((w) => w.z));
+  const contextMenu = (event: MouseEvent<HTMLDivElement>) => {
+    if (!(event.target instanceof Element)) return;
+    const target = event.target;
+    if (target.closest('.desktop-context-menu')) return;
+    const icon = target.closest<HTMLElement>('[data-open]');
+    const windowElement = target.closest<HTMLElement>('[data-app]');
+    if (windowElement) {
+      if (target.closest('input, textarea, select, a, [contenteditable="true"]')) return;
+      const id = windowElement.dataset.app!;
+      const state = p.windows.find((window) => window.id === id);
+      if (!state) return;
+      p.contextMenu.show(event, translate(p.language, appRegistry[id].title), [
+        { label: t('Bring to front', 'Traer al frente'), icon: PanelTop, run: () => p.focus(id) },
+        { label: t('Minimize', 'Minimizar'), icon: Minus, run: () => p.minimize(id) },
+        {
+          label: state.maximized
+            ? t('Restore size', 'Restaurar tamaño')
+            : t('Maximize', 'Maximizar'),
+          icon: state.maximized ? Copy : Square,
+          run: () => p.maximize(id),
+          disabled: innerWidth <= 650,
+        },
+        { label: t('Close window', 'Cerrar ventana'), icon: X, run: () => p.close(id) },
+      ]);
+    } else if (icon) {
+      const id = icon.dataset.open!;
+      if (!appRegistry[id]) return;
+      const actions = [{ label: t('Open', 'Abrir'), icon: ArrowUpRight, run: () => p.open(id) }];
+      const project = projects[id];
+      if (project?.url)
+        p.contextMenu.show(event, translate(p.language, appRegistry[id].title), [
+          ...actions,
+          { label: t('Visit project', 'Visitar proyecto'), icon: ExternalLink, href: project.url },
+          ...(p.windows.some((window) => window.id === id)
+            ? [{ label: t('Close window', 'Cerrar ventana'), icon: X, run: () => p.close(id) }]
+            : []),
+        ]);
+      else p.contextMenu.show(event, translate(p.language, appRegistry[id].title), actions);
+    } else if (target.closest('main') && !target.closest('.desktop-avatar')) {
+      p.contextMenu.show(event, t('Desktop', 'Escritorio'), [
+        { label: t('Search', 'Buscar'), icon: Search, run: () => p.open('search') },
+        { label: t('Quick view', 'Vista rápida'), icon: LayoutGrid, run: () => p.open('quick') },
+        {
+          label: t('Restore icon layout', 'Restaurar distribución de iconos'),
+          icon: RotateCcw,
+          run: p.shortcuts.reset,
+        },
+        {
+          label: t('Minimize all windows', 'Minimizar todas las ventanas'),
+          icon: Minus,
+          run: p.minimizeAll,
+          disabled: !p.windows.some((window) => !window.minimized),
+        },
+        {
+          label: t('Close all windows', 'Cerrar todas las ventanas'),
+          icon: X,
+          run: p.closeAll,
+          disabled: !p.windows.length,
+        },
+      ]);
+    }
+    p.setActiveMenu(null);
+  };
   return (
-    <div id="desktop">
+    <div id="desktop" onContextMenu={contextMenu}>
       <header className="menubar">
         <a
           href="#"
@@ -132,7 +210,7 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
           <time id="clock">{p.clock}</time>
         </div>
       </header>
-      <main>
+      <main tabIndex={-1}>
         <div className="wallpaper" aria-hidden="true">
           <div className="wallpaper-word">
             KETZE
@@ -142,7 +220,7 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
           <div className="orb orb-one" />
           <div className="orb orb-two" />
         </div>
-        <DesktopShortcuts language={p.language} open={p.open} />
+        <DesktopShortcuts language={p.language} presenter={p.shortcuts} />
         <DesktopAvatars collection={p.avatars} language={p.language} />
         <section id="windows" aria-label={t('Open windows', 'Ventanas abiertas')}>
           {p.windows.map((state) => (
@@ -150,6 +228,7 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
           ))}
         </section>
       </main>
+      <DesktopContextMenu presenter={p.contextMenu} />
       <footer className="dock-shell">
         <div
           className="dock"

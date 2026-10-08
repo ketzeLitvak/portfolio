@@ -24,7 +24,12 @@ export function useWindowPresenter(state: WindowState, desktop: DesktopPresenter
     return () => observer.disconnect();
   }, [state.id, state.maximized, state.minimized, resize]);
   const startDrag = (event: PointerEvent<HTMLDivElement>) => {
-    if ((event.target as HTMLElement).closest('button') || innerWidth <= 650 || state.maximized)
+    if (
+      event.button !== 0 ||
+      (event.target as HTMLElement).closest('button') ||
+      innerWidth <= 650 ||
+      state.maximized
+    )
       return;
     const width = ref.current?.getBoundingClientRect().width ?? state.width;
     drag.current = {

@@ -1,3 +1,6 @@
+import { desktopApps, desktopShortcutIds } from '../models/desktopShortcuts';
+import { useDesktopShortcutsPresenter } from './useDesktopShortcutsPresenter';
+import { useContextMenuPresenter } from './useContextMenuPresenter';
 import { useSavedAvatarsPresenter } from './useSavedAvatarsPresenter';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Language, Theme, WindowState, AppOpenOptions } from '../models/types';
@@ -168,7 +171,7 @@ export function useDesktopPresenter() {
   );
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return;
+      if (event.key !== 'Escape' || event.defaultPrevented) return;
       if (activeMenu) {
         setActiveMenu(null);
         return;
@@ -179,7 +182,16 @@ export function useDesktopPresenter() {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [windows, close, activeMenu]);
+  const shortcuts = useDesktopShortcutsPresenter(desktopShortcutIds, desktopApps.length, open);
+  const contextMenu = useContextMenuPresenter();
+  const closeAll = () => setWindows([]);
+  const minimizeAll = () =>
+    setWindows((previous) => previous.map((window) => ({ ...window, minimized: true })));
   return {
+    shortcuts,
+    contextMenu,
+    closeAll,
+    minimizeAll,
     avatars,
     activeMenu,
     setActiveMenu,
