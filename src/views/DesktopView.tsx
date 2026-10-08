@@ -1,3 +1,4 @@
+import { WindowSwitcher } from '../components/WindowSwitcher';
 import { ShareLinkFeedback } from '../components/ShareLinkFeedback';
 import { findDesktopExperience } from '../models/desktopShortcuts';
 import {
@@ -281,6 +282,12 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
                 <span className="tooltip">{translate(p.language, app.title)}</span>
               </button>
             ))}
+          <WindowSwitcher
+            windows={p.windows}
+            language={p.language}
+            focus={p.focus}
+            close={p.close}
+          />
         </div>
       </footer>
     </div>
