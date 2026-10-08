@@ -108,43 +108,42 @@ export function CacheExperimentView({ language }: ViewProps) {
                 'Strategy selected. Change the price, then compare requests from both services.',
                 'Estrategia elegida. Cambiá el precio y compará consultas desde ambos servicios.',
               ]
-            : p.event === 'expire'
+            : !answer
               ? [
-                  'The copies expired. Ask for the price again.',
-                  'Las copias vencieron. Volvé a pedir el precio.',
+                  'Where does an app look for a price? Give it a try.',
+                  '¿Dónde busca una app un precio? Probalo.',
                 ]
-              : p.event === 'clear'
+              : answer.stale
                 ? [
-                    'Copies removed. The next read will fetch the original.',
-                    'Quitamos las copias. La próxima consulta buscará el original.',
+                    'Fast, but outdated: the copy still has the old price.',
+                    'Rápido, pero desactualizado: la copia tiene el precio anterior.',
                   ]
-                : !answer
+                : answer.source === 'database'
                   ? [
-                      'Where does an app look for a price? Give it a try.',
-                      '¿Dónde busca una app un precio? Probalo.',
+                      'Price found. Now we keep copies for next time.',
+                      'Encontramos el precio. Guardamos copias para la próxima.',
                     ]
-                  : answer.stale
+                  : answer.source === 'redis'
                     ? [
-                        'Fast, but outdated: the copy still has the old price.',
-                        'Rápido, pero desactualizado: la copia tiene el precio anterior.',
+                        `Service ${s.service.toUpperCase()} had no local copy. Shared Redis answered; now this service has its own copy.`,
+                        `El servicio ${s.service.toUpperCase()} no tenía copia local. Respondió Redis compartido; ahora este servicio tiene su propia copia.`,
                       ]
-                    : answer.source === 'database'
-                      ? [
-                          'Price found. Now we keep copies for next time.',
-                          'Encontramos el precio. Guardamos copias para la próxima.',
-                        ]
-                      : answer.source === 'redis'
-                        ? [
-                            `Service ${s.service.toUpperCase()} had no local copy. Shared Redis answered; now this service has its own copy.`,
-                            `El servicio ${s.service.toUpperCase()} no tenía copia local. Respondió Redis compartido; ahora este servicio tiene su propia copia.`,
-                          ]
-                        : [
-                            `Service ${s.service.toUpperCase()} answered from its own memory. We did not access Redis or the original.`,
-                            `Respondió la memoria del servicio ${s.service.toUpperCase()}. No consultamos Redis ni el original.`,
-                          ];
+                    : [
+                        `Service ${s.service.toUpperCase()} answered from its own memory. We did not access Redis or the original.`,
+                        `Respondió la memoria del servicio ${s.service.toUpperCase()}. No consultamos Redis ni el original.`,
+                      ];
   return (
     <div className="cache-playground">
       <header className="cache-intro">
+        <button
+          className="cache-reset"
+          onClick={p.reset}
+          disabled={p.busy}
+          title={t(['Start over', 'Empezar de nuevo'])}
+          aria-label={t(['Start over', 'Empezar de nuevo'])}
+        >
+          <RotateCcw size={15} />
+        </button>
         <span className="cache-eyebrow">
           <Sparkles size={13} />
           {t(['PLAY WITH A CONCEPT', 'JUGÁ CON UN CONCEPTO'])}
@@ -328,6 +327,7 @@ export function CacheExperimentView({ language }: ViewProps) {
           )}{' '}
           {!p.busy && s.service.toUpperCase()}
         </button>
+        <CacheStrategies presenter={p} language={language} />
         {answer && !p.busy && p.event === 'read' && (
           <span className="cache-time">
             <Timer size={15} />
@@ -348,40 +348,7 @@ export function CacheExperimentView({ language }: ViewProps) {
           </span>
         )}
       </div>
-      {s.requests > 0 && (
-        <section className="cache-try">
-          <h3>{t(['What if something changes?', '¿Y si algo cambia?'])}</h3>
-          <div className="cache-try-actions">
-            <button onClick={p.expire} disabled={p.busy}>
-              <Timer size={17} />
-              <span>
-                {t(['Let the copies expire', 'Dejar vencer las copias'])}
-                <small>{t(['Where will we look now?', '¿Dónde buscamos ahora?'])}</small>
-              </span>
-            </button>
-            {(Object.values(s.memories).some(
-              (entry) => entry && entry.expires > s.now && entry.version !== s.version,
-            ) ||
-              (s.redis && s.redis.expires > s.now && s.redis.version !== s.version)) && (
-              <button onClick={p.clear} disabled={p.busy}>
-                <Trash2 size={17} />
-                <span>
-                  {t(['Remove the old copies', 'Quitar las copias anteriores'])}
-                  <small>
-                    {t(['Fetch a fresh price next time', 'Buscar el precio nuevo después'])}
-                  </small>
-                </span>
-              </button>
-            )}
-          </div>
-        </section>
-      )}
-      {s.requests > 0 && <CacheStrategies presenter={p} language={language} />}
       <footer className="cache-footer">
-        <button onClick={p.reset} disabled={p.busy}>
-          <RotateCcw size={13} />
-          {t(['Start over', 'Empezar de nuevo'])}
-        </button>
         <span>{t(['Local demo · illustrative times', 'Demo local · tiempos ilustrativos'])}</span>
       </footer>
       <details className="cache-explanation">

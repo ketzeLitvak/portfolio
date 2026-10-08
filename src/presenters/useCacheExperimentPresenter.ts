@@ -3,7 +3,6 @@ import {
   initialCacheScenario,
   queryCache,
   updateCacheSource,
-  clearCacheCopies,
   invalidateCacheLayer,
 } from '../models/cacheExperiment';
 import type {
@@ -19,7 +18,7 @@ export function useCacheExperimentPresenter() {
   const [journey, setJourney] = useState<CacheJourney | null>(null);
   const [frame, setFrame] = useState(0);
   const [event, setEvent] = useState<
-    'idle' | 'read' | 'write' | 'expire' | 'clear' | 'service' | 'strategy' | 'invalidate'
+    'idle' | 'read' | 'write' | 'service' | 'strategy' | 'invalidate'
   >('idle');
   const busyRef = useRef(false);
   const [clockRunning, setClockRunning] = useState(false);
@@ -96,12 +95,6 @@ export function useCacheExperimentPresenter() {
     returning: !!journey && frame > journey.turn,
     query,
     write: () => change(updateCacheSource(state), 'write'),
-    expire: () =>
-      change(
-        { ...state, now: state.now + Math.max(state.memoryTTL, state.redisTTL) + 1 },
-        'expire',
-      ),
-    clear: () => change(clearCacheCopies(state), 'clear'),
     selectService: (service: CacheService) => change({ ...state, service }, 'service'),
     selectStrategy: (strategy: CacheStrategy) => change({ ...state, strategy }, 'strategy'),
     notify: (notifyOthers: boolean) => change({ ...state, notifyOthers }, 'strategy'),
