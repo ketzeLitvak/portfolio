@@ -2174,3 +2174,12 @@ input[type='text'] {
 .desktop-context-menu svg {
   flex-shrink: 0;
 }
+
+/* Labels must never compress a desktop icon's dimensions. */
+.app-grid .icon-tile {
+  flex-shrink: 0;
+}
+.app-grid .project-shortcut > span:last-child {
+  font-size: 10px;
+  white-space: nowrap;
+}
