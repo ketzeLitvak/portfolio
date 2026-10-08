@@ -1,4 +1,10 @@
+import { CacheLifetime } from './CacheLifetime';
+import { CacheMemory } from './CacheMemory';
+import { CacheStrategies } from './CacheStrategies';
+import { cacheServices, cacheStrategies } from '../../models/cacheExperiment';
 import {
+  Play,
+  Pause,
   ArrowRight,
   Check,
   Cpu,
@@ -8,7 +14,6 @@ import {
   RotateCcw,
   Sparkles,
   Timer,
-  TrendingUp,
   Trash2,
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
@@ -21,14 +26,14 @@ import {
 const nodes: { id: CacheStop; title: Text; subtitle: Text; icon: typeof Cpu }[] = [
   {
     id: 'client',
-    title: ['Your app', 'Tu app'],
+    title: ['Request', 'Consulta'],
     subtitle: ['Asks for a price', 'Pide un precio'],
     icon: Laptop,
   },
   {
     id: 'memory',
-    title: ['Quick copy', 'Copia rápida'],
-    subtitle: ['In this app', 'En esta app'],
+    title: ['Local memory', 'Memoria local'],
+    subtitle: ['One copy per service', 'Una copia por servicio'],
     icon: Cpu,
   },
   {
@@ -48,6 +53,8 @@ export function CacheExperimentView({ language }: ViewProps) {
   const p = useCacheExperimentPresenter(),
     s = p.state;
   const t = (text: Text) => translate(language, text);
+  const answer = s.answers[s.service];
+  const strategy = cacheStrategies.find((entry) => entry.id === s.strategy)!;
   const message: Text = p.busy
     ? p.returning
       ? ['The price travels back to your app.', 'El precio vuelve a tu app.']
@@ -61,40 +68,80 @@ export function CacheExperimentView({ language }: ViewProps) {
                 'No valid copy here. Let’s keep looking.',
                 'Acá no hay una copia vigente. Seguimos buscando.',
               ]
-    : p.event === 'write'
+    : p.event === 'invalidate'
       ? [
-          'The original price changed. Do the copies know?',
-          'El precio original cambió. ¿Las copias se enteraron?',
+          'Only that copy was removed. Other memories and Redis keep their own copies.',
+          'Borramos solo esa copia. Las otras memorias y Redis conservan las suyas.',
         ]
-      : p.event === 'expire'
-        ? [
-            'The copies expired. Ask for the price again.',
-            'Las copias vencieron. Volvé a pedir el precio.',
-          ]
-        : p.event === 'clear'
+      : p.event === 'write'
+        ? s.strategy === 'ttl'
           ? [
-              'Copies removed. The next read will fetch the original.',
-              'Quitamos las copias. La próxima consulta buscará el original.',
+              'Only the original changed. A and B keep their copies until expiration.',
+              'Cambió solo el original. A y B conservan sus copias hasta vencer.',
             ]
-          : !s.last
-            ? [
-                'Where does an app look for a price? Give it a try.',
-                '¿Dónde busca una app un precio? Probalo.',
-              ]
-            : s.last.stale
+          : s.strategy === 'invalidate'
+            ? s.notifyOthers
               ? [
-                  'Fast, but outdated: the copy still has the old price.',
-                  'Rápido, pero desactualizado: la copia tiene el precio anterior.',
+                  'Copies removed in Redis, A and B. The notification reached the other service.',
+                  'Borramos las copias de Redis, A y B. El aviso llegó al otro servicio.',
                 ]
-              : s.last.source === 'database'
+              : [
+                  'Redis and this service’s copy were removed. The other service still has its own memory.',
+                  'Borramos Redis y la copia de este servicio. El otro conserva su propia memoria.',
+                ]
+            : s.notifyOthers
+              ? [
+                  'Original and Redis updated. The other service received a notification and removed its local copy.',
+                  'Actualizamos original y Redis. El otro servicio recibió un aviso y borró su copia local.',
+                ]
+              : [
+                  'Original and Redis updated. The other service’s memory did not change.',
+                  'Actualizamos original y Redis. La memoria del otro servicio no cambió.',
+                ]
+        : p.event === 'service'
+          ? [
+              'You switched services. Its memory is separate; Redis and the original are the same.',
+              'Cambiaste de servicio. Su memoria es independiente; Redis y el original son los mismos.',
+            ]
+          : p.event === 'strategy'
+            ? [
+                'Strategy selected. Change the price, then compare requests from both services.',
+                'Estrategia elegida. Cambiá el precio y compará consultas desde ambos servicios.',
+              ]
+            : p.event === 'expire'
+              ? [
+                  'The copies expired. Ask for the price again.',
+                  'Las copias vencieron. Volvé a pedir el precio.',
+                ]
+              : p.event === 'clear'
                 ? [
-                    'Price found. Now we keep copies for next time.',
-                    'Encontramos el precio. Guardamos copias para la próxima.',
+                    'Copies removed. The next read will fetch the original.',
+                    'Quitamos las copias. La próxima consulta buscará el original.',
                   ]
-                : [
-                    'The copy answered. We skipped the trip to the original.',
-                    'Respondió la copia. Nos ahorramos el viaje al original.',
-                  ];
+                : !answer
+                  ? [
+                      'Where does an app look for a price? Give it a try.',
+                      '¿Dónde busca una app un precio? Probalo.',
+                    ]
+                  : answer.stale
+                    ? [
+                        'Fast, but outdated: the copy still has the old price.',
+                        'Rápido, pero desactualizado: la copia tiene el precio anterior.',
+                      ]
+                    : answer.source === 'database'
+                      ? [
+                          'Price found. Now we keep copies for next time.',
+                          'Encontramos el precio. Guardamos copias para la próxima.',
+                        ]
+                      : answer.source === 'redis'
+                        ? [
+                            `Service ${s.service.toUpperCase()} had no local copy. Shared Redis answered; now this service has its own copy.`,
+                            `El servicio ${s.service.toUpperCase()} no tenía copia local. Respondió Redis compartido; ahora este servicio tiene su propia copia.`,
+                          ]
+                        : [
+                            `Service ${s.service.toUpperCase()} answered from its own memory. We did not access Redis or the original.`,
+                            `Respondió la memoria del servicio ${s.service.toUpperCase()}. No consultamos Redis ni el original.`,
+                          ];
   return (
     <div className="cache-playground">
       <header className="cache-intro">
@@ -107,11 +154,57 @@ export function CacheExperimentView({ language }: ViewProps) {
         </h2>
         <p>
           {t([
-            'An app needs a price. Follow its journey, then ask again.',
-            'Una app necesita un precio. Seguí su recorrido y después pedilo otra vez.',
+            'Two services need a price. Their memory is private; Redis is shared.',
+            'Dos servicios necesitan un precio. Su memoria es privada; Redis es compartido.',
           ])}
         </p>
       </header>
+      <div className="cache-clock">
+        <span>
+          <Timer size={13} />
+          {t(['Simulated clock', 'Reloj simulado'])} <strong>{s.now} s</strong> ·{' '}
+          {t(
+            p.busy
+              ? ['paused during request', 'pausado durante consulta']
+              : p.clockRunning
+                ? ['running', 'en marcha']
+                : ['paused', 'pausado'],
+          )}
+        </span>
+        <button
+          onClick={p.toggleClock}
+          disabled={p.busy}
+          aria-label={t(
+            p.clockRunning ? ['Pause clock', 'Pausar reloj'] : ['Start clock', 'Iniciar reloj'],
+          )}
+          title={t(
+            p.clockRunning ? ['Pause clock', 'Pausar reloj'] : ['Start clock', 'Iniciar reloj'],
+          )}
+        >
+          {p.clockRunning ? <Pause size={14} /> : <Play size={14} />}
+        </button>
+        <button onClick={p.advanceClock} disabled={p.busy}>
+          +1 s
+        </button>
+      </div>
+      <div
+        className="cache-service-picker"
+        role="group"
+        aria-label={t(['Request destination', 'Destino de la consulta'])}
+      >
+        <span>{t(['Send request to', 'Consultar desde'])}</span>
+        {cacheServices.map((service) => (
+          <button
+            key={service}
+            data-service={service}
+            aria-pressed={s.service === service}
+            disabled={p.busy}
+            onClick={() => p.selectService(service)}
+          >
+            {t(['Service', 'Servicio'])} {service.toUpperCase()}
+          </button>
+        ))}
+      </div>
       <div
         className="cache-scene"
         data-traveling={p.busy}
@@ -121,13 +214,13 @@ export function CacheExperimentView({ language }: ViewProps) {
         ])}
       >
         {nodes.map(({ id, title, subtitle, icon: Icon }, index) => {
-          const entry = id === 'memory' || id === 'redis' ? s[id] : null;
+          const entry = id === 'redis' ? s.redis : null;
           const valid = entry && entry.expires > s.now;
           const value =
             id === 'database'
               ? s.value
               : id === 'client'
-                ? s.last?.value
+                ? answer?.value
                 : valid
                   ? entry.value
                   : null;
@@ -135,7 +228,7 @@ export function CacheExperimentView({ language }: ViewProps) {
             id !== 'database' && value !== null && value !== undefined && value !== s.value;
           const visited = p.journey
             ? p.journey.stops.slice(0, p.frame + 1).includes(id)
-            : s.last?.route.includes(id);
+            : answer?.route.includes(id);
           return (
             <article
               key={id}
@@ -147,24 +240,60 @@ export function CacheExperimentView({ language }: ViewProps) {
               <span className="cache-node-icon">
                 <Icon size={23} />
               </span>
-              <h3>{t(title)}</h3>
+              {id === 'redis' && (
+                <button
+                  className="cache-evict cache-redis-evict"
+                  onClick={() => p.invalidate('redis')}
+                  disabled={p.busy || !s.redis}
+                  aria-label={t(['Invalidate Redis', 'Invalidar Redis'])}
+                  title={t(['Invalidate Redis', 'Invalidar Redis'])}
+                >
+                  <Trash2 size={13} />
+                </button>
+              )}
+              <h3>
+                {id === 'client'
+                  ? `${t(['Service', 'Servicio'])} ${s.service.toUpperCase()}`
+                  : t(title)}
+              </h3>
               <span className="cache-node-subtitle">{t(subtitle)}</span>
-              <strong className="cache-price">
-                {value === null || value === undefined ? '—' : `$${value}`}
-              </strong>
-              <span className="cache-node-status">
-                {old
-                  ? t(['Old price', 'Precio anterior'])
-                  : id === 'client'
-                    ? t(['Last answer', 'Última respuesta'])
-                    : id === 'database'
-                      ? t(['Always here', 'Siempre acá'])
-                      : valid
-                        ? t(['Copy saved', 'Copia guardada'])
-                        : entry
-                          ? t(['Copy expired', 'Copia vencida'])
-                          : t(['No copy yet', 'Todavía sin copia'])}
-              </span>
+              {id === 'memory' ? (
+                <CacheMemory
+                  state={s}
+                  language={language}
+                  active={p.active === 'memory'}
+                  busy={p.busy}
+                  invalidate={p.invalidate}
+                />
+              ) : (
+                <>
+                  <strong className="cache-price">
+                    {value === null || value === undefined ? '—' : `$${value}`}
+                  </strong>
+                  <span className="cache-node-status">
+                    {old
+                      ? t(['Old price', 'Precio anterior'])
+                      : id === 'client'
+                        ? t(['Last answer', 'Última respuesta'])
+                        : id === 'database'
+                          ? t(['Always here', 'Siempre acá'])
+                          : valid
+                            ? t(['Copy saved', 'Copia guardada'])
+                            : entry
+                              ? t(['Copy expired', 'Copia vencida'])
+                              : t(['No copy yet', 'Todavía sin copia'])}
+                  </span>
+                  {id === 'redis' && (
+                    <CacheLifetime
+                      entry={s.redis}
+                      now={s.now}
+                      ttl={s.redisTTL}
+                      language={language}
+                      layer="redis"
+                    />
+                  )}
+                </>
+              )}
               {index < nodes.length - 1 && (
                 <ArrowRight className="cache-connector" size={18} aria-hidden="true" />
               )}
@@ -191,23 +320,24 @@ export function CacheExperimentView({ language }: ViewProps) {
           {t(
             p.busy
               ? ['Following the request…', 'Siguiendo la consulta…']
-              : s.requests === 0
+              : !answer
                 ? ['Ask for the price', 'Pedir el precio']
                 : ['Ask again', 'Pedir otra vez'],
-          )}
+          )}{' '}
+          {!p.busy && s.service.toUpperCase()}
         </button>
-        {s.last && !p.busy && p.event === 'read' && (
+        {answer && !p.busy && p.event === 'read' && (
           <span className="cache-time">
             <Timer size={15} />
-            {s.last.latency} ms{' '}
-            {p.firstLatency && s.last.latency < p.firstLatency ? (
+            {answer.latency} ms{' '}
+            {p.firstLatency && answer.latency < p.firstLatency ? (
               <small>
-                {Math.round(p.firstLatency / s.last.latency)}× {t(['faster', 'más rápido'])}
+                {Math.round(p.firstLatency / answer.latency)}× {t(['faster', 'más rápido'])}
               </small>
             ) : (
               <small>
                 {t(
-                  s.last.source === 'database'
+                  answer.source === 'database'
                     ? ['trip to the original', 'viaje al original']
                     : ['from a copy', 'desde una copia'],
                 )}
@@ -220,13 +350,6 @@ export function CacheExperimentView({ language }: ViewProps) {
         <section className="cache-try">
           <h3>{t(['What if something changes?', '¿Y si algo cambia?'])}</h3>
           <div className="cache-try-actions">
-            <button onClick={p.write} disabled={p.busy}>
-              <TrendingUp size={17} />
-              <span>
-                {t(['Change the original price', 'Cambiar el precio original'])}
-                <small>{t(['Does the copy update?', '¿Se actualiza la copia?'])}</small>
-              </span>
-            </button>
             <button onClick={p.expire} disabled={p.busy}>
               <Timer size={17} />
               <span>
@@ -234,7 +357,10 @@ export function CacheExperimentView({ language }: ViewProps) {
                 <small>{t(['Where will we look now?', '¿Dónde buscamos ahora?'])}</small>
               </span>
             </button>
-            {s.last?.stale && (
+            {(Object.values(s.memories).some(
+              (entry) => entry && entry.expires > s.now && entry.version !== s.version,
+            ) ||
+              (s.redis && s.redis.expires > s.now && s.redis.version !== s.version)) && (
               <button onClick={p.clear} disabled={p.busy}>
                 <Trash2 size={17} />
                 <span>
@@ -248,6 +374,7 @@ export function CacheExperimentView({ language }: ViewProps) {
           </div>
         </section>
       )}
+      {s.requests > 0 && <CacheStrategies presenter={p} language={language} />}
       <footer className="cache-footer">
         <button onClick={p.reset} disabled={p.busy}>
           <RotateCcw size={13} />
@@ -270,8 +397,8 @@ export function CacheExperimentView({ language }: ViewProps) {
               <span>
                 <b>{t(['Quick copy = memory.', 'Copia rápida = memoria.'])}</b>{' '}
                 {t([
-                  'Local to this app, valid for 6 simulated seconds.',
-                  'Local a esta app, válida por 6 segundos simulados.',
+                  'Private to each service process, valid for 6 simulated seconds. A’s memory never answers B.',
+                  'Privada a cada proceso de servicio, válida por 6 segundos simulados. La memoria de A nunca responde a B.',
                 ])}
               </span>
             </li>
@@ -290,20 +417,33 @@ export function CacheExperimentView({ language }: ViewProps) {
               <span>
                 <b>{t(['Original data = database.', 'Dato original = base de datos.'])}</b>{' '}
                 {t([
-                  'The authoritative value. Updating it does not automatically update existing copies in this demo.',
-                  'El valor de referencia. Actualizarlo no actualiza automáticamente las copias existentes en esta demo.',
+                  'The authoritative value. Each write uses the selected strategy. Updating Redis does not automatically change other services’ memories.',
+                  'El valor de referencia. Cada escritura usa la estrategia elegida. Actualizar Redis no cambia automáticamente las memorias de otros servicios.',
                 ])}
               </span>
             </li>
           </ul>
           <p>
             {t([
-              'The clock advances only when you expire the copies. Removing them is called invalidation. A real system chooses a strategy based on how fresh the data must be.',
-              'El reloj avanza al dejar vencer las copias. Quitarlas se llama invalidación. Un sistema real elige su estrategia según cuánto necesita que los datos estén actualizados.',
+              'The clock starts paused: use +1 s or start it to see copies expire. It pauses during request animations. Trash icons invalidate only that copy; other copies remain.',
+              'El reloj empieza pausado: usá +1 s o inicialo para ver vencer las copias. Se pausa durante el recorrido animado. Los iconos de papelera invalidan solo esa copia; las otras permanecen.',
             ])}
           </p>
-          <a href="https://redis.io/docs/latest/commands/expire/" target="_blank" rel="noreferrer">
-            {t(['Explore expiration in Redis', 'Explorar el vencimiento en Redis'])} →
+          <p>
+            <b>{strategy.concept}</b> · {t(strategy.description)}
+          </p>
+          <p>
+            {t([
+              'The notification option simulates a coordination mechanism that successfully evicts other services’ copies. Real systems must handle delivery failures and concurrent operations; those are outside this demo.',
+              'La opción de avisar simula un mecanismo de coordinación que logra borrar las copias de otros servicios. Un sistema real debe manejar fallos de entrega y operaciones concurrentes; esta demo no los simula.',
+            ])}
+          </p>
+          <a
+            href="https://learn.microsoft.com/en-us/azure/architecture/best-practices/caching"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {t(['Explore caching strategies', 'Explorar estrategias de caché'])} →
           </a>
         </div>
       </details>

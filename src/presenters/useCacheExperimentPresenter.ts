@@ -1,14 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
-import { initialCacheScenario, queryCache, updateCacheSource } from '../models/cacheExperiment';
-import type { CacheScenario } from '../models/cacheExperiment';
+import {
+  initialCacheScenario,
+  queryCache,
+  updateCacheSource,
+  clearCacheCopies,
+  invalidateCacheLayer,
+} from '../models/cacheExperiment';
+import type {
+  CacheScenario,
+  CacheService,
+  CacheStrategy,
+  CacheLayer,
+} from '../models/cacheExperiment';
 export type CacheStop = 'client' | 'memory' | 'redis' | 'database';
 type CacheJourney = { stops: CacheStop[]; turn: number; result: CacheScenario };
 export function useCacheExperimentPresenter() {
   const [state, setState] = useState(initialCacheScenario);
   const [journey, setJourney] = useState<CacheJourney | null>(null);
   const [frame, setFrame] = useState(0);
-  const [event, setEvent] = useState<'idle' | 'read' | 'write' | 'expire' | 'clear'>('idle');
+  const [event, setEvent] = useState<
+    'idle' | 'read' | 'write' | 'expire' | 'clear' | 'service' | 'strategy' | 'invalidate'
+  >('idle');
   const busyRef = useRef(false);
+  const [clockRunning, setClockRunning] = useState(false);
+  useEffect(() => {
+    if (!clockRunning || journey) return;
+    const timer = setInterval(
+      () =>
+        setState((previous) =>
+          busyRef.current ? previous : { ...previous, now: previous.now + 1 },
+        ),
+      1000,
+    );
+    return () => clearInterval(timer);
+  }, [clockRunning, journey]);
   const [firstLatency, setFirstLatency] = useState<number | null>(null);
   useEffect(() => {
     if (!journey) return;
@@ -47,6 +72,7 @@ export function useCacheExperimentPresenter() {
   };
   const reset = () => {
     setJourney(null);
+    setClockRunning(false);
     busyRef.current = false;
     setState(initialCacheScenario());
     setFrame(0);
@@ -59,6 +85,12 @@ export function useCacheExperimentPresenter() {
     frame,
     event,
     firstLatency,
+    clockRunning,
+    toggleClock: () => setClockRunning((previous) => !previous),
+    advanceClock: () => {
+      if (!busyRef.current) setState((previous) => ({ ...previous, now: previous.now + 1 }));
+    },
+    invalidate: (layer: CacheLayer) => change(invalidateCacheLayer(state, layer), 'invalidate'),
     busy: journey !== null,
     active: journey?.stops[frame],
     returning: !!journey && frame > journey.turn,
@@ -69,7 +101,10 @@ export function useCacheExperimentPresenter() {
         { ...state, now: state.now + Math.max(state.memoryTTL, state.redisTTL) + 1 },
         'expire',
       ),
-    clear: () => change({ ...state, memory: null, redis: null }, 'clear'),
+    clear: () => change(clearCacheCopies(state), 'clear'),
+    selectService: (service: CacheService) => change({ ...state, service }, 'service'),
+    selectStrategy: (strategy: CacheStrategy) => change({ ...state, strategy }, 'strategy'),
+    notify: (notifyOthers: boolean) => change({ ...state, notifyOthers }, 'strategy'),
     reset,
   };
 }
