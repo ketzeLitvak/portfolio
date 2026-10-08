@@ -9,7 +9,7 @@ export const desktopExperiences = experiences.map((entry) => ({
   id: `experience-${entry.id}`,
   experience: entry.id,
   logo: entry.logo,
-  title: entry.id === 'leadership' ? (['Círculo Social', 'Círculo Social'] as Text) : entry.tab,
+  title: entry.id === 'leadership' ? (['CSHA', 'CSHA'] as Text) : entry.tab,
   organization: entry.organization,
 }));
 export const findDesktopExperience = (id: string) =>
