@@ -1,7 +1,7 @@
 import { Download, ArrowUpRight, Mail, Linkedin, Github } from 'lucide-react';
 import type { ViewProps } from '../models/viewProps';
 import { translate } from '../models/types';
-import { ProjectListView } from './ProjectViews';
+import { ProjectList } from '../components/ProjectList';
 import { OpenButton } from '../components/Actions';
 export function ProfileView({ language, openApp }: ViewProps) {
   const t = (en: string, es: string) => translate(language, [en, es]);
@@ -110,7 +110,7 @@ export function QuickView({ language, openApp }: ViewProps) {
       </div>
       <div className="quick-section">
         <h3>{t('Selected projects', 'Proyectos destacados')}</h3>
-        <ProjectListView language={language} openApp={openApp} />
+        <ProjectList language={language} openApp={openApp} />
       </div>
       <div className="quick-section">
         <h3>UTN FRBA</h3>

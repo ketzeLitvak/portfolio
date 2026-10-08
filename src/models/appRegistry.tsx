@@ -1,3 +1,4 @@
+import { projectIcons } from './projectIcons';
 import {
   ArrowUpRight,
   FolderOpen,
@@ -17,7 +18,7 @@ import { projects } from './projects';
 import { ProjectSearchView } from '../views/ProjectSearchView';
 import { ExperienceView } from '../views/ExperienceView';
 import { WelcomeView } from '../views/WelcomeView';
-import { ProjectListView, ProjectDetailView, projectIcons } from '../views/ProjectViews';
+import { ProjectListView, ProjectDetailView } from '../views/ProjectViews';
 import { ProfileView, ContactView, QuickView } from '../views/ProfileViews';
 import { AvatarView, ToolsView } from '../views/PlaygroundViews';
 export interface AppDefinition {

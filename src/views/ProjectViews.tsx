@@ -1,49 +1,17 @@
-import { ArrowUpRight, Radio, MapPin, Trophy, Smile, Braces } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import { projects } from '../models/projects';
 import { translate } from '../models/types';
 import type { ViewProps } from '../models/viewProps';
 import { ExternalLink, OpenButton } from '../components/Actions';
-export const projectIcons: Record<string, LucideIcon> = {
-  chilta: Radio,
-  radix: MapPin,
-  gira: Trophy,
-  faceshape: Smile,
-  ketze: Braces,
-};
+import { ProjectList } from '../components/ProjectList';
+
 export function ProjectListView({ language, openApp }: ViewProps) {
-  const t = (en: string, es: string) => translate(language, [en, es]);
   return (
-    <div className="project-list">
-      <div className="folder-head">
-        <span>{t('WORKSPACE / SELECTED WORK', 'ESPACIO / PROYECTOS DESTACADOS')}</span>
-        <span>5 {t('items', 'elementos')}</span>
-      </div>
-      {Object.entries(projects).map(([id, p], index) => {
-        const Icon = projectIcons[id];
-        return (
-          <button key={id} className="project-row" data-open={id} onClick={() => openApp(id)}>
-            <span className="project-symbol" style={{ background: p.color }}>
-              {p.logo ? <img className="project-logo" src={p.logo} alt="" /> : <Icon size={23} />}
-            </span>
-            <span className="project-summary">
-              <b>{p.title}</b>
-              <small>{translate(language, p.subtitle)}</small>
-            </span>
-            <span className="project-counter">0{index + 1}</span>
-            <ArrowUpRight className="arrow" size={18} />
-          </button>
-        );
-      })}
-      <p className="notice">
-        {t(
-          'Each folder tells you what the product does and what I contributed.',
-          'Cada carpeta cuenta qué hace el producto y cuál fue mi aporte.',
-        )}
-      </p>
+    <div className="project-list-window">
+      <ProjectList language={language} openApp={openApp} />
     </div>
   );
 }
+
 export function ProjectDetailView({ id, language, openApp }: ViewProps & { id: string }) {
   const p = projects[id];
   const t = (en: string, es: string) => translate(language, [en, es]);
