@@ -2238,167 +2238,50 @@ input[type='text'] {
   background: none;
 }
 
-.window-switcher {
-  position: relative;
-  display: flex;
-  margin-left: 4px;
-  padding-left: 10px;
-  border-left: 1px solid var(--line);
+/* Fixed applications stay on the left; other open windows appear after the separator. */
+.dock {
+  --dock-icon-size: clamp(
+    14px,
+    calc((100vw - 64px - (var(--dock-items) - 1) * 7px) / var(--dock-items) - 6px),
+    43px
+  );
 }
-.i-window-switcher {
-  background: var(--bar);
-  color: var(--ink);
-}
-.window-switcher-count {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  display: grid;
-  place-items: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  background: var(--orange);
-  color: white;
-  border: 2px solid var(--panel);
-  border-radius: 12px;
-  font-size: 9px;
-}
-.window-switcher-panel {
-  position: absolute;
-  bottom: calc(100% + 18px);
-  right: -12px;
-  width: 320px;
-  max-width: calc(100vw - 24px);
-  padding: 8px;
-  background: var(--glass);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(20px);
-  text-align: left;
-}
-.window-switcher-panel header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 10px 14px;
-}
-.window-switcher-panel h2 {
-  margin: 0;
-  font-size: 13px;
-  letter-spacing: 0;
-}
-.window-switcher-panel header > span {
-  font-size: 11px;
-  color: var(--muted);
-}
-.window-switcher-list {
-  max-height: min(420px, calc(100dvh - 210px));
-  overflow-y: auto;
-}
-.window-switcher-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border-radius: 8px;
-}
-.window-switcher-row:hover {
-  background: var(--bar);
-}
-.dock .window-switcher-select {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px;
-  flex: 1;
-  min-width: 0;
-  text-align: left;
-  border-radius: 8px;
-}
-.window-switcher-select[aria-current='true'] {
-  background: color-mix(in srgb, var(--orange) 8%, transparent);
-}
-.window-switcher-icon {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
+.dock .dock-app {
   flex-shrink: 0;
-  background: var(--bar);
-  border-radius: 8px;
 }
-.window-switcher-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.dock .dock-app .icon-tile {
+  width: var(--dock-icon-size);
+  height: var(--dock-icon-size);
+}
+.dock .dock-app .icon-tile > svg {
+  width: min(23px, calc(var(--dock-icon-size) * 0.65));
+  height: min(23px, calc(var(--dock-icon-size) * 0.65));
+}
+.dock .project-icon-tile img {
   padding: 3px;
-  border-radius: inherit;
-  background: #fff;
 }
-.window-switcher-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-  flex: 1;
+.dock button.active:after {
+  transform: translateX(-50%);
 }
-.window-switcher-copy strong {
-  font-size: 11px;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.window-switcher-copy small {
-  font-size: 9px;
-  color: var(--muted);
-}
-.dock .window-switcher-close {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  margin-right: 6px;
-  border-radius: 6px;
-}
-.dock .window-switcher-close:hover {
-  background: var(--orange);
-  color: #fff;
-}
-.window-switcher-empty {
-  margin: 0;
-  padding: 14px 10px 20px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.7;
+.dock-separator {
+  width: 1px;
+  align-self: stretch;
+  margin: 6px 4px;
+  background: var(--line);
+  flex-shrink: 0;
 }
 @media (max-width: 650px) {
-  .dock .icon-tile {
-    width: 32px;
-    height: 32px;
+  .dock {
+    --dock-icon-size: clamp(
+      14px,
+      calc((100vw - 64px - (var(--dock-items) - 1) * 3px) / var(--dock-items)),
+      32px
+    );
   }
-  .window-switcher {
-    margin-left: 2px;
-    padding-left: 6px;
-  }
-  .window-switcher-panel {
-    position: fixed;
-    bottom: calc(100% + 14px);
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: 320px;
-  }
-  .dock .icon-tile svg {
-    width: 21px;
-    height: 21px;
-  }
-}
-
-@media (max-width: 650px) {
-  .dock > button,
-  .dock .window-switcher-trigger {
+  .dock .dock-app {
     padding: 0;
+  }
+  .dock-separator {
+    margin: 4px 3px;
   }
 }

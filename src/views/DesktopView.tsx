@@ -1,4 +1,4 @@
-import { WindowSwitcher } from '../components/WindowSwitcher';
+import { DesktopDock } from '../components/DesktopDock';
 import { ShareLinkFeedback } from '../components/ShareLinkFeedback';
 import { findDesktopExperience } from '../models/desktopShortcuts';
 import {
@@ -19,7 +19,6 @@ import { projects } from '../models/projects';
 import { DesktopContextMenu } from '../components/DesktopContextMenu';
 import { LayoutGrid, Sun, Moon, Monitor, Languages, Check } from 'lucide-react';
 import { translate } from '../models/types';
-import { launcherApps } from '../models/appRegistry';
 import { DesktopShortcuts } from '../components/DesktopShortcuts';
 import type { DesktopPresenter } from '../presenters/useDesktopPresenter';
 import { DesktopAvatars } from '../components/DesktopAvatars';
@@ -260,36 +259,7 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
       </main>
       <DesktopContextMenu presenter={p.contextMenu} />
       <ShareLinkFeedback presenter={p.share} language={p.language} />
-      <footer className="dock-shell">
-        <div
-          className="dock"
-          id="dock"
-          aria-label={t('Application launcher', 'Lanzador de aplicaciones')}
-        >
-          {launcherApps
-            .filter(([id]) => id !== 'tools')
-            .map(([id, app]) => (
-              <button
-                key={id}
-                data-open={id}
-                className={p.windows.some((w) => w.id === id) ? 'active' : ''}
-                aria-label={translate(p.language, app.title)}
-                onClick={() => p.open(id)}
-              >
-                <span className={`icon-tile i-${id}`}>
-                  <app.icon size={23} />
-                </span>
-                <span className="tooltip">{translate(p.language, app.title)}</span>
-              </button>
-            ))}
-          <WindowSwitcher
-            windows={p.windows}
-            language={p.language}
-            focus={p.focus}
-            close={p.close}
-          />
-        </div>
-      </footer>
+      <DesktopDock presenter={p} />
     </div>
   );
 }
