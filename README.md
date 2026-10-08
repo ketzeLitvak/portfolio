@@ -27,3 +27,17 @@ A workflow builds and deploys `dist/` on pushes to `main`. Select **GitHub Actio
 ## Privacy and publication
 
 CV PDFs are excluded from the public repository. Visitors can request the CV by email. No backend is needed; developer-tool input stays in the browser.
+
+## Code quality
+
+ESLint checks TypeScript and React Hooks. Prettier formats TypeScript, TSX, CSS, HTML, JSON and project configuration.
+
+```sh
+npm run lint          # Check code and React Hooks
+npm run lint:fix      # Apply available lint fixes
+npm run format        # Format the project
+npm run format:check  # Check formatting without changing files
+npm run check         # Lint, formatting and production build
+```
+
+GitHub Actions runs lint and formatting checks before building and deploying. In VS Code or Cursor, install the recommended ESLint and Prettier extensions to format on save and show diagnostics while editing.
