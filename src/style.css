@@ -2561,21 +2561,6 @@ input[type='text'] {
   }
 }
 
-.window[data-app='permissions'] {
-  --bar: #21574b;
-}
-.window[data-app='cache'] {
-  --bar: #534026;
-}
-.window[data-app='queues'] {
-  --bar: #3c365c;
-}
-.window[data-app='permissions'] .window-bar,
-.window[data-app='cache'] .window-bar,
-.window[data-app='queues'] .window-bar {
-  color: #fff;
-}
-
 /* Cache is a guided scene; technical details stay behind disclosure. */
 .cache-playground {
   padding: 28px;
