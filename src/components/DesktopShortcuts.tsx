@@ -1,4 +1,8 @@
-import { desktopApps as apps, desktopProjects as projectEntries } from '../models/desktopShortcuts';
+import {
+  desktopApps as apps,
+  desktopProjects as projectEntries,
+  desktopExperiences,
+} from '../models/desktopShortcuts';
 import { translate, type Language } from '../models/types';
 import type { useDesktopShortcutsPresenter } from '../presenters/useDesktopShortcutsPresenter';
 export function DesktopShortcuts({
@@ -38,6 +42,21 @@ export function DesktopShortcuts({
             <img src={project.logo} alt="" draggable={false} />
           </span>
           <span>{project.title}</span>
+        </button>
+      ))}
+      {desktopExperiences.map((entry) => (
+        <button
+          key={entry.id}
+          className="app-icon experience-shortcut"
+          data-open={entry.id}
+          aria-label={translate(language, entry.organization)}
+          title={translate(language, entry.organization)}
+          {...p.buttonProps(entry.id)}
+        >
+          <span className="icon-tile project-icon-tile">
+            <img src={entry.logo} alt="" draggable={false} />
+          </span>
+          <span>{translate(language, entry.title)}</span>
         </button>
       ))}
     </section>

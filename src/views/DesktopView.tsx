@@ -1,3 +1,4 @@
+import { findDesktopExperience } from '../models/desktopShortcuts';
 import {
   ArrowUpRight,
   ExternalLink,
@@ -49,18 +50,22 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
       ]);
     } else if (icon) {
       const id = icon.dataset.open!;
-      if (!appRegistry[id]) return;
-      const actions = [{ label: t('Open', 'Abrir'), icon: ArrowUpRight, run: () => p.open(id) }];
+      const experience = findDesktopExperience(id);
+      if (!experience && !appRegistry[id]) return;
+      const title = translate(p.language, experience?.organization ?? appRegistry[id].title);
+      const actions = [
+        { label: t('Open', 'Abrir'), icon: ArrowUpRight, run: () => p.openShortcut(id) },
+      ];
       const project = projects[id];
       if (project?.url)
-        p.contextMenu.show(event, translate(p.language, appRegistry[id].title), [
+        p.contextMenu.show(event, title, [
           ...actions,
           { label: t('Visit project', 'Visitar proyecto'), icon: ExternalLink, href: project.url },
           ...(p.windows.some((window) => window.id === id)
             ? [{ label: t('Close window', 'Cerrar ventana'), icon: X, run: () => p.close(id) }]
             : []),
         ]);
-      else p.contextMenu.show(event, translate(p.language, appRegistry[id].title), actions);
+      else p.contextMenu.show(event, title, actions);
     } else if (target.closest('main') && !target.closest('.desktop-avatar')) {
       p.contextMenu.show(event, t('Desktop', 'Escritorio'), [
         { label: t('Search', 'Buscar'), icon: Search, run: () => p.open('search') },

@@ -1,4 +1,9 @@
-import { desktopApps, desktopShortcutIds } from '../models/desktopShortcuts';
+import {
+  desktopApps,
+  desktopProjects,
+  desktopShortcutIds,
+  findDesktopExperience,
+} from '../models/desktopShortcuts';
 import { useDesktopShortcutsPresenter } from './useDesktopShortcutsPresenter';
 import { useContextMenuPresenter } from './useContextMenuPresenter';
 import { useSavedAvatarsPresenter } from './useSavedAvatarsPresenter';
@@ -78,6 +83,7 @@ export function useDesktopPresenter() {
         new Intl.DateTimeFormat(language === 'es' ? 'es-AR' : 'en-GB', {
           hour: '2-digit',
           minute: '2-digit',
+          hourCycle: 'h23',
           timeZone: 'America/Argentina/Buenos_Aires',
         }).format(new Date()),
       );
@@ -182,13 +188,27 @@ export function useDesktopPresenter() {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [windows, close, activeMenu]);
-  const shortcuts = useDesktopShortcutsPresenter(desktopShortcutIds, desktopApps.length, open);
+  const openShortcut = useCallback(
+    (id: string) => {
+      const experience = findDesktopExperience(id);
+      if (experience) open('experience', { experience: experience.experience });
+      else open(id);
+    },
+    [open],
+  );
+  const shortcuts = useDesktopShortcutsPresenter(
+    desktopShortcutIds,
+    desktopApps.length,
+    desktopProjects.length,
+    openShortcut,
+  );
   const contextMenu = useContextMenuPresenter();
   const closeAll = () => setWindows([]);
   const minimizeAll = () =>
     setWindows((previous) => previous.map((window) => ({ ...window, minimized: true })));
   return {
     shortcuts,
+    openShortcut,
     contextMenu,
     closeAll,
     minimizeAll,

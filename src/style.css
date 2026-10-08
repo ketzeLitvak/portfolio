@@ -2179,7 +2179,8 @@ input[type='text'] {
 .app-grid .icon-tile {
   flex-shrink: 0;
 }
-.app-grid .project-shortcut > span:last-child {
+.app-grid .project-shortcut > span:last-child,
+.app-grid .experience-shortcut > span:last-child {
   font-size: 10px;
   white-space: nowrap;
 }

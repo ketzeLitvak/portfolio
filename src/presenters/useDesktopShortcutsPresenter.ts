@@ -34,6 +34,7 @@ function resolvePositions(
   saved: Positions,
   layout: Layout,
   basicCount: number,
+  projectCount: number,
 ): Positions {
   const capacity = layout.columns * layout.rows;
   const result: Positions = {},
@@ -46,10 +47,15 @@ function resolvePositions(
     }
   }
   const projectStart = Math.ceil(basicCount / layout.rows) * layout.rows;
+  const experienceStart = projectStart + Math.ceil(projectCount / layout.rows) * layout.rows;
   for (const [index, id] of ids.entries())
     if (result[id] === undefined) {
       const preferred =
-        layout.mobile || index < basicCount ? index : projectStart + index - basicCount;
+        layout.mobile || index < basicCount
+          ? index
+          : index < basicCount + projectCount
+            ? projectStart + index - basicCount
+            : experienceStart + index - basicCount - projectCount;
       let slot = preferred < capacity && !used.has(preferred) ? preferred : 0;
       while (used.has(slot)) slot++;
       result[id] = slot;
@@ -60,6 +66,7 @@ function resolvePositions(
 export function useDesktopShortcutsPresenter(
   ids: string[],
   basicCount: number,
+  projectCount: number,
   open: (id: string) => void,
 ) {
   const gridRef = useRef<HTMLElement>(null);
@@ -84,7 +91,7 @@ export function useDesktopShortcutsPresenter(
               Math.floor((width + parseFloat(css.columnGap)) / (88 + parseFloat(css.columnGap))),
             ),
         rows: mobile
-          ? 4
+          ? Math.ceil(ids.length / 3)
           : Math.max(
               1,
               Math.floor((height + parseFloat(css.rowGap)) / (76 + parseFloat(css.rowGap))),
@@ -105,14 +112,14 @@ export function useDesktopShortcutsPresenter(
     const observer = new ResizeObserver(measure);
     observer.observe(grid);
     return () => observer.disconnect();
-  }, []);
+  }, [ids.length]);
   useEffect(() => {
     savePreference(storageKey, JSON.stringify(saved));
   }, [saved]);
   const mode = layout.mobile ? 'mobile' : 'desktop';
   const positions = useMemo(
-    () => resolvePositions(ids, saved[mode], layout, basicCount),
-    [ids, saved, mode, layout, basicCount],
+    () => resolvePositions(ids, saved[mode], layout, basicCount, projectCount),
+    [ids, saved, mode, layout, basicCount, projectCount],
   );
   const cellStyle = (slot: number): CSSProperties => ({
     gridColumn: layout.mobile ? (slot % layout.columns) + 1 : Math.floor(slot / layout.rows) + 1,
