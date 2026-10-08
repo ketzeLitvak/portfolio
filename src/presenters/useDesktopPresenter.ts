@@ -3,6 +3,7 @@ import { useShareLinkPresenter } from './useShareLinkPresenter';
 import {
   desktopApps,
   desktopProjects,
+  desktopExperiments,
   desktopShortcutIds,
   findDesktopExperience,
 } from '../models/desktopShortcuts';
@@ -116,6 +117,12 @@ export function useDesktopPresenter() {
       let top = Math.min(35 + count * 24, innerHeight - 260);
       let width = 660;
       let height = 510;
+      if (desktopExperiments.some(([experimentId]) => experimentId === id)) {
+        width = Math.min(820, innerWidth - 80);
+        height = Math.min(720, innerHeight - 150);
+        left = Math.max(24, (innerWidth - width) / 2);
+        top = 28;
+      }
       if (id === 'welcome') {
         left = innerWidth > 1100 ? 220 : 150;
         top = 62;
@@ -221,6 +228,7 @@ export function useDesktopPresenter() {
     desktopShortcutIds,
     desktopApps.length,
     desktopProjects.length,
+    desktopExperiments.length,
     openShortcut,
   );
   const contextMenu = useContextMenuPresenter();

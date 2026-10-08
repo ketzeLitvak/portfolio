@@ -35,6 +35,7 @@ function resolvePositions(
   layout: Layout,
   basicCount: number,
   projectCount: number,
+  experimentCount: number,
 ): Positions {
   const capacity = layout.columns * layout.rows;
   const result: Positions = {},
@@ -48,14 +49,21 @@ function resolvePositions(
   }
   const projectStart = Math.ceil(basicCount / layout.rows) * layout.rows;
   const experienceStart = projectStart + Math.ceil(projectCount / layout.rows) * layout.rows;
-  for (const [index, id] of ids.entries())
+  const experimentStart = ids.length - experimentCount;
+  const ordered = layout.mobile
+    ? ids
+    : [...ids.slice(experimentStart), ...ids.slice(0, experimentStart)];
+  for (const id of ordered)
     if (result[id] === undefined) {
+      const index = ids.indexOf(id);
       const preferred =
-        layout.mobile || index < basicCount
-          ? index
-          : index < basicCount + projectCount
-            ? projectStart + index - basicCount
-            : experienceStart + index - basicCount - projectCount;
+        !layout.mobile && index >= experimentStart
+          ? (layout.columns - 1) * layout.rows + index - experimentStart
+          : layout.mobile || index < basicCount
+            ? index
+            : index < basicCount + projectCount
+              ? projectStart + index - basicCount
+              : experienceStart + index - basicCount - projectCount;
       let slot = preferred < capacity && !used.has(preferred) ? preferred : 0;
       while (used.has(slot)) slot++;
       result[id] = slot;
@@ -67,6 +75,7 @@ export function useDesktopShortcutsPresenter(
   ids: string[],
   basicCount: number,
   projectCount: number,
+  experimentCount: number,
   open: (id: string) => void,
 ) {
   const gridRef = useRef<HTMLElement>(null);
@@ -98,6 +107,11 @@ export function useDesktopShortcutsPresenter(
             ),
         mobile,
       };
+      next.rows = Math.max(
+        next.rows,
+        Math.ceil(ids.length / next.columns),
+        mobile ? 1 : experimentCount,
+      );
       setLayout((previous) =>
         previous.columns === next.columns &&
         previous.rows === next.rows &&
@@ -112,14 +126,14 @@ export function useDesktopShortcutsPresenter(
     const observer = new ResizeObserver(measure);
     observer.observe(grid);
     return () => observer.disconnect();
-  }, [ids.length]);
+  }, [ids.length, experimentCount]);
   useEffect(() => {
     savePreference(storageKey, JSON.stringify(saved));
   }, [saved]);
   const mode = layout.mobile ? 'mobile' : 'desktop';
   const positions = useMemo(
-    () => resolvePositions(ids, saved[mode], layout, basicCount, projectCount),
-    [ids, saved, mode, layout, basicCount, projectCount],
+    () => resolvePositions(ids, saved[mode], layout, basicCount, projectCount, experimentCount),
+    [ids, saved, mode, layout, basicCount, projectCount, experimentCount],
   );
   const cellStyle = (slot: number): CSSProperties => ({
     gridColumn: layout.mobile ? (slot % layout.columns) + 1 : Math.floor(slot / layout.rows) + 1,

@@ -1,5 +1,11 @@
+import { PermissionExperimentView } from '../views/experiments/PermissionExperimentView';
+import { CacheExperimentView } from '../views/experiments/CacheExperimentView';
+import { QueueExperimentView } from '../views/experiments/QueueExperimentView';
 import { projectIcons } from './projectIcons';
 import {
+  ShieldCheck,
+  DatabaseZap,
+  Workflow,
   ArrowUpRight,
   FolderOpen,
   UserRound,
@@ -26,8 +32,27 @@ export interface AppDefinition {
   icon: LucideIcon;
   view: ComponentType<ViewProps>;
   launcher?: boolean;
+  experiment?: boolean;
 }
 export const appRegistry: Record<string, AppDefinition> = {
+  permissions: {
+    title: ['Permissions', 'Permisos'],
+    icon: ShieldCheck,
+    view: PermissionExperimentView,
+    experiment: true,
+  },
+  cache: {
+    title: ['Cache', 'Caché'],
+    icon: DatabaseZap,
+    view: CacheExperimentView,
+    experiment: true,
+  },
+  queues: {
+    title: ['Queues', 'Colas'],
+    icon: Workflow,
+    view: QueueExperimentView,
+    experiment: true,
+  },
   welcome: {
     title: ['Start here', 'Empezá acá'],
     icon: ArrowUpRight,

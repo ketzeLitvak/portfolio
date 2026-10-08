@@ -1,8 +1,9 @@
 import { experiences } from './experience';
 import type { Text } from './types';
-import { launcherApps } from './appRegistry';
+import { appRegistry, launcherApps } from './appRegistry';
 import { projects } from './projects';
 
+export const desktopExperiments = Object.entries(appRegistry).filter(([, app]) => app.experiment);
 export const desktopApps = launcherApps.filter(([id]) => id !== 'tools');
 export const desktopProjects = Object.entries(projects);
 export const desktopExperiences = experiences.map((entry) => ({
@@ -18,4 +19,5 @@ export const desktopShortcutIds = [
   ...desktopApps.map(([id]) => id),
   ...desktopProjects.map(([id]) => id),
   ...desktopExperiences.map((entry) => entry.id),
+  ...desktopExperiments.map(([id]) => id),
 ];

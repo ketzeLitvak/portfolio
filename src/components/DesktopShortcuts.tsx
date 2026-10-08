@@ -2,6 +2,7 @@ import {
   desktopApps as apps,
   desktopProjects as projectEntries,
   desktopExperiences,
+  desktopExperiments,
 } from '../models/desktopShortcuts';
 import { translate, type Language } from '../models/types';
 import type { useDesktopShortcutsPresenter } from '../presenters/useDesktopShortcutsPresenter';
@@ -23,6 +24,19 @@ export function DesktopShortcuts({
       {p.dropStyle && (
         <span className="shortcut-drop-target" style={p.dropStyle} aria-hidden="true" />
       )}
+      {desktopExperiments.map(([id, app]) => (
+        <button
+          key={id}
+          className="app-icon experiment-shortcut"
+          data-open={id}
+          {...p.buttonProps(id)}
+        >
+          <span className={`icon-tile i-${id}`}>
+            <app.icon size={28} />
+          </span>
+          <span>{translate(language, app.title)}</span>
+        </button>
+      ))}
       {apps.map(([id, app]) => (
         <button key={id} className="app-icon" data-open={id} {...p.buttonProps(id)}>
           <span className={`icon-tile i-${id}`}>
