@@ -1,3 +1,5 @@
+import { readDirectLink, updateDirectLink, clearDirectLink } from '../models/directLinks';
+import { useShareLinkPresenter } from './useShareLinkPresenter';
 import {
   desktopApps,
   desktopProjects,
@@ -40,7 +42,7 @@ export function useDesktopPresenter() {
     return () => media.removeEventListener('change', update);
   }, []);
   const initialWindows = () =>
-    window.innerWidth <= 650
+    window.innerWidth <= 650 || readDirectLink()
       ? []
       : [
           {
@@ -98,6 +100,7 @@ export function useDesktopPresenter() {
     );
   }, []);
   const open = useCallback((id: string, options?: AppOpenOptions) => {
+    updateDirectLink(id, options);
     const nextZ = ++z.current;
     const target =
       id === 'experience' && options?.experience
@@ -133,10 +136,28 @@ export function useDesktopPresenter() {
       ];
     });
   }, []);
-  const close = useCallback(
-    (id: string) => setWindows((previous) => previous.filter((w) => w.id !== id)),
-    [],
-  );
+  useEffect(() => {
+    const followLink = () => {
+      const target = readDirectLink();
+      if (target) open(target.id, target.options);
+    };
+    followLink();
+    window.addEventListener('hashchange', followLink);
+    return () => window.removeEventListener('hashchange', followLink);
+  }, [open]);
+  const selectExperience = useCallback((id: string) => {
+    updateDirectLink('experience', { experience: id });
+    const revision = ++z.current;
+    setWindows((previous) =>
+      previous.map((window) =>
+        window.id === 'experience' ? { ...window, experienceTarget: { id, revision } } : window,
+      ),
+    );
+  }, []);
+  const close = useCallback((id: string) => {
+    clearDirectLink(id);
+    setWindows((previous) => previous.filter((window) => window.id !== id));
+  }, []);
   const minimize = useCallback(
     (id: string) =>
       setWindows((previous) => previous.map((w) => (w.id === id ? { ...w, minimized: true } : w))),
@@ -203,10 +224,16 @@ export function useDesktopPresenter() {
     openShortcut,
   );
   const contextMenu = useContextMenuPresenter();
-  const closeAll = () => setWindows([]);
+  const closeAll = () => {
+    clearDirectLink();
+    setWindows([]);
+  };
   const minimizeAll = () =>
     setWindows((previous) => previous.map((window) => ({ ...window, minimized: true })));
+  const share = useShareLinkPresenter(language);
   return {
+    share,
+    selectExperience,
     shortcuts,
     openShortcut,
     contextMenu,

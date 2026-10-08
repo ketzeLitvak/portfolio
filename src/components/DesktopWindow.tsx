@@ -1,4 +1,4 @@
-import { Minus, Square, X } from 'lucide-react';
+import { Minus, Square, X, Link2 } from 'lucide-react';
 import type { WindowState } from '../models/types';
 import { translate } from '../models/types';
 import { appRegistry } from '../models/appRegistry';
@@ -50,6 +50,21 @@ export function DesktopWindow({
         </div>
         <div className="window-actions">
           <button
+            className="copy-link"
+            aria-label={t('Copy link', 'Copiar enlace')}
+            title={t('Copy link', 'Copiar enlace')}
+            onClick={() =>
+              desktop.share.copy(
+                state.id,
+                state.id === 'experience'
+                  ? { experience: state.experienceTarget?.id ?? 'geopagos' }
+                  : undefined,
+              )
+            }
+          >
+            <Link2 size={16} />
+          </button>
+          <button
             className="minimize"
             aria-label={t('Minimize', 'Minimizar')}
             onClick={() => desktop.minimize(state.id)}
@@ -78,6 +93,7 @@ export function DesktopWindow({
           openApp={desktop.open}
           avatarCollection={desktop.avatars}
           experienceTarget={state.experienceTarget}
+          onExperienceChange={desktop.selectExperience}
         />
       </div>
     </section>

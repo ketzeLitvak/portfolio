@@ -1,3 +1,4 @@
+import { ShareLinkFeedback } from '../components/ShareLinkFeedback';
 import { findDesktopExperience } from '../models/desktopShortcuts';
 import {
   ArrowUpRight,
@@ -9,6 +10,7 @@ import {
   Copy,
   X,
   PanelTop,
+  Link2,
 } from 'lucide-react';
 import type { MouseEvent } from 'react';
 import { appRegistry } from '../models/appRegistry';
@@ -36,6 +38,18 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
       const state = p.windows.find((window) => window.id === id);
       if (!state) return;
       p.contextMenu.show(event, translate(p.language, appRegistry[id].title), [
+        {
+          label: t('Copy link', 'Copiar enlace'),
+          icon: Link2,
+          run: () => {
+            void p.share.copy(
+              id,
+              id === 'experience'
+                ? { experience: state.experienceTarget?.id ?? 'geopagos' }
+                : undefined,
+            );
+          },
+        },
         { label: t('Bring to front', 'Traer al frente'), icon: PanelTop, run: () => p.focus(id) },
         { label: t('Minimize', 'Minimizar'), icon: Minus, run: () => p.minimize(id) },
         {
@@ -55,6 +69,16 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
       const title = translate(p.language, experience?.organization ?? appRegistry[id].title);
       const actions = [
         { label: t('Open', 'Abrir'), icon: ArrowUpRight, run: () => p.openShortcut(id) },
+        {
+          label: t('Copy link', 'Copiar enlace'),
+          icon: Link2,
+          run: () => {
+            void p.share.copy(
+              experience ? 'experience' : id,
+              experience ? { experience: experience.experience } : undefined,
+            );
+          },
+        },
       ];
       const project = projects[id];
       if (project?.url)
@@ -234,6 +258,7 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
         </section>
       </main>
       <DesktopContextMenu presenter={p.contextMenu} />
+      <ShareLinkFeedback presenter={p.share} language={p.language} />
       <footer className="dock-shell">
         <div
           className="dock"

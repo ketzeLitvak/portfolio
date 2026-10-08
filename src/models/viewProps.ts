@@ -4,5 +4,6 @@ export interface ViewProps {
   language: Language;
   openApp: (id: string, options?: AppOpenOptions) => void;
   experienceTarget?: ExperienceTarget;
+  onExperienceChange?: (id: string) => void;
   avatarCollection?: SavedAvatarsPresenter;
 }

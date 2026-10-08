@@ -41,3 +41,14 @@ npm run check         # Lint, formatting and production build
 ```
 
 GitHub Actions runs lint and formatting checks before building and deploying. In VS Code or Cursor, install the recommended ESLint and Prettier extensions to format on save and show diagnostics while editing.
+
+## Direct links
+
+Share a specific project, experience or desktop application using a URL fragment:
+
+- `#project=radix` opens Radix.
+- `#experience=geopagos` opens the Geopagos experience tab.
+- `#experience=utn` and `#experience=leadership` open the other experience tabs.
+- `#app=avatar` opens the avatar lab.
+
+Use the link icon in a window title bar or **Copy link** in its context menu. Experience links follow the selected tab. Invalid fragments are ignored. If clipboard access is unavailable, the interface displays a selectable link for manual copying.

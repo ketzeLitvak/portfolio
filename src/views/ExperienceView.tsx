@@ -5,8 +5,13 @@ import type { ViewProps } from '../models/viewProps';
 import { useExperiencePresenter } from '../presenters/useExperiencePresenter';
 import { OpenButton } from '../components/Actions';
 const tabIcons = [BriefcaseBusiness, GraduationCap, UsersRound];
-export function ExperienceView({ language, openApp, experienceTarget }: ViewProps) {
-  const p = useExperiencePresenter(experienceTarget),
+export function ExperienceView({
+  language,
+  openApp,
+  experienceTarget,
+  onExperienceChange,
+}: ViewProps) {
+  const p = useExperiencePresenter(experienceTarget, onExperienceChange),
     entry = p.entry;
   const t = (en: string, es: string) => translate(language, [en, es]);
   return (
