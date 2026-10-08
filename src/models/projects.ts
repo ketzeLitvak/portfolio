@@ -71,7 +71,7 @@ export const projects: Record<string, Project> = {
       'Dirigí el desarrollo iterativo de formas combinables, expresiones, documentación y una demo interactiva.',
     ],
     stack: ['React', 'TypeScript', 'SVG'],
-    url: 'https://github.com/ketzeLitvak/faceshape-react',
+    url: 'https://ketzelitvak.github.io/faceshape-react/',
     extra: 'avatar',
   },
   ketze: {
