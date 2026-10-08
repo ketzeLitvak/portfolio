@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { enqueueJob, initialQueueScenario, tickQueue } from '../models/queueExperiment';
+export type EventDelivery = 'normal' | 'retry' | 'fail';
 export function useQueueExperimentPresenter() {
   const [state, setState] = useState(initialQueueScenario);
-  const [workers, setWorkers] = useState(2),
-    [maxAttempts, setMaxAttempts] = useState(3),
-    [failFirst, setFailFirst] = useState(0);
-  const [key, setKey] = useState('event-001'),
-    [idempotent, setIdempotent] = useState(true),
-    [running, setRunning] = useState(false);
+  const [workers, setWorkers] = useState(1);
+  const [delivery, setDelivery] = useState<EventDelivery>('normal');
+  const [idempotent, setIdempotent] = useState(true);
+  const [running, setRunning] = useState(false);
   useEffect(() => {
     if (!running) return;
     const timer = setInterval(
@@ -17,32 +16,57 @@ export function useQueueExperimentPresenter() {
     return () => clearInterval(timer);
   }, [running, workers, idempotent]);
   const step = () => setState((previous) => tickQueue(previous, workers, idempotent));
-  const enqueue = () => setState((previous) => enqueueJob(previous, key, maxAttempts, failFirst));
+  const send = () => {
+    if (state.jobs.length >= 24) return;
+    setState((previous) =>
+      enqueueJob(
+        previous,
+        `event-${previous.nextId.toString().padStart(3, '0')}`,
+        3,
+        delivery === 'normal' ? 0 : delivery === 'retry' ? 1 : 3,
+      ),
+    );
+    setRunning(true);
+  };
+  const repeat = () => {
+    const last = state.jobs.at(-1);
+    if (!last || state.jobs.length >= 24) return;
+    setState((previous) =>
+      enqueueJob(previous, last.key, 3, delivery === 'normal' ? 0 : delivery === 'retry' ? 1 : 3),
+    );
+    setRunning(true);
+  };
   const reset = () => {
     setRunning(false);
     setState(initialQueueScenario());
-    setWorkers(2);
-    setMaxAttempts(3);
-    setFailFirst(0);
-    setKey('event-001');
+    setWorkers(1);
+    setDelivery('normal');
     setIdempotent(true);
   };
+  const waiting = state.jobs.filter((job) => job.status === 'waiting' || job.status === 'delayed');
+  const results = state.jobs
+    .filter((job) => ['completed', 'failed', 'deduplicated'].includes(job.status))
+    .sort((a, b) => (a.completedAt ?? 0) - (b.completedAt ?? 0) || a.id - b.id);
+  const active = state.jobs.filter((job) => job.status === 'active');
+  const effects = Object.values(state.effects).reduce((sum, count) => sum + count, 0);
   return {
     state,
     workers,
     setWorkers,
-    maxAttempts,
-    setMaxAttempts,
-    failFirst,
-    setFailFirst,
-    key,
-    setKey,
+    delivery,
+    setDelivery,
     idempotent,
     setIdempotent,
     running,
-    setRunning,
+    toggle: () => setRunning((previous) => !previous),
     step,
-    enqueue,
+    send,
+    repeat,
     reset,
+    waiting,
+    active,
+    results,
+    effects,
+    full: state.jobs.length >= 24,
   };
 }

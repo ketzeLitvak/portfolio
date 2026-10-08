@@ -9,6 +9,7 @@ export interface DemoJob {
   readyAt: number;
   finishAt: number;
   worker?: number;
+  completedAt?: number;
 }
 export interface QueueScenario {
   now: number;
@@ -74,6 +75,12 @@ export function tickQueue(
       });
     }
   }
+  for (const job of jobs)
+    if (
+      ['completed', 'failed', 'deduplicated'].includes(job.status) &&
+      job.completedAt === undefined
+    )
+      job.completedAt = now;
   const busy = new Set(jobs.filter((job) => job.status === 'active').map((job) => job.worker));
   for (let worker = 1; worker <= workers; worker++) {
     if (busy.has(worker)) continue;

@@ -48,7 +48,7 @@ export const appRegistry: Record<string, AppDefinition> = {
     experiment: true,
   },
   queues: {
-    title: ['Queues', 'Colas'],
+    title: ['Events', 'Eventos'],
     icon: Workflow,
     view: QueueExperimentView,
     experiment: true,
