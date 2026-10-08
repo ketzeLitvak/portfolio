@@ -34,6 +34,7 @@ export const projects: Record<string, Project> = {
       'Desarrollé el frontend, gran parte del backend y el diseño de la aplicación. Aporté ideas a la infraestructura de datos dentro del equipo.',
     ],
     stack: ['Next.js', 'React', 'TypeScript', 'Node.js', 'Python', 'Supabase'],
+    url: 'https://radix-location.com.ar',
     status: ['In development', 'En desarrollo'],
   },
   gira: {
