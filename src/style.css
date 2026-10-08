@@ -2934,7 +2934,7 @@ input[type='text'] {
   background: var(--cache-soft);
   color: var(--cache-accent);
 }
-.cache-service-picker + .cache-scene {
+.cache-toolbar + .cache-scene {
   margin-top: 18px;
 }
 .cache-memory-pair {
@@ -3154,5 +3154,48 @@ input[type='text'] {
   .cache-evict {
     width: 22px;
     height: 22px;
+  }
+}
+
+.cache-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+}
+.cache-toolbar .cache-service-picker,
+.cache-toolbar .cache-clock {
+  margin-top: 0;
+  min-width: 0;
+}
+.cache-toolbar .cache-clock {
+  justify-content: flex-end;
+}
+@media (max-width: 650px) {
+  .cache-toolbar {
+    gap: 10px;
+    align-items: center;
+  }
+  .cache-toolbar .cache-service-picker {
+    flex: 1 1 140px;
+    gap: 5px;
+  }
+  .cache-toolbar .cache-service-picker > span {
+    flex-basis: 100%;
+  }
+  .cache-toolbar .cache-service-picker button {
+    font-size: 9px;
+    padding: 7px;
+  }
+  .cache-toolbar .cache-clock {
+    flex: 0 1 120px;
+    font-size: 8px;
+    gap: 5px;
+    text-align: right;
+  }
+  .cache-toolbar .cache-clock > span {
+    justify-content: flex-end;
+    gap: 3px;
   }
 }

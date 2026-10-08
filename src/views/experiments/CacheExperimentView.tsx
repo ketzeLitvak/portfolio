@@ -159,51 +159,53 @@ export function CacheExperimentView({ language }: ViewProps) {
           ])}
         </p>
       </header>
-      <div className="cache-clock">
-        <span>
-          <Timer size={13} />
-          {t(['Simulated clock', 'Reloj simulado'])} <strong>{s.now} s</strong> ·{' '}
-          {t(
-            p.busy
-              ? ['paused during request', 'pausado durante consulta']
-              : p.clockRunning
-                ? ['running', 'en marcha']
-                : ['paused', 'pausado'],
-          )}
-        </span>
-        <button
-          onClick={p.toggleClock}
-          disabled={p.busy}
-          aria-label={t(
-            p.clockRunning ? ['Pause clock', 'Pausar reloj'] : ['Start clock', 'Iniciar reloj'],
-          )}
-          title={t(
-            p.clockRunning ? ['Pause clock', 'Pausar reloj'] : ['Start clock', 'Iniciar reloj'],
-          )}
+      <div className="cache-toolbar">
+        <div
+          className="cache-service-picker"
+          role="group"
+          aria-label={t(['Request destination', 'Destino de la consulta'])}
         >
-          {p.clockRunning ? <Pause size={14} /> : <Play size={14} />}
-        </button>
-        <button onClick={p.advanceClock} disabled={p.busy}>
-          +1 s
-        </button>
-      </div>
-      <div
-        className="cache-service-picker"
-        role="group"
-        aria-label={t(['Request destination', 'Destino de la consulta'])}
-      >
-        <span>{t(['Send request to', 'Consultar desde'])}</span>
-        {cacheServices.map((service) => (
+          <span>{t(['Send request to', 'Consultar desde'])}</span>
+          {cacheServices.map((service) => (
+            <button
+              key={service}
+              data-service={service}
+              aria-pressed={s.service === service}
+              disabled={p.busy}
+              onClick={() => p.selectService(service)}
+            >
+              {t(['Service', 'Servicio'])} {service.toUpperCase()}
+            </button>
+          ))}
+        </div>
+        <div className="cache-clock">
+          <span>
+            <Timer size={13} />
+            {t(['Simulated clock', 'Reloj simulado'])} <strong>{s.now} s</strong> ·{' '}
+            {t(
+              p.busy
+                ? ['paused during request', 'pausado durante consulta']
+                : p.clockRunning
+                  ? ['running', 'en marcha']
+                  : ['paused', 'pausado'],
+            )}
+          </span>
           <button
-            key={service}
-            data-service={service}
-            aria-pressed={s.service === service}
+            onClick={p.toggleClock}
             disabled={p.busy}
-            onClick={() => p.selectService(service)}
+            aria-label={t(
+              p.clockRunning ? ['Pause clock', 'Pausar reloj'] : ['Start clock', 'Iniciar reloj'],
+            )}
+            title={t(
+              p.clockRunning ? ['Pause clock', 'Pausar reloj'] : ['Start clock', 'Iniciar reloj'],
+            )}
           >
-            {t(['Service', 'Servicio'])} {service.toUpperCase()}
+            {p.clockRunning ? <Pause size={14} /> : <Play size={14} />}
           </button>
-        ))}
+          <button onClick={p.advanceClock} disabled={p.busy}>
+            +1 s
+          </button>
+        </div>
       </div>
       <div
         className="cache-scene"
