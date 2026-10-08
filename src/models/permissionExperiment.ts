@@ -29,9 +29,9 @@ export interface PermissionScenario {
 export const initialPermissionScenario = (): PermissionScenario => ({
   user: 'ana',
   document: 'guide',
-  action: 'edit',
-  editors: ['ana'],
-  viewers: [],
+  action: 'view',
+  editors: [],
+  viewers: ['atlas:ana'],
 });
 export function evaluatePermission(scenario: PermissionScenario) {
   const user = permissionUsers.find((entry) => entry.id === scenario.user)!;
@@ -80,4 +80,22 @@ export function evaluatePermission(scenario: PermissionScenario) {
                 'Ninguna relación permite esta acción. Compartir está reservado al propietario.',
               ];
   return { user, document, sameTenant, owner, editor, viewer, path, allowed, reason };
+}
+
+export type PermissionRole = 'none' | 'viewer' | 'editor';
+export function assignPermissionRole(
+  scenario: PermissionScenario,
+  role: PermissionRole,
+): PermissionScenario {
+  const result = evaluatePermission(scenario);
+  const key = `${result.document.tenant}:${scenario.user}`;
+  const remove = (entries: string[]) =>
+    entries.filter(
+      (entry) => entry !== key && !(result.document.tenant === 'atlas' && entry === scenario.user),
+    );
+  return {
+    ...scenario,
+    editors: [...remove(scenario.editors), ...(role === 'editor' ? [key] : [])],
+    viewers: [...remove(scenario.viewers), ...(role === 'viewer' ? [key] : [])],
+  };
 }

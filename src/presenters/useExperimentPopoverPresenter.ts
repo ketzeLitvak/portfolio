@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-export function useCacheStrategyPopoverPresenter() {
+export function useExperimentPopoverPresenter() {
   const id = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -23,7 +23,7 @@ export function useCacheStrategyPopoverPresenter() {
     if (!position) return;
     const frame = requestAnimationFrame(() =>
       panelRef.current
-        ?.querySelector<HTMLButtonElement>('.cache-strategy-choices button[aria-pressed="true"]')
+        ?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
         ?.focus({ preventScroll: true }),
     );
     const outside = (event: PointerEvent) => {

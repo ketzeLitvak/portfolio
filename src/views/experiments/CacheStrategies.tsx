@@ -3,7 +3,7 @@ import { Check, ChevronDown, Radio, TrendingUp, X } from 'lucide-react';
 import { cacheStrategies } from '../../models/cacheExperiment';
 import { translate, type Language } from '../../models/types';
 import type { useCacheExperimentPresenter } from '../../presenters/useCacheExperimentPresenter';
-import { useCacheStrategyPopoverPresenter } from '../../presenters/useCacheStrategyPopoverPresenter';
+import { useExperimentPopoverPresenter } from '../../presenters/useExperimentPopoverPresenter';
 export function CacheStrategies({
   presenter: p,
   language,
@@ -11,7 +11,7 @@ export function CacheStrategies({
   presenter: ReturnType<typeof useCacheExperimentPresenter>;
   language: Language;
 }) {
-  const popover = useCacheStrategyPopoverPresenter();
+  const popover = useExperimentPopoverPresenter();
   const s = p.state;
   const name =
     s.strategy === 'ttl'

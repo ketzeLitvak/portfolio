@@ -3259,3 +3259,517 @@ input[type='text'] {
     font-size: 9px;
   }
 }
+
+/* Permissions: one person, one door, one attempt. */
+.permission-playground {
+  --permission-accent: #28785e;
+  --permission-soft: #28785e10;
+  padding: 28px;
+}
+.dark .permission-playground {
+  --permission-accent: #8fd5b5;
+  --permission-soft: #8fd5b510;
+}
+.permission-intro {
+  position: relative;
+  padding-right: 32px;
+}
+.permission-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--permission-accent);
+  font-size: 9px;
+  letter-spacing: 0.13em;
+}
+.permission-intro h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 25px;
+  line-height: 1.2;
+  letter-spacing: -0.7px;
+  margin: 12px 0 9px;
+}
+.permission-intro p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+.permission-reset {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+}
+.permission-people {
+  display: flex;
+  gap: 8px;
+  margin: 22px 0;
+}
+.permission-people button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 13px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  font-size: 11px;
+}
+.permission-people button[aria-pressed='true'] {
+  border-color: var(--permission-accent);
+  background: var(--permission-soft);
+}
+.permission-people small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  text-align: left;
+  margin-top: 2px;
+}
+.permission-scene {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 24px 0;
+}
+.permission-scene article {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 22px 12px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--panel);
+  min-width: 0;
+}
+.permission-scene h3 {
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0;
+  margin: 12px 0 6px;
+}
+.permission-scene small {
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.permission-avatar {
+  display: grid;
+  place-items: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: var(--permission-soft);
+  color: var(--permission-accent);
+}
+.permission-organization {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--permission-accent);
+  padding: 4px 8px;
+  border-radius: 15px;
+  background: var(--permission-soft);
+  margin-bottom: 12px;
+}
+.permission-owner {
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--permission-accent);
+}
+.permission-option-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  margin-top: 5px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  font-size: 11px;
+}
+.permission-connection {
+  position: absolute;
+  right: -20px;
+  top: calc(50% - 10px);
+  color: var(--muted);
+  opacity: 0.5;
+}
+.permission-door {
+  justify-content: center;
+  gap: 10px;
+}
+.permission-door-icon {
+  color: var(--muted);
+  transition:
+    color 0.25s,
+    transform 0.25s;
+}
+.permission-door strong {
+  font-size: 12px;
+}
+.permission-scene[data-result='allowed'] .permission-door {
+  border-color: var(--permission-accent);
+  background: var(--permission-soft);
+}
+.permission-scene[data-result='allowed'] .permission-door-icon {
+  color: var(--permission-accent);
+  transform: scale(1.06);
+}
+.permission-scene[data-result='denied'] .permission-door {
+  border-color: #b9757355;
+  background: #b9757308;
+}
+.permission-scene[data-result='denied'] .permission-door-icon {
+  color: #b97573;
+}
+.permission-scene[data-result='checking'] .permission-door-icon {
+  animation: permission-check 0.65s ease-in-out infinite;
+}
+@keyframes permission-check {
+  50% {
+    transform: translateX(3px);
+    opacity: 0.5;
+  }
+}
+.permission-document-icon {
+  color: var(--permission-accent);
+}
+.permission-document-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 100px;
+  margin-top: 13px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.permission-document-preview[data-open='true'] {
+  color: var(--permission-accent);
+  background: var(--permission-soft);
+}
+.permission-paper-line {
+  width: 100%;
+  height: 4px;
+  background: var(--permission-accent);
+  opacity: 0.2;
+  border-radius: 3px;
+}
+.permission-paper-line:last-child {
+  width: 65%;
+  align-self: flex-start;
+}
+.permission-feedback {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px;
+  background: var(--permission-soft);
+  border-radius: 9px;
+}
+.permission-feedback[data-result='denied'] {
+  background: #b9757310;
+}
+.permission-feedback p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.permission-dot,
+.permission-pulse {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--permission-accent);
+}
+.permission-feedback[data-result='denied'] .permission-dot {
+  background: #b97573;
+}
+.permission-pulse {
+  animation: cache-pulse 1s ease-in-out infinite;
+}
+.permission-main-action {
+  display: flex;
+  gap: 9px;
+  align-items: stretch;
+  margin: 16px 0 20px;
+}
+.permission-attempt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 17px;
+  background: var(--permission-accent);
+  color: var(--panel);
+  border: 0;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.permission-main-action .permission-option-trigger {
+  margin-top: 0;
+}
+.permission-playground button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.permission-footer {
+  font-size: 9px;
+  color: var(--muted);
+  padding: 9px 0 20px;
+}
+.permission-explanation {
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+}
+.permission-explanation summary {
+  cursor: pointer;
+  padding: 15px 0;
+  font-weight: 500;
+}
+.permission-explanation p,
+.permission-explanation li {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.permission-explanation label {
+  display: grid;
+  gap: 7px;
+  max-width: 320px;
+  margin: 18px 0;
+}
+.permission-explanation select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: inherit;
+  background: var(--panel);
+  padding: 9px;
+  font-size: 11px;
+}
+.permission-explanation a {
+  color: var(--permission-accent);
+}
+.permission-options {
+  --permission-accent: #28785e;
+  --permission-soft: #28785e10;
+  position: fixed;
+  z-index: 100000;
+  max-height: min(410px, calc(100dvh - 24px));
+  overflow: auto;
+  padding: 14px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.dark .permission-options {
+  --permission-accent: #8fd5b5;
+  --permission-soft: #8fd5b510;
+}
+.permission-options header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+.permission-options header button {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+}
+.permission-options > div {
+  display: grid;
+  gap: 7px;
+}
+.permission-options > div > button {
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: transparent;
+  text-align: left;
+}
+.permission-options > div > button[aria-pressed='true'] {
+  border-color: var(--permission-accent);
+  background: var(--permission-soft);
+}
+.permission-options button span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  font-size: 11px;
+}
+.permission-options button small {
+  font-size: 10px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.permission-options button svg {
+  flex-shrink: 0;
+  color: var(--permission-accent);
+}
+@media (max-width: 650px) {
+  .permission-playground {
+    padding: 20px 16px;
+  }
+  .permission-intro h2 {
+    font-size: 22px;
+  }
+  .permission-people {
+    gap: 6px;
+  }
+  .permission-people button {
+    flex: 1;
+    padding: 9px;
+    gap: 6px;
+  }
+  .permission-scene {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+  }
+  .permission-scene article {
+    padding: 16px 9px;
+  }
+  .permission-scene .permission-document {
+    grid-column: 1 / -1;
+  }
+  .permission-person .permission-connection {
+    right: -16px;
+  }
+  .permission-door .permission-connection {
+    right: calc(50% - 9px);
+    top: auto;
+    bottom: -16px;
+    transform: rotate(90deg);
+  }
+  .permission-document-preview {
+    min-height: 76px;
+  }
+  .permission-people span {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .permission-door-icon {
+    transition: none;
+  }
+  .permission-pulse,
+  .permission-scene[data-result='checking'] .permission-door-icon {
+    animation: none;
+  }
+}
+@media (max-width: 650px) {
+  .permission-people {
+    margin: 16px 0;
+  }
+  .permission-scene {
+    margin: 18px 0;
+  }
+  .permission-scene .permission-person,
+  .permission-scene .permission-door {
+    padding: 13px 9px;
+  }
+  .permission-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  .permission-avatar svg {
+    width: 28px;
+    height: 28px;
+  }
+  .permission-person h3 {
+    margin: 8px 0 4px;
+  }
+  .permission-person .permission-organization {
+    margin-bottom: 6px;
+  }
+  .permission-person > small {
+    display: none;
+  }
+  .permission-person .permission-option-trigger {
+    padding: 7px 9px;
+  }
+  .permission-door-icon svg {
+    width: 62px;
+    height: 62px;
+  }
+  .permission-scene .permission-document {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) 78px;
+    grid-template-rows: auto auto auto;
+    gap: 5px 8px;
+    text-align: left;
+    padding: 12px 9px;
+  }
+  .permission-document-icon {
+    grid-column: 1;
+    grid-row: 1 / 4;
+  }
+  .permission-document h3 {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    font-size: 11px;
+  }
+  .permission-document .permission-organization {
+    grid-column: 2;
+    grid-row: 2;
+    width: fit-content;
+    margin: 0;
+    padding: 3px 6px;
+    font-size: 8px;
+  }
+  .permission-document > small {
+    grid-column: 2;
+    grid-row: 3;
+    font-size: 8px;
+  }
+  .permission-document-preview {
+    grid-column: 3;
+    grid-row: 1 / 4;
+    min-height: 70px;
+    margin: 0;
+    padding: 8px 6px;
+    gap: 6px;
+    text-align: center;
+    font-size: 8px;
+  }
+  .permission-feedback {
+    padding: 10px;
+  }
+  .permission-feedback p {
+    font-size: 11px;
+  }
+}
