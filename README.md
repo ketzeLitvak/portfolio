@@ -76,3 +76,11 @@ The dependency injection app (`#app=injection`) wires a shipping provider into t
 Load balancing (`#app=balance`) compares round robin with least active connections across three simulated servers. A controllable clock completes requests; stopped servers fail active work and are excluded from new routing. Tracing (`#app=tracing`) displays nested API, auth, payments and database spans with shared trace context, correlated logs and slow/error scenarios.
 
 Migrations (`#app=migrations`) applies a nullable column, backfill and NOT NULL constraint in order. Injected transaction failures leave both version and data unchanged; down migrations explicitly show destructive email removal. Idempotency (`#app=idempotency`) stores payment responses by key, replays identical retries, rejects changed amounts and illustrates a lost response after a successful charge. These four apps are local models, with independent algorithm tests.
+
+## Pixel Studio
+
+The drawing app (`#app=drawing`) is a 16×16 or 32×32 pixel editor with pencil, eraser, four-connected flood fill, color picker and palette. Pointer capture and line interpolation support continuous mouse, pen and touch strokes. Each stroke is one undo operation; history is capped at 40 entries. Canvas size changes and clearing can also be undone. The focused canvas supports arrows and Space/Enter, plus tool shortcuts and Ctrl/Command undo/redo.
+
+The current document is validated and saved in local storage, with a visible fallback if storage is unavailable. PNG exports use nearest-neighbor scaling to 512×512 or 1024×1024, preserving transparency without the editor grid. A drawing can be applied as a persistent desktop wallpaper; restore it in Pixel Studio or the desktop context menu. The wallpaper dependency is passed through the view contract and owned by the desktop presenter. Algorithms, interaction state, canvas rendering and feature components are separated into model, presenter, utility and view files.
+
+Default experiment columns fill from the right, leaving any partial column at the left edge of the experiment group. Rate limiting and database indexes remain in the far-right column; explicit dragged positions are preserved.

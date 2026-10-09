@@ -69,8 +69,15 @@ function resolvePositions(
     -layout.rows,
   );
   const left = experiments.filter((id) => !right.includes(id));
+  const leadingCount = left.length % layout.rows || layout.rows;
   const experimentSlots = new Map([
-    ...left.map((id, index) => [id, experimentBase + index] as const),
+    ...left.map(
+      (id, index) =>
+        [
+          id,
+          experimentBase + (index < leadingCount ? index : layout.rows + index - leadingCount),
+        ] as const,
+    ),
     ...right.map((id, index) => [id, (layout.columns - 1) * layout.rows + index] as const),
   ]);
   const ordered = layout.mobile

@@ -1,3 +1,5 @@
+import { DrawingView } from '../views/drawing/DrawingView';
+
 import { BalanceExperimentView } from '../views/experiments/balance/BalanceExperimentView';
 
 import { TracingExperimentView } from '../views/experiments/tracing/TracingExperimentView';
@@ -34,13 +36,14 @@ import { projectIcons } from './projectIcons';
 
 import {
   Network,
-  ScanLine,
+  Route,
   DatabaseBackup,
-  Repeat2,
+  CopyCheck,
+  Paintbrush,
   Plug,
   Gauge,
   ListOrdered,
-  History,
+  FileClock,
   Fingerprint,
   LockKeyhole,
   FileSignature,
@@ -142,7 +145,7 @@ export const appRegistry: Record<string, AppDefinition> = {
   },
   sourcing: {
     title: ['Event sourcing', 'Event sourcing'],
-    icon: History,
+    icon: FileClock,
     view: SourcingExperimentView,
     experiment: true,
   },
@@ -178,7 +181,7 @@ export const appRegistry: Record<string, AppDefinition> = {
   },
   tracing: {
     title: ['Tracing', 'Trazabilidad'],
-    icon: ScanLine,
+    icon: Route,
     view: TracingExperimentView,
     experiment: true,
   },
@@ -190,7 +193,7 @@ export const appRegistry: Record<string, AppDefinition> = {
   },
   idempotency: {
     title: ['Idempotency', 'Idempotencia'],
-    icon: Repeat2,
+    icon: CopyCheck,
     view: IdempotencyExperimentView,
     experiment: true,
   },
@@ -215,6 +218,12 @@ export const appRegistry: Record<string, AppDefinition> = {
     launcher: true,
   },
   avatar: { title: ['Avatar lab', 'Avatar lab'], icon: Smile, view: AvatarView, launcher: true },
+  drawing: {
+    title: ['Pixel Studio', 'Pixel Studio'],
+    icon: Paintbrush,
+    view: DrawingView,
+    launcher: true,
+  },
   tools: { title: ['Ketze Tools', 'Ketze Tools'], icon: Braces, view: ToolsView, launcher: true },
   contact: { title: ['Let’s talk', 'Hablemos'], icon: Mail, view: ContactView, launcher: true },
   quick: { title: ['Quick view', 'Vista rápida'], icon: LayoutGrid, view: QuickView },

@@ -53,6 +53,7 @@ export function DesktopWindow({
       <WindowTitleBar state={state} desktop={desktop} title={title} icon={Icon} drag={p} />
       <div className={styles.windowContent}>
         <View
+          wallpaper={desktop.wallpaper}
           language={desktop.language}
           openApp={desktop.open}
           avatarCollection={desktop.avatars}

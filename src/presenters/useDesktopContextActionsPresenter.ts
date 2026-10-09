@@ -12,6 +12,7 @@ import {
   PanelTop,
   Link2,
   LayoutGrid,
+  Image,
 } from 'lucide-react';
 
 import { findDesktopExperience } from '../models/desktopShortcuts';
@@ -93,6 +94,17 @@ export function useDesktopContextActionsPresenter(p: DesktopPresenter) {
       else p.contextMenu.show(event, title, actions);
     } else if (target.closest('main') && !target.closest('[data-desktop-avatar]')) {
       p.contextMenu.show(event, t('Desktop', 'Escritorio'), [
+        ...(p.wallpaper.image
+          ? [
+              {
+                label: t('Restore wallpaper', 'Restaurar fondo'),
+                icon: Image,
+                run: () => {
+                  p.wallpaper.restore();
+                },
+              },
+            ]
+          : []),
         { label: t('Search', 'Buscar'), icon: Search, run: () => p.open('search') },
         { label: t('Quick view', 'Vista rápida'), icon: LayoutGrid, run: () => p.open('quick') },
         {

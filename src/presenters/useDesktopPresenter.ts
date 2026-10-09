@@ -1,3 +1,5 @@
+import { useDesktopWallpaperPresenter } from './useDesktopWallpaperPresenter';
+
 import { readDirectLink, updateDirectLink, clearDirectLink } from '../models/directLinks';
 
 import { useShareLinkPresenter } from './useShareLinkPresenter';
@@ -23,6 +25,7 @@ import type { Language, Theme, WindowState, AppOpenOptions } from '../models/typ
 import { readPreference, savePreference } from '../models/types';
 
 export function useDesktopPresenter() {
+  const wallpaper = useDesktopWallpaperPresenter();
   const avatars = useSavedAvatarsPresenter();
   const [activeMenu, setActiveMenu] = useState<'language' | 'theme' | null>(null);
   useEffect(() => {
@@ -132,7 +135,7 @@ export function useDesktopPresenter() {
       let top = Math.min(35 + count * 24, innerHeight - 260);
       let width = 660;
       let height = 510;
-      if (desktopExperiments.some(([experimentId]) => experimentId === id)) {
+      if (id === 'drawing' || desktopExperiments.some(([experimentId]) => experimentId === id)) {
         width = Math.min(820, innerWidth - 80);
         height = Math.min(720, innerHeight - 150);
         left = Math.max(24, (innerWidth - width) / 2);
@@ -260,6 +263,7 @@ export function useDesktopPresenter() {
 
   const share = useShareLinkPresenter(language);
   return {
+    wallpaper,
     share,
     selectExperience,
     shortcuts,

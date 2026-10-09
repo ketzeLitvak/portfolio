@@ -32,13 +32,19 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
       <DesktopMenuBar presenter={p} />
       <main className={styles.desktopMain} tabIndex={-1}>
         <div className={styles.wallpaper} aria-hidden="true">
-          <div className={styles.wallpaperWord}>
-            KETZE
-            <br />
-            <span>STUDIO.</span>
-          </div>
-          <div className={classNames(styles.orb, styles.orbOne)} />
-          <div className={classNames(styles.orb, styles.orbTwo)} />
+          {p.wallpaper.image ? (
+            <img src={p.wallpaper.image} alt="" className={styles.customWallpaper} />
+          ) : (
+            <>
+              <div className={styles.wallpaperWord}>
+                KETZE
+                <br />
+                <span>STUDIO.</span>
+              </div>
+              <div className={classNames(styles.orb, styles.orbOne)} />
+              <div className={classNames(styles.orb, styles.orbTwo)} />
+            </>
+          )}
         </div>
         <DesktopShortcuts language={p.language} presenter={p.shortcuts} />
         <DesktopAvatars collection={p.avatars} language={p.language} />
