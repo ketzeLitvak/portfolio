@@ -302,7 +302,7 @@
   overflow: auto;
   border: 1px solid var(--line);
   border-radius: 4px;
-  max-height: 440px;
+  max-width: 440px;
 }
 .canvasWrap {
   border: 0;
@@ -364,9 +364,6 @@
   }
   .size {
     margin-top: 8px;
-  }
-  .canvas-viewport {
-    max-height: none;
   }
 }
 
