@@ -1,9 +1,11 @@
+import { CircuitExperimentView } from '../views/experiments/CircuitExperimentView';
 import { RaceExperimentView } from '../views/experiments/RaceExperimentView';
 import { PermissionExperimentView } from '../views/experiments/PermissionExperimentView';
 import { CacheExperimentView } from '../views/experiments/CacheExperimentView';
 import { QueueExperimentView } from '../views/experiments/QueueExperimentView';
 import { projectIcons } from './projectIcons';
 import {
+  Unplug,
   GitFork,
   ShieldCheck,
   DatabaseZap,
@@ -59,6 +61,12 @@ export const appRegistry: Record<string, AppDefinition> = {
     title: ['Race conditions', 'Concurrencia'],
     icon: GitFork,
     view: RaceExperimentView,
+    experiment: true,
+  },
+  circuit: {
+    title: ['Circuit breaker', 'Circuit breaker'],
+    icon: Unplug,
+    view: CircuitExperimentView,
     experiment: true,
   },
   welcome: {
