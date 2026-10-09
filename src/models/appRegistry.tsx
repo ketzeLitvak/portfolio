@@ -1,3 +1,11 @@
+import { BalanceExperimentView } from '../views/experiments/balance/BalanceExperimentView';
+
+import { TracingExperimentView } from '../views/experiments/tracing/TracingExperimentView';
+
+import { MigrationExperimentView } from '../views/experiments/migrations/MigrationExperimentView';
+
+import { IdempotencyExperimentView } from '../views/experiments/idempotency/IdempotencyExperimentView';
+
 import { InjectionExperimentView } from '../views/experiments/injection/InjectionExperimentView';
 
 import { RateExperimentView } from '../views/experiments/rate/RateExperimentView';
@@ -25,6 +33,10 @@ import { QueueExperimentView } from '../views/experiments/events/QueueExperiment
 import { projectIcons } from './projectIcons';
 
 import {
+  Network,
+  ScanLine,
+  DatabaseBackup,
+  Repeat2,
   Plug,
   Gauge,
   ListOrdered,
@@ -156,6 +168,30 @@ export const appRegistry: Record<string, AppDefinition> = {
     title: ['Dependency injection', 'Inyección de dependencias'],
     icon: Plug,
     view: InjectionExperimentView,
+    experiment: true,
+  },
+  balance: {
+    title: ['Load balancing', 'Balanceo de carga'],
+    icon: Network,
+    view: BalanceExperimentView,
+    experiment: true,
+  },
+  tracing: {
+    title: ['Tracing', 'Trazabilidad'],
+    icon: ScanLine,
+    view: TracingExperimentView,
+    experiment: true,
+  },
+  migrations: {
+    title: ['Migrations', 'Migraciones'],
+    icon: DatabaseBackup,
+    view: MigrationExperimentView,
+    experiment: true,
+  },
+  idempotency: {
+    title: ['Idempotency', 'Idempotencia'],
+    icon: Repeat2,
+    view: IdempotencyExperimentView,
     experiment: true,
   },
   welcome: {

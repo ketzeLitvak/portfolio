@@ -115,3 +115,20 @@
   background: #443254;
   color: #d8b9f6;
 }
+
+.i-balance {
+  background: #294b56;
+  color: #b1e0eb;
+}
+.i-tracing {
+  background: #594530;
+  color: #efcf9e;
+}
+.i-migrations {
+  background: #34513e;
+  color: #b6e3c0;
+}
+.i-idempotency {
+  background: #4c395b;
+  color: #dfc5f3;
+}

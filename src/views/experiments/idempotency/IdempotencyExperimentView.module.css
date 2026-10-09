@@ -1,0 +1,54 @@
+.root {
+  --lab-accent: #715b86;
+}
+:global(.dark) .root {
+  --lab-accent: #cbb2e1;
+}
+.request {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0 16px 16px;
+  background: var(--panel);
+}
+.request select {
+  padding: 10px;
+  background: var(--bar);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font: inherit;
+}
+.check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  margin: 18px 0;
+}
+.check input {
+  accent-color: var(--lab-accent);
+}
+.payments {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 11px;
+}
+.payments h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  margin-top: 0;
+}
+.payments > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.payments span,
+.payments p {
+  color: var(--muted);
+}

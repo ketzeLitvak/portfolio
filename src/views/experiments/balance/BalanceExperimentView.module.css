@@ -1,0 +1,73 @@
+.root {
+  --lab-accent: #397080;
+}
+:global(.dark) .root {
+  --lab-accent: #9bd7e6;
+}
+.servers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.servers article {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 14px;
+  min-width: 0;
+}
+.servers article[data-off='true'] {
+  opacity: 0.6;
+  border-style: dashed;
+}
+.servers header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lab-accent);
+}
+.servers header button {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--bar);
+  color: var(--ink);
+}
+.servers small,
+.servers p {
+  font-size: 10px;
+  color: var(--muted);
+}
+.count {
+  display: grid;
+  gap: 4px;
+  font-size: 32px;
+  margin: 20px 0 10px;
+}
+.jobs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 40px;
+}
+.jobs span {
+  font-size: 9px;
+  padding: 4px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--lab-accent) 12%, transparent);
+}
+@media (max-width: 650px) {
+  .servers {
+    gap: 6px;
+  }
+  .servers article {
+    padding: 9px;
+  }
+  .servers header {
+    gap: 4px;
+  }
+}

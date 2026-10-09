@@ -63,7 +63,7 @@ To add a screen, create its feature folder, view, CSS Module and optional presen
 
 ## Interactive experiments
 
-Independent desktop apps: caching, permissions, events, concurrency, circuit breakers, rate limiting, database indexes, event sourcing, hashing, encryption, digital signatures and dependency injection. Experiment icons start in the rightmost columns and can be dragged like the other shortcuts.
+Independent desktop apps: caching, permissions, events, concurrency, circuit breakers, rate limiting, database indexes, event sourcing, hashing, encryption, digital signatures, dependency injection, load balancing, distributed tracing, database migrations and idempotency. Experiment icons start in the rightmost columns and can be dragged like the other shortcuts.
 
 Rate limiting compares fixed windows, sliding windows and token buckets with an explicit virtual clock and separate client quotas. The index example compares linear scanning with binary lookup over an ordered key-to-row mapping; it illustrates the idea without claiming to emulate a database B-tree. Event sourcing reconstructs a cart from an append-only history and records undo as a compensating event.
 
@@ -72,3 +72,7 @@ Cryptography uses the browser's Web Crypto API: SHA-256 fingerprints, PBKDF2 pas
 Share any experiment using `#app=rate`, `#app=indexes`, `#app=sourcing`, `#app=hashing`, `#app=encryption` or `#app=signatures`. `ExperimentWorkbench`, `ExperimentClock`, `HexValue` and scoped workbench utilities keep the common UI reusable. Algorithms live in the models, interaction state in presenters and each feature view has its own CSS Module.
 
 The dependency injection app (`#app=injection`) wires a shipping provider into the checkout constructor. Standard and express providers quote by weight; a test stub returns a fixed response. The checkout delegates through the shared contract. Tests independently inject a spy and verify order forwarding, alongside composition and stub behavior.
+
+Load balancing (`#app=balance`) compares round robin with least active connections across three simulated servers. A controllable clock completes requests; stopped servers fail active work and are excluded from new routing. Tracing (`#app=tracing`) displays nested API, auth, payments and database spans with shared trace context, correlated logs and slow/error scenarios.
+
+Migrations (`#app=migrations`) applies a nullable column, backfill and NOT NULL constraint in order. Injected transaction failures leave both version and data unchanged; down migrations explicitly show destructive email removal. Idempotency (`#app=idempotency`) stores payment responses by key, replays identical retries, rejects changed amounts and illustrates a lost response after a successful charge. These four apps are local models, with independent algorithm tests.
