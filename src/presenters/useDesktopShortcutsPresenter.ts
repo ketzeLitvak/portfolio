@@ -59,6 +59,20 @@ function resolvePositions(
   const projectStart = Math.ceil(basicCount / layout.rows) * layout.rows;
   const experienceStart = projectStart + Math.ceil(projectCount / layout.rows) * layout.rows;
   const experimentStart = ids.length - experimentCount;
+  const experiments = ids.slice(experimentStart);
+  const experimentColumns = Math.ceil(experimentCount / layout.rows);
+  const experimentBase = Math.max(0, layout.columns - experimentColumns) * layout.rows;
+  const lastColumnStart = (experimentColumns - 1) * layout.rows;
+  const moved: string[] = experiments.filter((id) => id === 'rate' || id === 'indexes');
+  const right = [
+    ...experiments.slice(lastColumnStart).filter((id) => !moved.includes(id)),
+    ...moved,
+  ].slice(-layout.rows);
+  const left = experiments.filter((id) => !right.includes(id));
+  const experimentSlots = new Map([
+    ...left.map((id, index) => [id, experimentBase + index] as const),
+    ...right.map((id, index) => [id, (layout.columns - 1) * layout.rows + index] as const),
+  ]);
   const ordered = layout.mobile
     ? ids
     : [...ids.slice(experimentStart), ...ids.slice(0, experimentStart)];
@@ -67,9 +81,7 @@ function resolvePositions(
       const index = ids.indexOf(id);
       const preferred =
         !layout.mobile && index >= experimentStart
-          ? Math.max(0, layout.columns - Math.ceil(experimentCount / layout.rows)) * layout.rows +
-            index -
-            experimentStart
+          ? experimentSlots.get(id)!
           : layout.mobile || index < basicCount
             ? index
             : index < basicCount + projectCount
