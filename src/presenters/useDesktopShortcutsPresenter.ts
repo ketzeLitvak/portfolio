@@ -5,7 +5,7 @@ import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react';
 import { readPreference, savePreference } from '../models/types';
 
 type Positions = Record<string, number>;
-type Layout = { columns: number; rows: number; mobile: boolean };
+type Layout = { columns: number; rows: number; mobile: boolean; iconSize: number };
 type Drag = {
   id: string;
   pointer: number;
@@ -64,7 +64,9 @@ function resolvePositions(
       const index = ids.indexOf(id);
       const preferred =
         !layout.mobile && index >= experimentStart
-          ? (layout.columns - 1) * layout.rows + index - experimentStart
+          ? Math.max(0, layout.columns - Math.ceil(experimentCount / layout.rows)) * layout.rows +
+            index -
+            experimentStart
           : layout.mobile || index < basicCount
             ? index
             : index < basicCount + projectCount
@@ -86,7 +88,12 @@ export function useDesktopShortcutsPresenter(
   open: (id: string) => void,
 ) {
   const gridRef = useRef<HTMLElement>(null);
-  const [layout, setLayout] = useState<Layout>({ columns: 12, rows: 1, mobile: false });
+  const [layout, setLayout] = useState<Layout>({
+    columns: 12,
+    rows: 1,
+    mobile: false,
+    iconSize: 48,
+  });
   const [saved, setSaved] = useState(loadPositions);
   const [drag, setDrag] = useState<Drag | null>(null);
   const dragRef = useRef<Drag | null>(null);
@@ -101,29 +108,31 @@ export function useDesktopShortcutsPresenter(
       const width = grid.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight);
       const height = grid.clientHeight - parseFloat(css.paddingTop) - parseFloat(css.paddingBottom);
       const next = {
+        iconSize: 48,
         columns: mobile
-          ? 3
+          ? innerHeight < 600
+            ? 4
+            : 3
           : Math.max(
               1,
               Math.floor((width + parseFloat(css.columnGap)) / (88 + parseFloat(css.columnGap))),
             ),
         rows: mobile
-          ? Math.ceil(ids.length / 3)
+          ? 1
           : Math.max(
               1,
               Math.floor((height + parseFloat(css.rowGap)) / (76 + parseFloat(css.rowGap))),
             ),
         mobile,
       };
-      next.rows = Math.max(
-        next.rows,
-        Math.ceil(ids.length / next.columns),
-        mobile ? 1 : experimentCount,
-      );
+      next.rows = Math.max(next.rows, Math.ceil(ids.length / next.columns));
+      const rowHeight = (height - (next.rows - 1) * parseFloat(css.rowGap)) / next.rows;
+      next.iconSize = Math.min(48, Math.max(18, Math.floor(rowHeight - 32)));
       setLayout((previous) =>
         previous.columns === next.columns &&
         previous.rows === next.rows &&
-        previous.mobile === next.mobile
+        previous.mobile === next.mobile &&
+        previous.iconSize === next.iconSize
           ? previous
           : next,
       );
@@ -251,7 +260,11 @@ export function useDesktopShortcutsPresenter(
   return {
     reset,
     gridRef,
-    gridStyle: { gridTemplateRows: `repeat(${layout.rows}, minmax(0, 1fr))` },
+    gridStyle: {
+      gridTemplateRows: `repeat(${layout.rows}, minmax(0, 1fr))`,
+      gridTemplateColumns: `repeat(${layout.columns}, ${layout.mobile ? 'minmax(0, 1fr)' : '88px'})`,
+      '--shortcut-size': `${layout.iconSize}px`,
+    } as CSSProperties,
     buttonProps,
     dropStyle: drag?.moved && drag.target !== null ? cellStyle(drag.target) : null,
   };

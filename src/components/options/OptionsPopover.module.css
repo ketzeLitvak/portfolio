@@ -177,3 +177,74 @@
 
 .events-options-trigger {
 }
+
+.labTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 11px;
+}
+.labPanel {
+  position: fixed;
+  z-index: 100000;
+  max-height: min(410px, calc(100dvh - 24px));
+  overflow: auto;
+  padding: 14px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.labPanel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.labPanel header button {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+}
+.labChoices {
+  display: grid;
+  gap: 7px;
+}
+.labChoices button {
+  display: grid;
+  gap: 5px;
+  text-align: left;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.labChoices button[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--bar);
+}
+.labChoices button > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  font-size: 11px;
+}
+.labChoices small {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.55;
+}

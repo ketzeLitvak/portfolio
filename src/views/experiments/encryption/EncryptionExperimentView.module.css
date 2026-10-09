@@ -1,0 +1,80 @@
+.root {
+  --lab-accent: #318469;
+}
+:global(.dark) .root {
+  --lab-accent: #9bdec4;
+}
+.root h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.iv {
+  margin: 14px 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.iv > span {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  margin-bottom: 6px;
+}
+.tamper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 10px;
+  margin-top: 14px;
+}
+.tamper[aria-pressed='true'] {
+  border-color: #bb7272;
+}
+.tamper:disabled {
+  opacity: 0.4;
+}
+.keys {
+  display: grid;
+  gap: 8px;
+}
+.keys button {
+  padding: 9px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 10px;
+}
+.keys button[aria-pressed='true'] {
+  border-color: var(--lab-accent);
+}
+.keys button:disabled {
+  opacity: 0.4;
+}
+.output {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  margin-top: 16px;
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.output small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.output[data-failed='true'] {
+  color: #bd7272;
+}
+@media (max-width: 400px) {
+  .keys button,
+  .tamper {
+    font-size: 9px;
+    padding: 7px;
+  }
+}

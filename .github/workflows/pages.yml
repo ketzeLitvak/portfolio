@@ -22,6 +22,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run test:lint-rules
+      - run: npm run test:experiments
       - run: npm run format:check
       - run: npm run build
       - uses: actions/configure-pages@v5

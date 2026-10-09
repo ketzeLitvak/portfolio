@@ -170,3 +170,17 @@
     padding: 0;
   }
 }
+
+.app-grid :global(.external_icon_tile) {
+  width: var(--shortcut-size, 48px);
+  height: var(--shortcut-size, 48px);
+}
+.app-grid :global(.external_icon_tile) > svg {
+  width: 65%;
+  height: 65%;
+}
+.app-grid :global(.external_app_icon) {
+  min-height: 0;
+  gap: 3px;
+  padding: 1px 0;
+}

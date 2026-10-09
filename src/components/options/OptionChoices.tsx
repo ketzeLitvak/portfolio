@@ -30,11 +30,13 @@ export function OptionChoices<T extends string>({
   return (
     <div
       className={
-        appearance === 'cache'
-          ? optionStyles.cacheStrategyChoices
-          : appearance === 'events'
-            ? optionStyles.eventsDeliveries
-            : undefined
+        appearance === 'lab'
+          ? optionStyles.labChoices
+          : appearance === 'cache'
+            ? optionStyles.cacheStrategyChoices
+            : appearance === 'events'
+              ? optionStyles.eventsDeliveries
+              : undefined
       }
       role="group"
       aria-label={label}

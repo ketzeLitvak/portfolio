@@ -1,3 +1,6 @@
+.lab-explanation {
+  --explanation-accent: var(--lab-accent);
+}
 .cache-explanation {
   --explanation-accent: var(--cache-accent);
 }
@@ -14,6 +17,7 @@
 .cache-explanation,
 .permission-explanation,
 .events-explanation,
+.lab-explanation,
 .race-explanation {
   border-top: 1px solid var(--line);
   font-size: 11px;
@@ -21,6 +25,7 @@
 .cache-explanation summary,
 .permission-explanation summary,
 .events-explanation summary,
+.lab-explanation summary,
 .race-explanation summary {
   cursor: pointer;
   padding: 15px 0;
@@ -31,6 +36,7 @@
 .permission-explanation li,
 .events-explanation p,
 .events-explanation li,
+.lab-explanation p,
 .race-explanation p {
   font-size: 11px;
   line-height: 1.7;
@@ -60,6 +66,7 @@
 .cache-explanation a,
 .permission-explanation a,
 .events-explanation a,
+.lab-explanation a,
 .race-explanation a {
   color: var(--explanation-accent);
 }
@@ -77,6 +84,7 @@
   padding: 9px;
   font-size: 11px;
 }
+.lab-explanation pre,
 .race-explanation pre {
   padding: 12px;
   background: var(--bg);

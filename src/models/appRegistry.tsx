@@ -1,3 +1,15 @@
+import { RateExperimentView } from '../views/experiments/rate/RateExperimentView';
+
+import { IndexExperimentView } from '../views/experiments/indexes/IndexExperimentView';
+
+import { SourcingExperimentView } from '../views/experiments/sourcing/SourcingExperimentView';
+
+import { HashExperimentView } from '../views/experiments/hashing/HashExperimentView';
+
+import { EncryptionExperimentView } from '../views/experiments/encryption/EncryptionExperimentView';
+
+import { SignatureExperimentView } from '../views/experiments/signatures/SignatureExperimentView';
+
 import { CircuitExperimentView } from '../views/experiments/circuit/CircuitExperimentView';
 
 import { RaceExperimentView } from '../views/experiments/race/RaceExperimentView';
@@ -11,6 +23,12 @@ import { QueueExperimentView } from '../views/experiments/events/QueueExperiment
 import { projectIcons } from './projectIcons';
 
 import {
+  Gauge,
+  ListOrdered,
+  History,
+  Fingerprint,
+  LockKeyhole,
+  FileSignature,
   Unplug,
   GitFork,
   ShieldCheck,
@@ -93,6 +111,42 @@ export const appRegistry: Record<string, AppDefinition> = {
     title: ['Circuit breaker', 'Circuit breaker'],
     icon: Unplug,
     view: CircuitExperimentView,
+    experiment: true,
+  },
+  rate: {
+    title: ['Rate limiting', 'Rate limiting'],
+    icon: Gauge,
+    view: RateExperimentView,
+    experiment: true,
+  },
+  indexes: {
+    title: ['Database indexes', 'Índices'],
+    icon: ListOrdered,
+    view: IndexExperimentView,
+    experiment: true,
+  },
+  sourcing: {
+    title: ['Event sourcing', 'Event sourcing'],
+    icon: History,
+    view: SourcingExperimentView,
+    experiment: true,
+  },
+  hashing: {
+    title: ['Hashing', 'Hashing'],
+    icon: Fingerprint,
+    view: HashExperimentView,
+    experiment: true,
+  },
+  encryption: {
+    title: ['Encryption', 'Cifrado'],
+    icon: LockKeyhole,
+    view: EncryptionExperimentView,
+    experiment: true,
+  },
+  signatures: {
+    title: ['Digital signatures', 'Firmas digitales'],
+    icon: FileSignature,
+    view: SignatureExperimentView,
     experiment: true,
   },
   welcome: {

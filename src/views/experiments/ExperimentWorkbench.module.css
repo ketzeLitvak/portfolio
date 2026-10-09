@@ -1,0 +1,21 @@
+.root {
+  padding: 24px;
+}
+.footer {
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.6;
+  margin: 22px 0 12px;
+}
+.error {
+  padding: 12px;
+  border: 1px solid #bd626266;
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--ink);
+}
+@media (max-width: 650px) {
+  .root {
+    padding: 17px;
+  }
+}

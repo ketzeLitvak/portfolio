@@ -37,7 +37,7 @@ npm run lint          # Check code and React Hooks
 npm run lint:fix      # Apply available lint fixes
 npm run format        # Format the project
 npm run format:check  # Check formatting without changing files
-npm run check         # Lint, lint-rule tests, formatting and production build
+npm run check         # Lint, model and lint-rule tests, formatting and production build
 ```
 
 GitHub Actions runs lint and formatting checks before building and deploying. In VS Code or Cursor, install the recommended ESLint and Prettier extensions to format on save and show diagnostics while editing.
@@ -60,3 +60,13 @@ Each screen lives in its own feature folder. `DesktopWindow` owns the shared win
 Use a colocated `.module.css` file and import its classes as `styles`. Shared content utilities live in `styles/Content.module.css`; `styles/global.css` contains theme variables, resets, typography and base form styles only. Modules reference another component's scoped classes through ICSS imports where a parent layout needs to size its children. They do not expose feature classes globally. Behavior uses data attributes or ARIA roles instead of styling class names.
 
 To add a screen, create its feature folder, view, CSS Module and optional presenter, then register it in `models/appRegistry.tsx`. Run `npm run lint:fix` and `npm run format` before `npm run check`.
+
+## Interactive experiments
+
+Independent desktop apps: caching, permissions, events, concurrency, circuit breakers, rate limiting, database indexes, event sourcing, hashing, encryption and digital signatures. Experiment icons start in the rightmost columns and can be dragged like the other shortcuts.
+
+Rate limiting compares fixed windows, sliding windows and token buckets with an explicit virtual clock and separate client quotas. The index example compares linear scanning with binary lookup over an ordered key-to-row mapping; it illustrates the idea without claiming to emulate a database B-tree. Event sourcing reconstructs a cart from an append-only history and records undo as a compensating event.
+
+Cryptography uses the browser's Web Crypto API: SHA-256 fingerprints, PBKDF2 password derivation with random per-account salts, AES-GCM authenticated encryption and ECDSA signatures. Keys are generated locally for each demonstration and discarded when the window is closed; private keys are not exportable. These apps need a secure context (HTTPS or localhost). No entered messages or passwords are sent to a server.
+
+Share any experiment using `#app=rate`, `#app=indexes`, `#app=sourcing`, `#app=hashing`, `#app=encryption` or `#app=signatures`. `ExperimentWorkbench`, `ExperimentClock`, `HexValue` and scoped workbench utilities keep the common UI reusable. Algorithms live in the models, interaction state in presenters and each feature view has its own CSS Module.

@@ -10,7 +10,7 @@ import { useExperimentPopoverPresenter } from '../../presenters/useExperimentPop
 
 import { translate, type Language } from '../../models/types';
 
-export type OptionsAppearance = 'cache' | 'permission' | 'events';
+export type OptionsAppearance = 'cache' | 'permission' | 'events' | 'lab';
 
 export function OptionsPopover({
   language,
@@ -41,11 +41,13 @@ export function OptionsPopover({
       <button
         ref={p.triggerRef}
         className={
-          appearance === 'cache'
-            ? styles.cacheStrategyTrigger
-            : appearance === 'permission'
-              ? styles.permissionOptionTrigger
-              : styles.eventsOptionsTrigger
+          appearance === 'lab'
+            ? styles.labTrigger
+            : appearance === 'cache'
+              ? styles.cacheStrategyTrigger
+              : appearance === 'permission'
+                ? styles.permissionOptionTrigger
+                : styles.eventsOptionsTrigger
         }
         onClick={p.toggle}
         disabled={disabled}
@@ -63,11 +65,13 @@ export function OptionsPopover({
             ref={p.panelRef}
             id={p.id}
             className={
-              appearance === 'cache'
-                ? styles.cacheStrategyPopover
-                : appearance === 'permission'
-                  ? styles.permissionOptions
-                  : styles.eventsOptions
+              appearance === 'lab'
+                ? styles.labPanel
+                : appearance === 'cache'
+                  ? styles.cacheStrategyPopover
+                  : appearance === 'permission'
+                    ? styles.permissionOptions
+                    : styles.eventsOptions
             }
             style={p.position}
             role="region"

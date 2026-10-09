@@ -86,3 +86,27 @@
   background: #283e59;
   color: #add0fb;
 }
+.i-rate {
+  background: #274d54;
+  color: #a3e0e7;
+}
+.i-indexes {
+  background: #514127;
+  color: #efd3a0;
+}
+.i-sourcing {
+  background: #493455;
+  color: #dfbdf2;
+}
+.i-hashing {
+  background: #30455e;
+  color: #bbd7f8;
+}
+.i-encryption {
+  background: #275444;
+  color: #a5efd2;
+}
+.i-signatures {
+  background: #55382f;
+  color: #efc0b5;
+}

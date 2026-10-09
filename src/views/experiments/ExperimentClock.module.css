@@ -1,0 +1,26 @@
+.clock {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.clock span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.clock button {
+  display: grid;
+  place-items: center;
+  height: 27px;
+  min-width: 28px;
+  padding: 0 6px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+}
+.clock button:disabled {
+  opacity: 0.4;
+}

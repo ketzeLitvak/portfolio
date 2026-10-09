@@ -1,0 +1,55 @@
+.root {
+  --lab-accent: #a05f54;
+}
+:global(.dark) .root {
+  --lab-accent: #e6b1a6;
+}
+.root h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.keys {
+  display: grid;
+  gap: 8px;
+}
+.keys button {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 9px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 11px;
+}
+.keys button[aria-pressed='true'] {
+  border-color: var(--lab-accent);
+}
+.keys button:disabled {
+  opacity: 0.4;
+}
+.keys small {
+  font-family: monospace;
+  font-size: 8px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.verdict {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+}
+.verdict[data-valid='true'] {
+  color: var(--lab-accent);
+}
+.verdict[data-valid='false'] {
+  color: #bd7272;
+}

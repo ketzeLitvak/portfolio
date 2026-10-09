@@ -1,3 +1,6 @@
+.lab-intro {
+  --header-accent: var(--lab-accent);
+}
 .cache-intro {
   --header-accent: var(--cache-accent);
 }
@@ -14,6 +17,7 @@
 .cache-intro,
 .permission-intro,
 .events-intro,
+.lab-intro,
 .race-intro {
   position: relative;
   padding-right: 32px;
@@ -21,6 +25,7 @@
 .cache-eyebrow,
 .permission-eyebrow,
 .events-eyebrow,
+.lab-eyebrow,
 .race-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -32,6 +37,7 @@
 .cache-intro h2,
 .permission-intro h2,
 .events-intro h2,
+.lab-intro h2,
 .race-intro h2 {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 25px;
@@ -45,6 +51,7 @@
 .cache-intro p,
 .permission-intro p,
 .events-intro p,
+.lab-intro p,
 .race-intro p {
   color: var(--muted);
   font-size: 12px;
@@ -54,6 +61,7 @@
 .cache-reset,
 .permission-reset,
 .events-reset,
+.lab-reset,
 .race-reset {
   position: absolute;
   right: 0;
@@ -76,6 +84,7 @@
   .cache-intro h2,
   .permission-intro h2,
   .events-intro h2,
+  .lab-intro h2,
   .race-intro h2 {
     font-size: 22px;
   }

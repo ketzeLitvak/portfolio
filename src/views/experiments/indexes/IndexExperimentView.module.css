@@ -1,0 +1,126 @@
+.root {
+  --lab-accent: #906c2d;
+}
+:global(.dark) .root {
+  --lab-accent: #e6c27f;
+}
+.query {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.query label {
+  display: grid;
+  gap: 7px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.query select {
+  padding: 9px;
+  font-size: 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+}
+.table,
+.index {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin: 12px 0;
+}
+.table header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.table h3,
+.index h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 0;
+  margin: 0;
+}
+.index h3 {
+  margin-bottom: 12px;
+}
+.rows,
+.keys {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 5px;
+}
+.rows > span,
+.keys > span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 7px 2px;
+  background: var(--bar);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 10px;
+}
+.rows small,
+.keys small {
+  font-size: 8px;
+  color: var(--muted);
+}
+.rows [data-visited='true'],
+.keys [data-visited='true'] {
+  background: color-mix(in srgb, var(--lab-accent) 14%, var(--panel));
+}
+.rows [data-found='true'],
+.keys [data-current='true'] {
+  border-color: var(--lab-accent);
+}
+.keys [data-excluded='true'] {
+  opacity: 0.4;
+}
+.add {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.add:disabled {
+  opacity: 0.4;
+}
+.compare {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  font-size: 10px;
+  color: var(--muted);
+}
+@media (max-width: 650px) {
+  .rows,
+  .keys {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+  }
+  .rows > span {
+    flex-direction: row;
+    gap: 5px;
+    padding: 7px 2px;
+  }
+  .table,
+  .index {
+    padding: 10px;
+  }
+}

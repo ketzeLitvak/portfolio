@@ -4,7 +4,7 @@ import { RotateCcw, Sparkles } from 'lucide-react';
 
 import { translate, type Language, type Text } from '../../models/types';
 
-export type ExperimentAppearance = 'cache' | 'permission' | 'events' | 'race';
+export type ExperimentAppearance = 'cache' | 'permission' | 'events' | 'race' | 'lab';
 
 export function ExperimentHeader({
   language,

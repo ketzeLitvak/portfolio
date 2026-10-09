@@ -1,0 +1,19 @@
+.hex {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 3px 8px;
+  font-family: monospace;
+  font-size: 10px;
+  line-height: 1.8;
+  color: var(--muted);
+  max-height: 125px;
+  overflow: auto;
+}
+.hex > span {
+  white-space: nowrap;
+}
+.hex span[data-changed='true'] {
+  color: var(--lab-accent);
+  font-weight: 700;
+}
