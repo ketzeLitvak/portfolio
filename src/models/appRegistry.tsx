@@ -1,8 +1,10 @@
+import { RaceExperimentView } from '../views/experiments/RaceExperimentView';
 import { PermissionExperimentView } from '../views/experiments/PermissionExperimentView';
 import { CacheExperimentView } from '../views/experiments/CacheExperimentView';
 import { QueueExperimentView } from '../views/experiments/QueueExperimentView';
 import { projectIcons } from './projectIcons';
 import {
+  GitFork,
   ShieldCheck,
   DatabaseZap,
   Workflow,
@@ -51,6 +53,12 @@ export const appRegistry: Record<string, AppDefinition> = {
     title: ['Events', 'Eventos'],
     icon: Workflow,
     view: QueueExperimentView,
+    experiment: true,
+  },
+  race: {
+    title: ['Race conditions', 'Concurrencia'],
+    icon: GitFork,
+    view: RaceExperimentView,
     experiment: true,
   },
   welcome: {
