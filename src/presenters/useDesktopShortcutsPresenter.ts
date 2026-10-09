@@ -62,12 +62,12 @@ function resolvePositions(
   const experiments = ids.slice(experimentStart);
   const experimentColumns = Math.ceil(experimentCount / layout.rows);
   const experimentBase = Math.max(0, layout.columns - experimentColumns) * layout.rows;
-  const lastColumnStart = (experimentColumns - 1) * layout.rows;
   const moved: string[] = experiments.filter((id) => id === 'rate' || id === 'indexes');
-  const right = [
-    ...experiments.slice(lastColumnStart).filter((id) => !moved.includes(id)),
-    ...moved,
-  ].slice(-layout.rows);
+  const remaining = experiments.filter((id) => !moved.includes(id));
+  const rightCapacity = Math.max(0, layout.rows - moved.length);
+  const right = [...(rightCapacity > 0 ? remaining.slice(-rightCapacity) : []), ...moved].slice(
+    -layout.rows,
+  );
   const left = experiments.filter((id) => !right.includes(id));
   const experimentSlots = new Map([
     ...left.map((id, index) => [id, experimentBase + index] as const),
