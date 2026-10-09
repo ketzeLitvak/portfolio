@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --fix --max-warnings 0",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "check": "npm run lint && npm run format:check && npm run build"
+    "check": "npm run lint && npm run test:lint-rules && npm run format:check && npm run build",
+    "test:lint-rules": "node --test eslint-rules/*.test.js"
   },
   "dependencies": {
     "faceshape-react": "^0.1.0",

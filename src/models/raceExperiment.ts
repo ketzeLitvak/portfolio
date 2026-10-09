@@ -1,4 +1,5 @@
 import type { Text } from './types';
+
 export type RaceMode = 'unsafe' | 'atomic';
 export type BuyerId = 'a' | 'b';
 export interface RaceBuyer {
@@ -68,6 +69,7 @@ export const raceSteps: Record<RaceMode, RaceStep[]> = {
     },
   ],
 };
+
 export const initialRaceScenario = (mode: RaceMode = 'unsafe'): RaceScenario => ({
   mode,
   step: 0,
@@ -75,6 +77,7 @@ export const initialRaceScenario = (mode: RaceMode = 'unsafe'): RaceScenario => 
   buyers: { a: { read: null, status: 'ready' }, b: { read: null, status: 'ready' } },
   trace: [],
 });
+
 export function advanceRace(previous: RaceScenario): RaceScenario {
   const action = raceSteps[previous.mode][previous.step];
   if (!action) return previous;
@@ -102,5 +105,6 @@ export function advanceRace(previous: RaceScenario): RaceScenario {
   }
   return state;
 }
+
 export const raceSales = (state: RaceScenario) =>
   Object.values(state.buyers).filter((buyer) => buyer.status === 'confirmed').length;

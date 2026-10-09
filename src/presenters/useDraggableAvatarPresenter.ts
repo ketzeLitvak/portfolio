@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
+
 import type { KeyboardEvent, PointerEvent } from 'react';
+
 import type { AvatarPosition } from '../models/avatars';
 
 export function useDraggableAvatarPresenter(
@@ -36,10 +38,12 @@ export function useDraggableAvatarPresenter(
       const area = bounds();
       paint(position.x * area.width, position.y * area.height);
     };
+
     update();
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, [position.x, position.y, bounds, paint]);
+
   const commit = () => {
     const area = bounds();
     savePosition({
@@ -47,6 +51,7 @@ export function useDraggableAvatarPresenter(
       y: area.height ? current.current.y / area.height : 0,
     });
   };
+
   const startDrag = (event: PointerEvent<HTMLDivElement>) => {
     if (event.button !== 0 || (event.target as Element).closest('button')) return;
     drag.current = {
@@ -60,11 +65,13 @@ export function useDraggableAvatarPresenter(
     event.currentTarget.focus({ preventScroll: true });
     event.preventDefault();
   };
+
   const moveDrag = (event: PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (d?.pointer === event.pointerId)
       paint(d.left + event.clientX - d.x, d.top + event.clientY - d.y);
   };
+
   const endDrag = (event: PointerEvent<HTMLDivElement>) => {
     if (drag.current?.pointer !== event.pointerId) return;
     drag.current = null;
@@ -72,6 +79,7 @@ export function useDraggableAvatarPresenter(
       event.currentTarget.releasePointerCapture(event.pointerId);
     commit();
   };
+
   const moveWithKeyboard = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.target !== event.currentTarget) return;
     const offsets: Record<string, [number, number]> = {
@@ -87,5 +95,6 @@ export function useDraggableAvatarPresenter(
     paint(current.current.x + offset[0] * step, current.current.y + offset[1] * step);
     commit();
   };
+
   return { ref, startDrag, moveDrag, endDrag, moveWithKeyboard };
 }

@@ -1,0 +1,13 @@
+.quick-section {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+.quick-section h3 {
+  font-size: 20px;
+}
+.quick-section p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.75;
+}

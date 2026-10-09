@@ -19,6 +19,7 @@ export interface CircuitScenario {
 }
 export const circuitThreshold = 3;
 export const circuitCooldown = 6;
+
 export function initialCircuitScenario(enabled = true, healthy = false): CircuitScenario {
   return {
     enabled,
@@ -33,6 +34,7 @@ export function initialCircuitScenario(enabled = true, healthy = false): Circuit
     nextId: 1,
   };
 }
+
 export function tickCircuit(s: CircuitScenario): CircuitScenario {
   const now = s.now + 1;
   return {
@@ -44,6 +46,7 @@ export function tickCircuit(s: CircuitScenario): CircuitScenario {
         : s.status,
   };
 }
+
 export function requestCircuit(s: CircuitScenario): CircuitScenario {
   const blocked = s.enabled && s.status === 'open';
   const probe = s.enabled && s.status === 'half-open';

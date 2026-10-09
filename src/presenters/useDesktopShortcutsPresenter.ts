@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react';
+
 import { readPreference, savePreference } from '../models/types';
 
 type Positions = Record<string, number>;
@@ -15,20 +17,24 @@ type Drag = {
   target: number | null;
 };
 const storageKey = 'ketze-desktop-shortcuts';
+
 function loadPositions(): { desktop: Positions; mobile: Positions } {
   try {
     const saved = JSON.parse(readPreference(storageKey, '{}'));
+
     const valid = (value: unknown): Positions =>
       value && typeof value === 'object'
         ? Object.fromEntries(
             Object.entries(value).filter(([, slot]) => Number.isSafeInteger(slot) && slot >= 0),
           )
         : {};
+
     return { desktop: valid(saved?.desktop), mobile: valid(saved?.mobile) };
   } catch {
     return { desktop: {}, mobile: {} };
   }
 }
+
 function resolvePositions(
   ids: string[],
   saved: Positions,
@@ -71,6 +77,7 @@ function resolvePositions(
     }
   return result;
 }
+
 export function useDesktopShortcutsPresenter(
   ids: string[],
   basicCount: number,
@@ -87,6 +94,7 @@ export function useDesktopShortcutsPresenter(
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
+
     const measure = () => {
       const css = getComputedStyle(grid);
       const mobile = innerWidth <= 650;
@@ -122,6 +130,7 @@ export function useDesktopShortcutsPresenter(
       dragRef.current = null;
       setDrag(null);
     };
+
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(grid);
@@ -135,10 +144,12 @@ export function useDesktopShortcutsPresenter(
     () => resolvePositions(ids, saved[mode], layout, basicCount, projectCount, experimentCount),
     [ids, saved, mode, layout, basicCount, projectCount, experimentCount],
   );
+
   const cellStyle = (slot: number): CSSProperties => ({
     gridColumn: layout.mobile ? (slot % layout.columns) + 1 : Math.floor(slot / layout.rows) + 1,
     gridRow: layout.mobile ? Math.floor(slot / layout.columns) + 1 : (slot % layout.rows) + 1,
   });
+
   const targetAt = (x: number, y: number): number | null => {
     const grid = gridRef.current;
     if (!grid) return null;
@@ -150,6 +161,7 @@ export function useDesktopShortcutsPresenter(
       heights = css.gridTemplateRows.split(' ').map(parseFloat);
     const gapX = parseFloat(css.columnGap),
       gapY = parseFloat(css.rowGap);
+
     const track = (coordinate: number, sizes: number[], gap: number) => {
       let start = 0;
       for (let i = 0; i < sizes.length; i++) {
@@ -158,11 +170,13 @@ export function useDesktopShortcutsPresenter(
       }
       return -1;
     };
+
     const column = track(x - left, widths, gapX),
       row = track(y - top, heights, gapY);
     if (column < 0 || row < 0) return null;
     return layout.mobile ? row * layout.columns + column : column * layout.rows + row;
   };
+
   const finish = (event: ReactPointerEvent<HTMLButtonElement>, cancelled = false) => {
     const current = dragRef.current;
     if (!current || current.pointer !== event.pointerId) return;
@@ -182,6 +196,7 @@ export function useDesktopShortcutsPresenter(
     if (event.currentTarget.hasPointerCapture(event.pointerId))
       event.currentTarget.releasePointerCapture(event.pointerId);
   };
+
   const buttonProps = (id: string) => ({
     style: {
       ...cellStyle(positions[id]),
@@ -230,7 +245,9 @@ export function useDesktopShortcutsPresenter(
       open(id);
     },
   });
+
   const reset = () => setSaved((value) => ({ ...value, [mode]: {} }));
+
   return {
     reset,
     gridRef,

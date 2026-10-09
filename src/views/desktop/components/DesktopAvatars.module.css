@@ -1,0 +1,89 @@
+.desktop-avatars {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+.desktop-avatar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.desktop-avatar > svg {
+  flex-shrink: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 5px #0002);
+}
+.desktop-avatar-name {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 9px;
+  color: var(--ink);
+  padding: 3px 7px;
+  background: var(--glass);
+  border-radius: 6px;
+}
+.desktop-avatar > button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  line-height: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--muted);
+  pointer-events: auto;
+  opacity: 0.55;
+}
+.desktop-avatar:hover > button,
+.desktop-avatar:focus-within > button {
+  opacity: 1;
+}
+.desktop-avatar > button:hover {
+  background: var(--orange);
+  color: #fff;
+}
+@media (max-width: 650px) {
+  .desktop-avatar > button {
+    opacity: 1;
+  }
+  .desktop-avatar {
+    width: 78px;
+  }
+  .desktop-avatar-name {
+    max-width: 78px;
+  }
+}
+
+.desktop-avatar:active {
+  cursor: grabbing;
+}
+.desktop-avatar > button > svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.desktop-avatar:focus,
+.desktop-avatar:focus-visible {
+  outline: none;
+}

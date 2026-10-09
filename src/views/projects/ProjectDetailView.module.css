@@ -1,0 +1,118 @@
+:import('../../styles/Content.module.css') {
+  external_btn: btn;
+}
+
+.project-banner {
+  height: 145px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 25px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.project-banner:after {
+  content: '';
+  width: 220px;
+  height: 220px;
+  border: 1px solid #ffffff60;
+  border-radius: 50%;
+  position: absolute;
+  right: -30px;
+  top: -100px;
+  box-shadow:
+    0 0 0 35px #ffffff10,
+    0 0 0 70px #ffffff08;
+}
+.project-banner h2 {
+  font-size: 40px;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+.project-banner span {
+  font-size: 9px;
+  position: relative;
+  z-index: 1;
+}
+.project-body {
+  padding: 25px;
+}
+.project-body h3 {
+  font-size: 23px;
+  margin-bottom: 12px;
+}
+.project-body p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.75;
+}
+.project-body .contribution {
+  border-left: 2px solid var(--orange);
+  padding-left: 15px;
+  margin: 22px 0;
+}
+.contribution b {
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+.project-body > :global(.external_btn) + :global(.external_btn) {
+  margin-left: 8px;
+}
+.project-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+.project-banner-logo {
+  width: 65px;
+  height: 75px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.project-banner {
+  gap: 15px;
+}
+.project-banner h2 {
+  font-size: clamp(24px, 4vw, 40px);
+}
+@media (max-width: 650px) {
+  .project-banner-title {
+    gap: 10px;
+  }
+  .project-banner-logo {
+    width: 45px;
+    height: 55px;
+  }
+  .project-banner {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 145px;
+  }
+}
+
+.project-banner-logo {
+  width: 76px;
+  height: 76px;
+  padding: 9px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0002;
+}
+.project-banner:after {
+  border-color: #ffffff20;
+  box-shadow:
+    0 0 0 35px #ffffff05,
+    0 0 0 70px #ffffff03;
+}
+@media (max-width: 650px) {
+  .project-banner-logo {
+    width: 60px;
+    height: 60px;
+    padding: 7px;
+  }
+}

@@ -1,6 +1,9 @@
 import { experiences } from './experience';
+
 import type { Text } from './types';
+
 import { appRegistry, launcherApps } from './appRegistry';
+
 import { projects } from './projects';
 
 export const desktopExperiments = Object.entries(appRegistry).filter(([, app]) => app.experiment);
@@ -13,8 +16,10 @@ export const desktopExperiences = experiences.map((entry) => ({
   title: entry.id === 'leadership' ? (['CSHA', 'CSHA'] as Text) : entry.tab,
   organization: entry.organization,
 }));
+
 export const findDesktopExperience = (id: string) =>
   desktopExperiences.find((entry) => entry.id === id);
+
 export const desktopShortcutIds = [
   ...desktopApps.map(([id]) => id),
   ...desktopProjects.map(([id]) => id),

@@ -1,0 +1,179 @@
+.cache-strategy-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 10px;
+  background: var(--cache-soft);
+  color: var(--cache-accent);
+  border: 1px solid var(--cache-accent);
+  border-left: 0;
+  border-radius: 0 9px 9px 0;
+}
+.cache-strategy-popover {
+  --cache-accent: #9b672d;
+  --cache-soft: #b7853912;
+  position: fixed;
+  z-index: 100000;
+  max-height: min(410px, calc(100dvh - 24px));
+  overflow: auto;
+  padding: 14px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+:global(.dark) .cache-strategy-popover {
+  --cache-accent: #e2b46e;
+  --cache-soft: #e2b46e0d;
+}
+.cache-strategy-popover header,
+.permission-options header,
+.events-options header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.cache-strategy-popover header button,
+.permission-options header button,
+.events-options header button {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+}
+.cache-strategy-choices,
+.permission-options > div,
+.events-deliveries {
+  display: grid;
+  gap: 7px;
+}
+.cache-strategy-choices button,
+.permission-options > div > button,
+.events-deliveries button {
+  display: grid;
+  gap: 5px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: transparent;
+}
+.cache-strategy-choices button[aria-pressed='true'] {
+  border-color: var(--cache-accent);
+  background: var(--cache-soft);
+}
+.cache-strategy-choices button > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 11px;
+}
+.cache-strategy-choices button svg {
+  color: var(--cache-accent);
+  flex-shrink: 0;
+}
+.cache-strategy-choices small,
+.permission-options button small,
+.events-deliveries small {
+  font-size: 10px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.cache-strategy-popover > p,
+.events-options > p {
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 12px 0 0;
+}
+@media (max-width: 650px) {
+  .cache-strategy-trigger {
+    padding: 7px;
+    font-size: 9px;
+  }
+}
+.permission-option-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  margin-top: 5px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  font-size: 11px;
+}
+.permission-options {
+  --permission-accent: #28785e;
+  --permission-soft: #28785e10;
+  position: fixed;
+  z-index: 100000;
+  max-height: min(410px, calc(100dvh - 24px));
+  overflow: auto;
+  padding: 14px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+:global(.dark) .permission-options {
+  --permission-accent: #8fd5b5;
+  --permission-soft: #8fd5b510;
+}
+.permission-options > div > button[aria-pressed='true'] {
+  border-color: var(--permission-accent);
+  background: var(--permission-soft);
+}
+.permission-options button span,
+.events-deliveries span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  font-size: 11px;
+}
+.permission-options button svg {
+  flex-shrink: 0;
+  color: var(--permission-accent);
+}
+.events-options {
+  --events-accent: #7660a3;
+  --events-soft: #7660a310;
+  position: fixed;
+  z-index: 100000;
+  max-height: min(410px, calc(100dvh - 24px));
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+:global(.dark) .events-options {
+  --events-accent: #c8b4ee;
+  --events-soft: #c8b4ee10;
+}
+.events-deliveries button[aria-pressed='true'] {
+  border-color: var(--events-accent);
+  background: var(--events-soft);
+}
+.events-deliveries svg {
+  flex-shrink: 0;
+  color: var(--events-accent);
+}
+
+.events-options-trigger {
+}

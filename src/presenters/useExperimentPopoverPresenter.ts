@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
+
 export function useExperimentPopoverPresenter() {
   const id = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -6,7 +7,9 @@ export function useExperimentPopoverPresenter() {
   const [position, setPosition] = useState<{ left: number; top: number; width: number } | null>(
     null,
   );
+
   const close = () => setPosition(null);
+
   const toggle = () => {
     if (position) return close();
     const rect = triggerRef.current?.getBoundingClientRect();
@@ -19,6 +22,7 @@ export function useExperimentPopoverPresenter() {
       top: Math.max(12, Math.min(rect.bottom + 8, innerHeight - height - 12)),
     });
   };
+
   useEffect(() => {
     if (!position) return;
     const frame = requestAnimationFrame(() =>
@@ -26,11 +30,13 @@ export function useExperimentPopoverPresenter() {
         ?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
         ?.focus({ preventScroll: true }),
     );
+
     const outside = (event: PointerEvent) => {
       const target = event.target as Node;
       if (!panelRef.current?.contains(target) && !triggerRef.current?.contains(target))
         setPosition(null);
     };
+
     const escape = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return;
       event.preventDefault();
@@ -38,10 +44,13 @@ export function useExperimentPopoverPresenter() {
       setPosition(null);
       triggerRef.current?.focus();
     };
+
     const reposition = () => setPosition(null);
+
     const scroll = (event: Event) => {
       if (!panelRef.current?.contains(event.target as Node)) setPosition(null);
     };
+
     document.addEventListener('pointerdown', outside);
     document.addEventListener('keydown', escape, true);
     document.addEventListener('wheel', scroll, { passive: true });

@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { advanceRace, initialRaceScenario, raceSales, raceSteps } from '../models/raceExperiment';
+
 import type { RaceMode } from '../models/raceExperiment';
+
 export function useRaceExperimentPresenter() {
   const [state, setState] = useState(initialRaceScenario);
   const [running, setRunning] = useState(false);
@@ -22,22 +25,26 @@ export function useRaceExperimentPresenter() {
     );
     return () => clearTimeout(timer);
   }, [state, running]);
+
   const selectMode = (mode: RaceMode) => {
     if (busy.current) return;
     setState(initialRaceScenario(mode));
   };
+
   const buy = () => {
     if (busy.current) return;
     busy.current = true;
     setState(initialRaceScenario(state.mode));
     setRunning(true);
   };
+
   const reset = () => {
     busy.current = false;
     setRunning(false);
     setState(initialRaceScenario());
     setComparison({});
   };
+
   const done = state.step === raceSteps[state.mode].length;
   return {
     state,

@@ -1,7 +1,11 @@
 import { useEffect, useRef } from 'react';
+
 import type { PointerEvent } from 'react';
+
 import type { WindowState } from '../models/types';
+
 import type { DesktopPresenter } from './useDesktopPresenter';
+
 export function useWindowPresenter(state: WindowState, desktop: DesktopPresenter) {
   const ref = useRef<HTMLElement>(null);
   const { resize } = desktop;
@@ -23,6 +27,7 @@ export function useWindowPresenter(state: WindowState, desktop: DesktopPresenter
     observer.observe(element);
     return () => observer.disconnect();
   }, [state.id, state.maximized, state.minimized, resize]);
+
   const startDrag = (event: PointerEvent<HTMLDivElement>) => {
     if (
       event.button !== 0 ||
@@ -42,17 +47,21 @@ export function useWindowPresenter(state: WindowState, desktop: DesktopPresenter
     };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
+
   const moveDrag = (event: PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (d?.pointer === event.pointerId)
       desktop.move(state.id, d.left + event.clientX - d.x, d.top + event.clientY - d.y, d.width);
   };
+
   const endDrag = () => {
     drag.current = null;
   };
+
   const doubleClick = (event: React.MouseEvent) => {
     if (!(event.target as HTMLElement).closest('button') && innerWidth > 650)
       desktop.maximize(state.id);
   };
+
   return { ref, startDrag, moveDrag, endDrag, doubleClick };
 }

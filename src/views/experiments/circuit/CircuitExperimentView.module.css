@@ -1,0 +1,224 @@
+.circuit-playground {
+  --circuit-accent: #376fa6;
+  --race-accent: var(--circuit-accent);
+  padding: 24px;
+}
+body:global(.dark) .circuit-playground {
+  --circuit-accent: #9cc6f5;
+}
+.circuit-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+.circuit-toolbar > span,
+.circuit-toolbar > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.circuit-toolbar button {
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--ink);
+}
+.circuit-scene {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;
+  gap: 12px;
+}
+.circuit-scene article {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 10px;
+  background: var(--panel);
+}
+.circuit-scene h3 {
+  margin: 0;
+  font-size: 15px;
+}
+.circuit-scene small,
+.circuit-gate-caption {
+  font-size: 10px;
+  color: var(--muted);
+}
+.circuit-gate {
+  position: relative;
+  color: var(--circuit-accent);
+}
+.circuit-gate strong {
+  font-size: 13px;
+}
+.circuit-scene[data-status='open'] .circuit-gate {
+  color: #d78c8c;
+  border-color: #9a545455;
+}
+.circuit-scene[data-status='half-open'] .circuit-gate {
+  color: #d0ad69;
+}
+.circuit-scene[data-status='disabled'] .circuit-gate {
+  color: var(--muted);
+}
+.circuit-arrow {
+  position: absolute;
+  right: -15px;
+  color: var(--muted);
+}
+.circuit-failures {
+  display: flex;
+  gap: 5px;
+}
+.circuit-failures span {
+  width: 20px;
+  height: 4px;
+  border-radius: 3px;
+  background: var(--line);
+}
+.circuit-failures span[data-filled='true'] {
+  background: #cf7d7d;
+}
+.circuit-service > span {
+  color: #cf7d7d;
+  font-size: 11px;
+}
+.circuit-service[data-healthy='true'] > span {
+  color: var(--circuit-accent);
+}
+.circuit-health {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid var(--line);
+  padding: 8px;
+  border-radius: 7px;
+  color: var(--ink);
+  background: transparent;
+  font-size: 10px;
+}
+.circuit-feedback {
+  font-size: 12px;
+  line-height: 1.6;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+}
+.circuit-feedback p {
+  margin: 12px 0;
+}
+.circuit-send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: var(--circuit-accent);
+  color: #132234;
+  border: 0;
+  border-radius: 9px;
+  font-weight: 700;
+}
+body:not(:global(.dark)) .circuit-send {
+  color: white;
+}
+.circuit-counts {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 15px 0;
+}
+.circuit-counts span {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+.circuit-counts strong {
+  color: var(--ink);
+  font-size: 18px;
+}
+.circuit-results {
+  padding: 0;
+  list-style: none;
+  margin: 12px 0;
+}
+.circuit-results li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+}
+.circuit-results li > span {
+  color: var(--muted);
+  min-width: 45px;
+}
+.circuit-results li > strong {
+  flex: 1;
+  font-weight: 500;
+}
+.circuit-results li > small {
+  color: var(--muted);
+}
+.circuit-results li > svg {
+  color: #cf7d7d;
+}
+.circuit-results li[data-outcome='success'] > svg {
+  color: var(--circuit-accent);
+}
+.circuit-playground button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+@media (max-width: 650px) {
+  .circuit-playground {
+    padding: 17px;
+  }
+  .circuit-scene {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .circuit-scene .circuit-gate {
+    grid-column: 1/-1;
+    grid-row: 1;
+    padding: 12px;
+    gap: 5px;
+  }
+  .circuit-gate > svg:first-child {
+    width: 22px;
+    height: 22px;
+  }
+  .circuit-scene article {
+    padding: 14px 8px;
+    gap: 6px;
+  }
+  .circuit-arrow {
+    display: none;
+  }
+  .circuit-counts span {
+    font-size: 10px;
+    gap: 6px;
+  }
+}
+.circuit-step {
+}
+.circuit-store {
+}

@@ -1,4 +1,5 @@
 import type { Text } from './types';
+
 export type CacheService = 'a' | 'b';
 export type CacheStrategy = 'ttl' | 'invalidate' | 'write-through';
 export const cacheServices: CacheService[] = ['a', 'b'];
@@ -64,6 +65,7 @@ export interface CacheScenario {
   requests: number;
   last: CacheResult | null;
 }
+
 export const initialCacheScenario = (): CacheScenario => ({
   now: 0,
   value: 100,
@@ -79,6 +81,7 @@ export const initialCacheScenario = (): CacheScenario => ({
   requests: 0,
   last: null,
 });
+
 export function queryCache(previous: CacheScenario): CacheScenario {
   const state = {
     ...previous,
@@ -121,6 +124,7 @@ export function queryCache(previous: CacheScenario): CacheScenario {
   state.requests++;
   return state;
 }
+
 export function updateCacheSource(previous: CacheScenario): CacheScenario {
   const state = {
     ...previous,
@@ -146,10 +150,13 @@ export function updateCacheSource(previous: CacheScenario): CacheScenario {
       if (service !== state.service) state.memories[service] = null;
   return state;
 }
+
 export function clearCacheCopies(state: CacheScenario): CacheScenario {
   return { ...state, memories: { a: null, b: null }, redis: null };
 }
+
 export type CacheLayer = CacheService | 'redis';
+
 export function invalidateCacheLayer(state: CacheScenario, layer: CacheLayer): CacheScenario {
   return layer === 'redis'
     ? { ...state, redis: null }

@@ -17,12 +17,14 @@ export interface QueueScenario {
   jobs: DemoJob[];
   effects: Record<string, number>;
 }
+
 export const initialQueueScenario = (): QueueScenario => ({
   now: 0,
   nextId: 1,
   jobs: [],
   effects: {},
 });
+
 export function enqueueJob(
   state: QueueScenario,
   key: string,
@@ -48,6 +50,7 @@ export function enqueueJob(
     ],
   };
 }
+
 export function tickQueue(
   previous: QueueScenario,
   workers: number,

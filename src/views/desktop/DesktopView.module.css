@@ -1,0 +1,93 @@
+.desktop {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+.desktop-main {
+  height: calc(100% - 62px);
+  position: relative;
+}
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--line) 0.8px, transparent 0.8px);
+  background-size: 22px 22px;
+  overflow: hidden;
+}
+.wallpaper-word {
+  position: absolute;
+  top: 9%;
+  left: 29%;
+  font-family: 'Space Grotesk';
+  font-size: clamp(120px, 15vw, 230px);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -14px;
+  color: #dddddd;
+  transform: rotate(-5deg);
+  user-select: none;
+}
+.wallpaper-word span {
+  -webkit-text-stroke: 1px #bcbcbc;
+  color: transparent;
+}
+:global(.dark) .wallpaper-word {
+  color: #292929;
+}
+:global(.dark) .wallpaper-word span {
+  -webkit-text-stroke-color: #484848;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.35;
+  filter: blur(1px);
+  border: 1px solid #a5a5a5;
+}
+.orb-one {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle at 30% 30%, #dc262633, #dc262608);
+  right: -150px;
+  top: 40%;
+}
+.orb-two {
+  width: 240px;
+  height: 240px;
+  border: 50px solid #dc262620;
+  left: 27%;
+  bottom: -75px;
+}
+@media (max-width: 1000px) {
+  .wallpaper-word {
+    font-size: 150px;
+  }
+}
+@media (max-width: 650px) {
+  .desktop {
+    min-height: 0;
+    height: 100dvh;
+  }
+  .desktop-main {
+    height: calc(100% - 58px);
+  }
+  .wallpaper-word {
+    top: 6%;
+    left: 5%;
+    font-size: 85px;
+    letter-spacing: -6px;
+  }
+  .orb-one {
+    right: -300px;
+  }
+}
+.wallpaper-word {
+  letter-spacing: -12px;
+}
+@media (max-width: 650px) {
+  .wallpaper-word {
+    font-size: 78px;
+    letter-spacing: -5px;
+  }
+}

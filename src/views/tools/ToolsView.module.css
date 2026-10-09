@@ -1,0 +1,8 @@
+.tools-project-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  background: #fff;
+}

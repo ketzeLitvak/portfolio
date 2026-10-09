@@ -33,7 +33,9 @@ export interface WindowState {
   minimized: boolean;
   maximized: boolean;
 }
+
 export const translate = (language: Language, text: Text) => text[language === 'es' ? 1 : 0];
+
 export function readPreference(key: string, fallback: string): string {
   try {
     return localStorage.getItem(key) ?? fallback;
@@ -41,6 +43,7 @@ export function readPreference(key: string, fallback: string): string {
     return fallback;
   }
 }
+
 export function savePreference(key: string, value: string) {
   try {
     localStorage.setItem(key, value);

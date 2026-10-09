@@ -1,0 +1,36 @@
+.welcome-content {
+  padding: 37px 38px;
+  background: radial-gradient(ellipse at 100% 0, #dc262614, transparent 65%);
+  min-height: 100%;
+}
+h1 .accent {
+  color: var(--orange);
+}
+.welcome-footer {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  margin-top: 25px;
+}
+.welcome-footer small {
+  font-size: 9px;
+  color: var(--muted);
+  max-width: 150px;
+  line-height: 1.5;
+}
+@media (max-width: 650px) {
+  .welcome-content {
+    padding: 25px;
+  }
+  .welcome-content h1 {
+    font-size: 38px;
+  }
+  .welcome-footer {
+    flex-wrap: wrap;
+  }
+}
+:global(.dark) h1 .accent {
+  color: #f87171;
+}

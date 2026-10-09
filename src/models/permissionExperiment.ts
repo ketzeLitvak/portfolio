@@ -1,4 +1,5 @@
 import type { Text } from './types';
+
 export const permissionUsers = [
   { id: 'ana', name: 'Ana', tenant: 'atlas' },
   { id: 'bruno', name: 'Bruno', tenant: 'atlas' },
@@ -26,6 +27,7 @@ export interface PermissionScenario {
   editors: string[];
   viewers: string[];
 }
+
 export const initialPermissionScenario = (): PermissionScenario => ({
   user: 'ana',
   document: 'guide',
@@ -33,6 +35,7 @@ export const initialPermissionScenario = (): PermissionScenario => ({
   editors: [],
   viewers: ['atlas:ana'],
 });
+
 export function evaluatePermission(scenario: PermissionScenario) {
   const user = permissionUsers.find((entry) => entry.id === scenario.user)!;
   const document = permissionDocuments.find((entry) => entry.id === scenario.document)!;
@@ -83,16 +86,19 @@ export function evaluatePermission(scenario: PermissionScenario) {
 }
 
 export type PermissionRole = 'none' | 'viewer' | 'editor';
+
 export function assignPermissionRole(
   scenario: PermissionScenario,
   role: PermissionRole,
 ): PermissionScenario {
   const result = evaluatePermission(scenario);
   const key = `${result.document.tenant}:${scenario.user}`;
+
   const remove = (entries: string[]) =>
     entries.filter(
       (entry) => entry !== key && !(result.document.tenant === 'atlas' && entry === scenario.user),
     );
+
   return {
     ...scenario,
     editors: [...remove(scenario.editors), ...(role === 'editor' ? [key] : [])],

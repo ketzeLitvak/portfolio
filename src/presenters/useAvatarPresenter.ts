@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react';
+
 import type { ExpressionName, EyeVariant, MouthVariant, EyebrowVariant } from 'faceshape-react';
+
 import { avatarShapes, type AvatarConfig } from '../models/avatars';
+
 export function useAvatarPresenter() {
   const svgRef = useRef<SVGSVGElement>(null);
   const [name, setName] = useState('Ketze');
@@ -11,11 +14,14 @@ export function useAvatarPresenter() {
   const [eyebrows, setEyebrows] = useState<EyebrowVariant>('expression');
   const [color, setColor] = useState('#edcf79');
   const [animated, setAnimated] = useState(true);
+
   const setShape = (value: string) => {
     setShapeState(value);
     setMouth(avatarShapes[value].mouth ?? 'tongue');
   };
+
   const config: AvatarConfig = { name, shape, expression, eyes, mouth, eyebrows, color };
+
   const load = (avatar: AvatarConfig) => {
     setName(avatar.name);
     setShapeState(avatar.shape);
@@ -25,6 +31,7 @@ export function useAvatarPresenter() {
     setEyebrows(avatar.eyebrows);
     setColor(avatar.color);
   };
+
   const download = () => {
     if (!svgRef.current) return;
     const svg = svgRef.current.cloneNode(true) as SVGSVGElement;
@@ -37,6 +44,7 @@ export function useAvatarPresenter() {
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
+
   return {
     config,
     load,

@@ -1,4 +1,5 @@
 import type { Text } from './types';
+
 export interface ExperienceEntry {
   id: string;
   tab: Text;

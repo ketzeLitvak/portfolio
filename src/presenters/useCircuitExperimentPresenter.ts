@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { initialCircuitScenario, requestCircuit, tickCircuit } from '../models/circuitExperiment';
+
 export function useCircuitExperimentPresenter() {
   const [state, setState] = useState(initialCircuitScenario);
   const [busy, setBusy] = useState(false);
@@ -28,17 +30,20 @@ export function useCircuitExperimentPresenter() {
     );
     return () => clearTimeout(timer);
   }, [busy, state.status, state.enabled, state.healthy]);
+
   const request = () => {
     if (lock.current) return;
     lock.current = true;
     setBusy(true);
   };
+
   const reset = () => {
     lock.current = false;
     setBusy(false);
     setRunning(false);
     setState(initialCircuitScenario());
   };
+
   return {
     state,
     busy,

@@ -1,0 +1,98 @@
+.experience-view > h2 {
+  font-size: 32px;
+  margin-bottom: 22px;
+}
+.experience-header {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 20px;
+}
+.experience-header > img,
+.experience-people {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #fff;
+  object-fit: contain;
+}
+.experience-header > img[src$='utn-logo.png'] {
+  padding: 5px;
+}
+.experience-people {
+  display: grid;
+  place-items: center;
+  background: var(--bar);
+  color: var(--orange);
+}
+.experience-period {
+  font-size: 9px;
+  color: var(--muted);
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+.experience-header h3 {
+  font-size: 25px;
+  letter-spacing: -0.8px;
+  margin: 0 0 8px;
+  line-height: 1.1;
+}
+.experience-role {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.6;
+}
+.experience-summary {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-bottom: 23px;
+}
+.experience-contributions article {
+  display: grid;
+  grid-template-columns: 25px minmax(0, 1fr);
+  gap: 12px;
+  padding: 17px 0;
+  border-top: 1px solid var(--line);
+}
+.experience-contributions article > span {
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--orange);
+  padding-top: 2px;
+}
+.experience-contributions h4 {
+  font-family: 'Space Grotesk';
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+.experience-contributions p {
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted);
+  margin: 0;
+}
+@media (max-width: 650px) {
+  .experience-header {
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .experience-header > img,
+  .experience-people {
+    width: 60px;
+    height: 60px;
+  }
+  .experience-header h3 {
+    font-size: 21px;
+  }
+}
+
+.experience-header > img[src$='geopagos-logo.jpg'] {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}

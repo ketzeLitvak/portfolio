@@ -1,0 +1,82 @@
+.cache-intro {
+  --header-accent: var(--cache-accent);
+}
+.permission-intro {
+  --header-accent: var(--permission-accent);
+}
+.events-intro {
+  --header-accent: var(--events-accent);
+}
+.race-intro {
+  --header-accent: var(--race-accent);
+}
+
+.cache-intro,
+.permission-intro,
+.events-intro,
+.race-intro {
+  position: relative;
+  padding-right: 32px;
+}
+.cache-eyebrow,
+.permission-eyebrow,
+.events-eyebrow,
+.race-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  color: var(--header-accent);
+}
+.cache-intro h2,
+.permission-intro h2,
+.events-intro h2,
+.race-intro h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 25px;
+  line-height: 1.2;
+  margin: 12px 0 9px;
+  letter-spacing: -0.7px;
+}
+.cache-intro h2 {
+  max-width: 520px;
+}
+.cache-intro p,
+.permission-intro p,
+.events-intro p,
+.race-intro p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0;
+}
+.cache-reset,
+.permission-reset,
+.events-reset,
+.race-reset {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--muted);
+}
+.cache-reset:hover:not(:disabled) {
+  color: var(--header-accent);
+  border-color: var(--header-accent);
+}
+@media (max-width: 650px) {
+  .cache-intro h2,
+  .permission-intro h2,
+  .events-intro h2,
+  .race-intro h2 {
+    font-size: 22px;
+  }
+}

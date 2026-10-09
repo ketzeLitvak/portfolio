@@ -1,5 +1,7 @@
 import { readDirectLink, updateDirectLink, clearDirectLink } from '../models/directLinks';
+
 import { useShareLinkPresenter } from './useShareLinkPresenter';
+
 import {
   desktopApps,
   desktopProjects,
@@ -7,20 +9,28 @@ import {
   desktopShortcutIds,
   findDesktopExperience,
 } from '../models/desktopShortcuts';
+
 import { useDesktopShortcutsPresenter } from './useDesktopShortcutsPresenter';
+
 import { useContextMenuPresenter } from './useContextMenuPresenter';
+
 import { useSavedAvatarsPresenter } from './useSavedAvatarsPresenter';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import type { Language, Theme, WindowState, AppOpenOptions } from '../models/types';
+
 import { readPreference, savePreference } from '../models/types';
+
 export function useDesktopPresenter() {
   const avatars = useSavedAvatarsPresenter();
   const [activeMenu, setActiveMenu] = useState<'language' | 'theme' | null>(null);
   useEffect(() => {
     const outside = (event: PointerEvent) => {
-      if (event.target instanceof Element && !event.target.closest('.system-option'))
+      if (event.target instanceof Element && !event.target.closest('[data-system-option]'))
         setActiveMenu(null);
     };
+
     document.addEventListener('pointerdown', outside);
     return () => document.removeEventListener('pointerdown', outside);
   }, []);
@@ -37,11 +47,14 @@ export function useDesktopPresenter() {
   const dark = theme === 'auto' ? systemDark : theme === 'dark';
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
+
     const update = () => setSystemDark(media.matches);
+
     update();
     media.addEventListener('change', update);
     return () => media.removeEventListener('change', update);
   }, []);
+
   const initialWindows = () =>
     window.innerWidth <= 650 || readDirectLink()
       ? []
@@ -67,6 +80,7 @@ export function useDesktopPresenter() {
             maximized: false,
           },
         ];
+
   const [windows, setWindows] = useState<WindowState[]>(initialWindows);
   const z = useRef(12);
   const [clock, setClock] = useState('');
@@ -90,6 +104,7 @@ export function useDesktopPresenter() {
           timeZone: 'America/Argentina/Buenos_Aires',
         }).format(new Date()),
       );
+
     update();
     const timer = setInterval(update, 30000);
     return () => clearInterval(timer);
@@ -148,6 +163,7 @@ export function useDesktopPresenter() {
       const target = readDirectLink();
       if (target) open(target.id, target.options);
     };
+
     followLink();
     window.addEventListener('hashchange', followLink);
     return () => window.removeEventListener('hashchange', followLink);
@@ -213,6 +229,7 @@ export function useDesktopPresenter() {
       const top = windows.filter((w) => !w.minimized).sort((a, b) => b.z - a.z)[0];
       if (top) close(top.id);
     };
+
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [windows, close, activeMenu]);
@@ -232,12 +249,15 @@ export function useDesktopPresenter() {
     openShortcut,
   );
   const contextMenu = useContextMenuPresenter();
+
   const closeAll = () => {
     clearDirectLink();
     setWindows([]);
   };
+
   const minimizeAll = () =>
     setWindows((previous) => previous.map((window) => ({ ...window, minimized: true })));
+
   const share = useShareLinkPresenter(language);
   return {
     share,
@@ -266,4 +286,5 @@ export function useDesktopPresenter() {
     resize,
   };
 }
+
 export type DesktopPresenter = ReturnType<typeof useDesktopPresenter>;

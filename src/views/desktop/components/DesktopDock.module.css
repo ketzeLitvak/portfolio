@@ -1,0 +1,142 @@
+:import('./ApplicationIcon.module.css') {
+  external_icon_tile: icon-tile;
+  external_project_icon_tile: project-icon-tile;
+}
+
+.dock-shell {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 101;
+  text-align: center;
+}
+.dock {
+  display: flex;
+  gap: 7px;
+  background: var(--glass);
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 21px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 30px #24282113;
+}
+.dock button {
+  position: relative;
+  border: 0;
+  background: none;
+  padding: 3px;
+}
+.dock :global(.external_icon_tile) {
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  font-size: 22px;
+}
+.dock button:hover :global(.external_icon_tile) {
+  transform: translateY(-7px);
+}
+.dock button.active:after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--ink);
+  border-radius: 50%;
+  bottom: -6px;
+  left: 50%;
+}
+.dock .tooltip {
+  display: none;
+  position: absolute;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--panel);
+  white-space: nowrap;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 10px;
+}
+.dock button:hover .tooltip {
+  display: block;
+}
+@media (max-width: 650px) {
+  .dock-shell {
+    bottom: 20px;
+    width: max-content;
+  }
+  .dock {
+    gap: 4px;
+    padding: 8px;
+  }
+  .dock :global(.external_icon_tile) {
+    width: 39px;
+    height: 39px;
+    font-size: 20px;
+  }
+  .dock .tooltip {
+    display: none !important;
+  }
+}
+.dock :global(.external_icon_tile) svg {
+  width: 23px;
+  height: 23px;
+}
+@media (max-width: 650px) {
+  .dock {
+    gap: 3px;
+    padding: 8px;
+  }
+  .dock :global(.external_icon_tile) {
+    width: 36px;
+    height: 36px;
+  }
+}
+.dock {
+  --dock-icon-size: clamp(
+    14px,
+    calc((100vw - 64px - (var(--dock-items) - 1) * 7px) / var(--dock-items) - 6px),
+    43px
+  );
+}
+.dock .dock-app {
+  flex-shrink: 0;
+}
+.dock .dock-app :global(.external_icon_tile) {
+  width: var(--dock-icon-size);
+  height: var(--dock-icon-size);
+}
+.dock .dock-app :global(.external_icon_tile) > svg {
+  width: min(23px, calc(var(--dock-icon-size) * 0.65));
+  height: min(23px, calc(var(--dock-icon-size) * 0.65));
+}
+.dock :global(.external_project_icon_tile) img {
+  padding: 3px;
+}
+.dock button.active:after {
+  transform: translateX(-50%);
+}
+.dock-separator {
+  width: 1px;
+  align-self: stretch;
+  margin: 6px 4px;
+  background: var(--line);
+  flex-shrink: 0;
+}
+@media (max-width: 650px) {
+  .dock {
+    --dock-icon-size: clamp(
+      14px,
+      calc((100vw - 64px - (var(--dock-items) - 1) * 3px) / var(--dock-items)),
+      32px
+    );
+  }
+  .dock .dock-app {
+    padding: 0;
+  }
+  .dock-separator {
+    margin: 4px 3px;
+  }
+}

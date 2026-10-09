@@ -5,6 +5,7 @@ import type {
   MouthVariant,
   EyebrowVariant,
 } from 'faceshape-react';
+
 import {
   cat,
   cloud,
@@ -17,6 +18,7 @@ import {
   robot,
   shark,
 } from 'faceshape-react/shapes';
+
 import type { Text } from './types';
 
 export const avatarShapes: Record<
@@ -95,6 +97,7 @@ export interface SavedAvatar extends AvatarConfig {
   id: string;
   position?: AvatarPosition;
 }
+
 export function isAvatarConfig(value: unknown): value is AvatarConfig {
   if (!value || typeof value !== 'object') return false;
   const p = value as Record<string, unknown>;

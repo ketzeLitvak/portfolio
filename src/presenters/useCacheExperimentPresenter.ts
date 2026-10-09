@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
+
 import {
   initialCacheScenario,
   queryCache,
   updateCacheSource,
   invalidateCacheLayer,
 } from '../models/cacheExperiment';
+
 import type {
   CacheScenario,
   CacheService,
   CacheStrategy,
   CacheLayer,
 } from '../models/cacheExperiment';
+
 export type CacheStop = 'client' | 'memory' | 'redis' | 'database';
 type CacheJourney = { stops: CacheStop[]; turn: number; result: CacheScenario };
+
 export function useCacheExperimentPresenter() {
   const [state, setState] = useState(initialCacheScenario);
   const [journey, setJourney] = useState<CacheJourney | null>(null);
@@ -52,6 +56,7 @@ export function useCacheExperimentPresenter() {
     );
     return () => clearTimeout(timer);
   }, [journey, frame]);
+
   const query = () => {
     if (busyRef.current) return;
     busyRef.current = true;
@@ -64,11 +69,13 @@ export function useCacheExperimentPresenter() {
       result,
     });
   };
+
   const change = (next: CacheScenario, nextEvent: typeof event) => {
     if (busyRef.current) return;
     setState(next);
     setEvent(nextEvent);
   };
+
   const reset = () => {
     setJourney(null);
     setClockRunning(false);
@@ -78,6 +85,7 @@ export function useCacheExperimentPresenter() {
     setFirstLatency(null);
     setEvent('idle');
   };
+
   return {
     state,
     journey,

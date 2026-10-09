@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+
 import { enqueueJob, initialQueueScenario, tickQueue } from '../models/queueExperiment';
+
 export type EventDelivery = 'normal' | 'retry' | 'fail';
+
 export function useQueueExperimentPresenter() {
   const [state, setState] = useState(initialQueueScenario);
   const [workers, setWorkers] = useState(1);
@@ -15,7 +18,9 @@ export function useQueueExperimentPresenter() {
     );
     return () => clearInterval(timer);
   }, [running, workers, idempotent]);
+
   const step = () => setState((previous) => tickQueue(previous, workers, idempotent));
+
   const send = () => {
     if (state.jobs.length >= 24) return;
     setState((previous) =>
@@ -28,6 +33,7 @@ export function useQueueExperimentPresenter() {
     );
     setRunning(true);
   };
+
   const repeat = () => {
     const last = state.jobs.at(-1);
     if (!last || state.jobs.length >= 24) return;
@@ -36,6 +42,7 @@ export function useQueueExperimentPresenter() {
     );
     setRunning(true);
   };
+
   const reset = () => {
     setRunning(false);
     setState(initialQueueScenario());
@@ -43,6 +50,7 @@ export function useQueueExperimentPresenter() {
     setDelivery('normal');
     setIdempotent(true);
   };
+
   const waiting = state.jobs.filter((job) => job.status === 'waiting' || job.status === 'delayed');
   const results = state.jobs
     .filter((job) => ['completed', 'failed', 'deduplicated'].includes(job.status))

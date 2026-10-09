@@ -1,5 +1,7 @@
 import { projects } from './projects';
+
 import { experiences, experienceSkillLabels } from './experience';
+
 import type { Text } from './types';
 
 export const projectCategories: Record<string, Text> = {
@@ -80,6 +82,7 @@ export const searchLanguages = [...new Set(searchableEntries.flatMap((p) => p.la
 export const searchTechnologies = [
   ...new Set(searchableEntries.flatMap((p) => p.technologies)),
 ].sort();
+
 export const normalizeSearch = (value: string) =>
   value
     .normalize('NFD')

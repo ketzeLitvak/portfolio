@@ -1,0 +1,88 @@
+.cache-explanation {
+  --explanation-accent: var(--cache-accent);
+}
+.permission-explanation {
+  --explanation-accent: var(--permission-accent);
+}
+.events-explanation {
+  --explanation-accent: var(--events-accent);
+}
+.race-explanation {
+  --explanation-accent: var(--race-accent);
+}
+
+.cache-explanation,
+.permission-explanation,
+.events-explanation,
+.race-explanation {
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+}
+.cache-explanation summary,
+.permission-explanation summary,
+.events-explanation summary,
+.race-explanation summary {
+  cursor: pointer;
+  padding: 15px 0;
+  font-weight: 500;
+}
+.cache-explanation p,
+.permission-explanation p,
+.permission-explanation li,
+.events-explanation p,
+.events-explanation li,
+.race-explanation p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.cache-explanation p {
+  margin: 0 0 12px;
+}
+.cache-explanation ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+  display: grid;
+  gap: 12px;
+}
+.cache-explanation li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.6;
+}
+.cache-explanation li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--explanation-accent);
+}
+.cache-explanation a,
+.permission-explanation a,
+.events-explanation a,
+.race-explanation a {
+  color: var(--explanation-accent);
+}
+.permission-explanation label {
+  display: grid;
+  gap: 7px;
+  max-width: 320px;
+  margin: 18px 0;
+}
+.permission-explanation select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: inherit;
+  background: var(--panel);
+  padding: 9px;
+  font-size: 11px;
+}
+.race-explanation pre {
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: auto;
+  font-size: 10px;
+  line-height: 1.7;
+}

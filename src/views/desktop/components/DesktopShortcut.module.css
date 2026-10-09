@@ -1,0 +1,52 @@
+:import('./ApplicationIcon.module.css') {
+  external_icon_tile: icon-tile;
+}
+
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: none;
+  padding: 5px 3px;
+  font-size: 11px;
+  text-align: center;
+}
+.app-icon:hover :global(.external_icon_tile) {
+  transform: translateY(-4px) rotate(-5deg);
+  box-shadow: 0 7px 12px #24282118;
+}
+@media (max-width: 650px) {
+  .app-icon {
+    font-size: 11px;
+  }
+}
+.app-icon {
+  min-width: 0;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 3px;
+  border-radius: 9px;
+  line-height: 1.35;
+}
+.app-icon > span:last-child {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.app-icon:hover,
+.app-icon:focus-visible {
+  background: color-mix(in srgb, var(--panel) 65%, transparent);
+}
+@media (max-width: 650px) {
+  .app-icon {
+    gap: 6px;
+  }
+}
+.experiment-shortcut {
+}
+
+.project-shortcut {
+}
+.experience-shortcut {
+}

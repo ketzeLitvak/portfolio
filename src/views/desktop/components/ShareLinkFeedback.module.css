@@ -1,0 +1,52 @@
+.share-link-toast {
+  position: fixed;
+  z-index: 2100;
+  bottom: 105px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 18px;
+  border-radius: 9px;
+  background: var(--ink);
+  color: var(--panel);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+}
+.share-link-fallback {
+  position: fixed;
+  z-index: 2100;
+  bottom: 105px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(440px, calc(100vw - 24px));
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.share-link-fallback label {
+  display: block;
+  padding-right: 20px;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+.share-link-fallback input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  color: var(--ink);
+  background: var(--bar);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 11px;
+}
+.share-link-fallback > button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  border: 0;
+  background: none;
+}

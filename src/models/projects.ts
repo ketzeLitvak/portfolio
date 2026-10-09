@@ -1,4 +1,5 @@
 import type { Project } from './types';
+
 export const projects: Record<string, Project> = {
   chilta: {
     title: 'Chilta',

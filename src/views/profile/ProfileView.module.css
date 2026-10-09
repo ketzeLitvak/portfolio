@@ -1,0 +1,57 @@
+.profile-top {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.monogram {
+  width: 65px;
+  height: 65px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #c7c7c7;
+  color: #202020;
+  font-family: 'Space Grotesk';
+  font-size: 24px;
+}
+.profile-top h2 {
+  font-size: 27px;
+  margin: 0 0 5px;
+}
+.profile-top small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.profile-body p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+@media (max-width: 650px) {
+  .profile-top h2 {
+    font-size: 24px;
+  }
+  .profile-top {
+    gap: 12px;
+  }
+  .monogram {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+}
+.monogram img {
+  display: block;
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  transform: translateX(1.8%);
+}
+@media (max-width: 650px) {
+  .monogram img {
+    width: 33px;
+    height: 33px;
+  }
+}

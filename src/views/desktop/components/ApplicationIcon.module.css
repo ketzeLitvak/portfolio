@@ -1,0 +1,88 @@
+.icon-tile {
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  font-family: 'Space Grotesk';
+  font-size: 26px;
+  transition: 0.2s;
+  box-shadow: 0 3px 4px #2428210a;
+  color: #242821;
+  position: relative;
+  border: 1px solid #ffffff50;
+}
+.i-welcome {
+  background: #f5b4b4;
+}
+.i-projects {
+  background: #e26666;
+}
+.i-profile {
+  background: #c7c7c7;
+}
+.i-avatar {
+  background: #f3d4d4;
+}
+.i-tools {
+  background: #9f9f9f;
+}
+.i-contact {
+  background: #c94a4a;
+}
+.icon-tile svg {
+  width: 30px;
+  height: 30px;
+}
+@media (max-width: 650px) {
+  .icon-tile {
+    width: 59px;
+    height: 59px;
+  }
+}
+:global(.dark) .icon-tile {
+  border-color: #ffffff15;
+}
+.project-icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  overflow: hidden;
+  border-color: #ffffff50 !important;
+}
+.project-icon-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  object-fit: contain;
+}
+
+.i-search {
+  background: #dac8aa;
+}
+
+.i-experience {
+  background: #b3b8cf;
+}
+.i-permissions {
+  background: #21574b;
+  color: #a9f1cd;
+}
+.i-cache {
+  background: #534026;
+  color: #ffe0a4;
+}
+.i-queues {
+  background: #3c365c;
+  color: #d2c1ff;
+}
+.i-race {
+  background: #563326;
+  color: #ffc79d;
+}
+.i-circuit {
+  background: #283e59;
+  color: #add0fb;
+}

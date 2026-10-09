@@ -1,9 +1,15 @@
-import { CircuitExperimentView } from '../views/experiments/CircuitExperimentView';
-import { RaceExperimentView } from '../views/experiments/RaceExperimentView';
-import { PermissionExperimentView } from '../views/experiments/PermissionExperimentView';
-import { CacheExperimentView } from '../views/experiments/CacheExperimentView';
-import { QueueExperimentView } from '../views/experiments/QueueExperimentView';
+import { CircuitExperimentView } from '../views/experiments/circuit/CircuitExperimentView';
+
+import { RaceExperimentView } from '../views/experiments/race/RaceExperimentView';
+
+import { PermissionExperimentView } from '../views/experiments/permissions/PermissionExperimentView';
+
+import { CacheExperimentView } from '../views/experiments/cache/CacheExperimentView';
+
+import { QueueExperimentView } from '../views/experiments/events/QueueExperimentView';
+
 import { projectIcons } from './projectIcons';
+
 import {
   Unplug,
   GitFork,
@@ -20,17 +26,37 @@ import {
   Search,
   BriefcaseBusiness,
 } from 'lucide-react';
+
 import type { LucideIcon } from 'lucide-react';
+
 import type { ComponentType } from 'react';
+
 import type { Text } from './types';
+
 import type { ViewProps } from './viewProps';
+
 import { projects } from './projects';
-import { ProjectSearchView } from '../views/ProjectSearchView';
-import { ExperienceView } from '../views/ExperienceView';
-import { WelcomeView } from '../views/WelcomeView';
-import { ProjectListView, ProjectDetailView } from '../views/ProjectViews';
-import { ProfileView, ContactView, QuickView } from '../views/ProfileViews';
-import { AvatarView, ToolsView } from '../views/PlaygroundViews';
+
+import { ProjectSearchView } from '../views/search/ProjectSearchView';
+
+import { ExperienceView } from '../views/experience/ExperienceView';
+
+import { WelcomeView } from '../views/welcome/WelcomeView';
+
+import { ProjectListView } from '../views/projects/ProjectListView';
+
+import { ProjectDetailView } from '../views/projects/ProjectDetailView';
+
+import { ProfileView } from '../views/profile/ProfileView';
+
+import { ContactView } from '../views/contact/ContactView';
+
+import { QuickView } from '../views/quick/QuickView';
+
+import { AvatarView } from '../views/avatar/AvatarView';
+
+import { ToolsView } from '../views/tools/ToolsView';
+
 export interface AppDefinition {
   title: Text;
   icon: LucideIcon;

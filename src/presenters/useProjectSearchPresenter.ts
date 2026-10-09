@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+
 import { normalizeSearch, projectCategories, searchableEntries } from '../models/projectSearch';
 
 export function useProjectSearchPresenter() {
@@ -18,12 +19,14 @@ export function useProjectSearchPresenter() {
       );
     });
   }, [query, language, technology, category]);
+
   const reset = () => {
     setQuery('');
     setLanguage('');
     setTechnology('');
     setCategory('');
   };
+
   return {
     query,
     setQuery,

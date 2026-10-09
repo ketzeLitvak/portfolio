@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+
 import type { MouseEvent, KeyboardEvent } from 'react';
+
 import type { LucideIcon } from 'lucide-react';
 
 export interface ContextMenuAction {
@@ -15,6 +17,7 @@ interface ContextMenuState {
   y: number;
   actions: ContextMenuAction[];
 }
+
 export function useContextMenuPresenter() {
   const [menu, setMenu] = useState<ContextMenuState | null>(null);
   const ref = useRef<HTMLDivElement>(null);
@@ -23,10 +26,11 @@ export function useContextMenuPresenter() {
     setMenu(null);
     origin.current?.focus({ preventScroll: true });
   }, []);
+
   const show = (event: MouseEvent, title: string, actions: ContextMenuAction[]) => {
     event.preventDefault();
     const element = event.target instanceof Element ? event.target : null;
-    origin.current = element?.closest<HTMLElement>('button, .window, main') ?? null;
+    origin.current = element?.closest<HTMLElement>('button, [data-app], main') ?? null;
     const bounds = origin.current?.getBoundingClientRect();
     setMenu({
       title,
@@ -35,6 +39,7 @@ export function useContextMenuPresenter() {
       y: event.clientY || bounds?.top || 8,
     });
   };
+
   useLayoutEffect(() => {
     const element = ref.current;
     if (!menu || !element) return;
@@ -45,16 +50,20 @@ export function useContextMenuPresenter() {
   }, [menu]);
   useEffect(() => {
     if (!menu) return;
+
     const outside = (event: PointerEvent) => {
       if (event.target instanceof Node && !ref.current?.contains(event.target)) setMenu(null);
     };
+
     const escape = (event: globalThis.KeyboardEvent) => {
       if (event.key !== 'Escape') return;
       event.preventDefault();
       event.stopImmediatePropagation();
       dismiss();
     };
+
     const resize = () => setMenu(null);
+
     document.addEventListener('pointerdown', outside);
     document.addEventListener('keydown', escape, true);
     window.addEventListener('resize', resize);
@@ -64,6 +73,7 @@ export function useContextMenuPresenter() {
       window.removeEventListener('resize', resize);
     };
   }, [menu, dismiss]);
+
   const navigate = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Tab') {
       dismiss();
@@ -83,6 +93,8 @@ export function useContextMenuPresenter() {
     event.preventDefault();
     items[next].focus();
   };
+
   return { menu, ref, show, dismiss, navigate };
 }
+
 export type ContextMenuPresenter = ReturnType<typeof useContextMenuPresenter>;

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { directLinkUrl } from '../models/directLinks';
+
 import { translate, type Language, type AppOpenOptions } from '../models/types';
 
 export function useShareLinkPresenter(language: Language) {
@@ -14,6 +16,7 @@ export function useShareLinkPresenter(language: Language) {
   useEffect(() => {
     if (manualLink) inputRef.current?.select();
   }, [manualLink]);
+
   const copy = async (id: string, options?: AppOpenOptions) => {
     const url = directLinkUrl(id, options);
     try {
@@ -24,6 +27,8 @@ export function useShareLinkPresenter(language: Language) {
       setManualLink(url);
     }
   };
+
   return { message, manualLink, inputRef, copy, dismiss: () => setManualLink(null) };
 }
+
 export type ShareLinkPresenter = ReturnType<typeof useShareLinkPresenter>;

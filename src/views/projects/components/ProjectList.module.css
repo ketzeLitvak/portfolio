@@ -1,0 +1,104 @@
+:import('../../../styles/Content.module.css') {
+  external_notice: notice;
+}
+
+.project-list {
+  padding: 0;
+}
+.folder-head {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 0 18px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.project-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--line);
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 0;
+}
+.project-row:hover {
+  background: var(--bar);
+  border-radius: 0;
+}
+.project-row .project-symbol {
+  width: 43px;
+  height: 43px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: 'Space Grotesk';
+  font-size: 22px;
+}
+.project-row b {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.project-row small {
+  color: var(--muted);
+  font-size: 10px;
+  display: block;
+}
+.project-row .arrow {
+  margin-left: auto;
+  font-size: 18px;
+}
+.project-counter {
+  margin-left: auto;
+  margin-right: 8px;
+  font-size: 8px;
+  color: var(--muted);
+}
+@media (max-width: 650px) {
+  .project-counter {
+    display: none;
+  }
+}
+.project-counter + .arrow {
+  flex-shrink: 0;
+}
+.project-row {
+  display: grid;
+  grid-template-columns: 43px minmax(0, 1fr) 20px 18px;
+  gap: 13px;
+}
+.project-counter {
+  margin: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.project-row .arrow {
+  margin: 0;
+}
+.project-summary {
+  min-width: 0;
+}
+.project-symbol {
+  overflow: hidden;
+}
+.project-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 3px;
+  background: #fff;
+}
+@media (max-width: 650px) {
+  .project-row {
+    grid-template-columns: 43px minmax(0, 1fr) 18px;
+  }
+}
+
+.project-list > :global(.external_notice) {
+  padding: 0;
+}

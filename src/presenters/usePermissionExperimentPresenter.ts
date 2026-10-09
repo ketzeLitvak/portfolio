@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+
 import {
   assignPermissionRole,
   evaluatePermission,
   initialPermissionScenario,
 } from '../models/permissionExperiment';
+
 import type { PermissionScenario, PermissionRole } from '../models/permissionExperiment';
+
 export function usePermissionExperimentPresenter() {
   const [scenario, setScenario] = useState(initialPermissionScenario);
   const [checking, setChecking] = useState(false);
@@ -30,27 +33,32 @@ export function usePermissionExperimentPresenter() {
     );
     return () => clearTimeout(timer);
   }, [checking]);
+
   const update = (patch: Partial<PermissionScenario>) => {
     if (busy.current) return;
     setScenario((previous) => ({ ...previous, ...patch }));
     setAttempted(false);
   };
+
   const setRole = (next: PermissionRole) => {
     if (busy.current || result.owner) return;
     setScenario((previous) => assignPermissionRole(previous, next));
     setAttempted(false);
   };
+
   const attempt = () => {
     if (busy.current) return;
     busy.current = true;
     setAttempted(false);
     setChecking(true);
   };
+
   const reset = () => {
     busy.current = false;
     setChecking(false);
     setAttempted(false);
     setScenario(initialPermissionScenario());
   };
+
   return { scenario, result, role, update, setRole, attempt, checking, attempted, reset };
 }
