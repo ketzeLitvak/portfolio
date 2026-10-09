@@ -6,6 +6,7 @@ import {
   decryptMessage,
   encryptMessage,
   type CipherEnvelope,
+  type CryptoTrial,
 } from '../models/cryptoExperiment';
 
 import { useAsyncExperimentPresenter } from './useAsyncExperimentPresenter';
@@ -14,8 +15,8 @@ export function useEncryptionExperimentPresenter() {
   const task = useAsyncExperimentPresenter();
   const [message, setMessage] = useState('Nos vemos en Ketze Studio');
   const [envelope, setEnvelope] = useState<CipherEnvelope | null>(null);
-  const [otherKey, setOtherKey] = useState(false);
-  const [tampered, setTampered] = useState(false);
+  const [trial, setTrial] = useState<CryptoTrial>('matching');
+  const tampered = trial === 'tampered';
   const [result, setResult] = useState<{ plaintext: string | null } | null>(null);
 
   const encrypt = () => {
@@ -24,18 +25,19 @@ export function useEncryptionExperimentPresenter() {
       (value) => {
         setEnvelope(value);
         setResult(null);
-        setOtherKey(false);
-        setTampered(false);
+        setTrial('matching');
       },
     );
   };
 
-  const decrypt = () => {
-    if (envelope)
-      void task.run(
-        () => decryptMessage(envelope, otherKey, tampered),
-        (plaintext) => setResult({ plaintext }),
-      );
+  const decrypt = (next: CryptoTrial) => {
+    if (!envelope || task.busy) return;
+    setTrial(next);
+    setResult(null);
+    void task.run(
+      () => decryptMessage(envelope, next === 'other', next === 'tampered'),
+      (plaintext) => setResult({ plaintext }),
+    );
   };
 
   const reset = () => {
@@ -43,14 +45,13 @@ export function useEncryptionExperimentPresenter() {
     setMessage('Nos vemos en Ketze Studio');
     setEnvelope(null);
     setResult(null);
-    setOtherKey(false);
-    setTampered(false);
+    setTrial('matching');
   };
 
   return {
     message,
     envelope,
-    otherKey,
+    trial,
     tampered,
     result,
     busy: task.busy,
@@ -65,15 +66,7 @@ export function useEncryptionExperimentPresenter() {
       setMessage(value);
       setEnvelope(null);
       setResult(null);
-      setTampered(false);
-    },
-    selectKey: (value: boolean) => {
-      setOtherKey(value);
-      setResult(null);
-    },
-    toggleTamper: () => {
-      setTampered((value) => !value);
-      setResult(null);
+      setTrial('matching');
     },
   };
 }

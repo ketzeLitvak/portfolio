@@ -1,3 +1,5 @@
+export type CryptoTrial = 'matching' | 'other' | 'tampered';
+
 export const passwordIterations = 600_000;
 const encoder = new TextEncoder();
 

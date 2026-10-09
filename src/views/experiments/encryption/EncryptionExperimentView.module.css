@@ -20,42 +20,6 @@
   font-size: 9px;
   margin-bottom: 6px;
 }
-.tamper {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  padding: 8px;
-  background: transparent;
-  color: var(--ink);
-  font-size: 10px;
-  margin-top: 14px;
-}
-.tamper[aria-pressed='true'] {
-  border-color: #bb7272;
-}
-.tamper:disabled {
-  opacity: 0.4;
-}
-.keys {
-  display: grid;
-  gap: 8px;
-}
-.keys button {
-  padding: 9px;
-  color: var(--ink);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  font-size: 10px;
-}
-.keys button[aria-pressed='true'] {
-  border-color: var(--lab-accent);
-}
-.keys button:disabled {
-  opacity: 0.4;
-}
 .output {
   border-top: 1px solid var(--line);
   padding-top: 14px;
@@ -70,11 +34,4 @@
 }
 .output[data-failed='true'] {
   color: #bd7272;
-}
-@media (max-width: 400px) {
-  .keys button,
-  .tamper {
-    font-size: 9px;
-    padding: 7px;
-  }
 }

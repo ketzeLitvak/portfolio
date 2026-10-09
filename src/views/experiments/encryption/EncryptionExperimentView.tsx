@@ -1,4 +1,4 @@
-import { KeyRound, LockKeyhole, Pencil, UnlockKeyhole } from 'lucide-react';
+import { LockKeyhole, UnlockKeyhole } from 'lucide-react';
 
 import type { ViewProps } from '../../../models/viewProps';
 
@@ -10,9 +10,42 @@ import { ExperimentWorkbench } from '../ExperimentWorkbench';
 
 import { HexValue } from '../HexValue';
 
+import { ExperimentActionSelect } from '../ExperimentActionSelect';
+
+import type { CryptoTrial } from '../../../models/cryptoExperiment';
+
+import type { OptionChoice } from '../../../components/options/OptionChoices';
+
 import ui from '../ExperimentUI.module.css';
 
 import styles from './EncryptionExperimentView.module.css';
+
+const trials: readonly OptionChoice<CryptoTrial>[] = [
+  {
+    id: 'matching',
+    title: ['Matching key', 'Misma clave'],
+    description: [
+      'Decrypt the original ciphertext with key A.',
+      'Descifrar el texto cifrado original con la clave A.',
+    ],
+  },
+  {
+    id: 'other',
+    title: ['Another key', 'Otra clave'],
+    description: [
+      'Try the original ciphertext with an unrelated key B.',
+      'Probar el texto cifrado original con otra clave B.',
+    ],
+  },
+  {
+    id: 'tampered',
+    title: ['Modified ciphertext', 'Texto cifrado alterado'],
+    description: [
+      'Change one byte and decrypt with the matching key.',
+      'Cambiar un byte y descifrar con la misma clave.',
+    ],
+  },
+];
 
 export function EncryptionExperimentView({ language }: ViewProps) {
   const p = useEncryptionExperimentPresenter();
@@ -70,73 +103,48 @@ export function EncryptionExperimentView({ language }: ViewProps) {
           <LockKeyhole size={16} />
           {t(p.busy ? ['Working…', 'Procesando…'] : ['Encrypt message', 'Cifrar mensaje'])}
         </button>
-        <button className={ui.secondary} disabled={p.busy || !p.envelope} onClick={p.decrypt}>
-          <UnlockKeyhole size={16} />
-          {t(['Decrypt', 'Descifrar'])}
-        </button>
+        <ExperimentActionSelect
+          language={language}
+          label={t(['Decrypt', 'Descifrar'])}
+          title={t(['Try decryption', 'Probar descifrado'])}
+          icon={UnlockKeyhole}
+          disabled={p.busy || !p.envelope}
+          value={p.trial}
+          options={trials}
+          onSelect={p.decrypt}
+        />
       </div>
-      <div className={ui.scene}>
-        <article className={ui.panel}>
-          <h3>
-            <LockKeyhole size={15} />
-            {t(['Encrypted message', 'Mensaje cifrado'])}
-          </h3>
-          <HexValue value={p.hex} label={t(['Ciphertext', 'Texto cifrado'])} />
-          {p.envelope && (
-            <div className={styles.iv}>
-              <span>IV · 96 bits</span>
-              <HexValue value={p.iv} label="IV" />
-            </div>
-          )}
-          <button
-            className={styles.tamper}
-            disabled={p.busy || !p.envelope}
-            aria-pressed={p.tampered}
-            onClick={p.toggleTamper}
-          >
-            <Pencil size={13} />
-            {t(
-              p.tampered
-                ? ['Restore bytes', 'Restaurar bytes']
-                : ['Change one byte', 'Cambiar un byte'],
-            )}
-          </button>
-        </article>
-        <article className={ui.panel}>
-          <h3>
-            <KeyRound size={15} />
-            {t(['Key to decrypt', 'Clave para descifrar'])}
-          </h3>
-          <div
-            className={styles.keys}
-            role="group"
-            aria-label={t(['Decryption key', 'Clave de descifrado'])}
-          >
-            {[false, true].map((other) => (
-              <button
-                key={String(other)}
-                aria-pressed={p.otherKey === other}
-                disabled={p.busy || !p.envelope}
-                onClick={() => p.selectKey(other)}
-              >
-                {t(
-                  other
-                    ? ['Another key · B', 'Otra clave · B']
-                    : ['Matching key · A', 'Misma clave · A'],
-                )}
-              </button>
-            ))}
+      <article className={ui.panel}>
+        <h3>
+          <LockKeyhole size={15} />
+          {t(['Encrypted message', 'Mensaje cifrado'])}
+        </h3>
+        <HexValue value={p.hex} label={t(['Ciphertext', 'Texto cifrado'])} />
+        {p.envelope && (
+          <div className={styles.iv}>
+            <span>IV · 96 bits</span>
+            <HexValue value={p.iv} label="IV" />
           </div>
-          <div className={styles.output} data-failed={p.result?.plaintext === null}>
-            {p.result?.plaintext === null ? (
-              <span>{t(['Cannot decrypt', 'No se puede descifrar'])}</span>
-            ) : p.result ? (
-              <strong>{p.result.plaintext || t(['Empty message', 'Mensaje vacío'])}</strong>
-            ) : (
-              <small>{t(['Decrypt to reveal the message', 'Descifrá para ver el mensaje'])}</small>
-            )}
-          </div>
-        </article>
+        )}
+        {p.tampered && (
+          <p className={ui.note}>
+            {t([
+              'One byte was modified for this attempt.',
+              'Se modificó un byte para este intento.',
+            ])}
+          </p>
+        )}
+      </article>
+      <div className={styles.output} data-failed={p.result?.plaintext === null} aria-live="polite">
+        {p.result?.plaintext === null ? (
+          <span>{t(['Cannot decrypt', 'No se puede descifrar'])}</span>
+        ) : p.result ? (
+          <strong>{p.result.plaintext || t(['Empty message', 'Mensaje vacío'])}</strong>
+        ) : (
+          <small>
+            {t(['Open Decrypt and choose a test.', 'Abrí Descifrar y elegí una prueba.'])}
+          </small>
+        )}
       </div>
       <p className={ui.feedback} data-error={p.result?.plaintext === null} aria-live="polite">
         {p.result
@@ -151,8 +159,8 @@ export function EncryptionExperimentView({ language }: ViewProps) {
               ])
           : p.envelope
             ? t([
-                'The message is encrypted. Select a key and try decrypting it.',
-                'El mensaje está cifrado. Elegí una clave y probá descifrarlo.',
+                'The message is encrypted. Open Decrypt to try the original key, another key, or altered bytes.',
+                'El mensaje está cifrado. Abrí Descifrar para probar la misma clave, otra clave o bytes alterados.',
               ])
             : t(['Start by encrypting the message.', 'Empezá cifrando el mensaje.'])}
       </p>

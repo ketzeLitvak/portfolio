@@ -5,6 +5,7 @@ import {
   signMessage,
   verifyMessage,
   type SignedMessage,
+  type CryptoTrial,
 } from '../models/cryptoExperiment';
 
 import { useAsyncExperimentPresenter } from './useAsyncExperimentPresenter';
@@ -13,7 +14,7 @@ export function useSignatureExperimentPresenter() {
   const task = useAsyncExperimentPresenter();
   const [message, setMessage] = useState('Pedido #42 · total $100');
   const [packet, setPacket] = useState<SignedMessage | null>(null);
-  const [otherIdentity, setOtherIdentity] = useState(false);
+  const [trial, setTrial] = useState<CryptoTrial>('matching');
   const [verified, setVerified] = useState<boolean | null>(null);
 
   const sign = () => {
@@ -22,27 +23,32 @@ export function useSignatureExperimentPresenter() {
       (value) => {
         setPacket(value);
         setVerified(null);
-        setOtherIdentity(false);
+        setTrial('matching');
       },
     );
   };
 
-  const verify = () => {
-    if (packet) void task.run(() => verifyMessage(packet, message, otherIdentity), setVerified);
+  const verify = (next: CryptoTrial) => {
+    if (!packet || task.busy) return;
+    const candidate = next === 'tampered' ? packet.message + '!' : message;
+    setMessage(candidate);
+    setTrial(next);
+    setVerified(null);
+    void task.run(() => verifyMessage(packet, candidate, next === 'other'), setVerified);
   };
 
   const reset = () => {
     task.clear();
     setMessage('Pedido #42 · total $100');
     setPacket(null);
-    setOtherIdentity(false);
+    setTrial('matching');
     setVerified(null);
   };
 
   return {
     message,
     packet,
-    otherIdentity,
+    trial,
     verified,
     busy: task.busy,
     error: task.error,
@@ -52,14 +58,6 @@ export function useSignatureExperimentPresenter() {
     signature: packet ? bytesToHex(new Uint8Array(packet.signature)) : '',
     edit: (value: string) => {
       setMessage(value);
-      setVerified(null);
-    },
-    selectVerifier: (other: boolean) => {
-      setOtherIdentity(other);
-      setVerified(null);
-    },
-    tamper: () => {
-      setMessage((value) => value + '!');
       setVerified(null);
     },
     restore: () => {

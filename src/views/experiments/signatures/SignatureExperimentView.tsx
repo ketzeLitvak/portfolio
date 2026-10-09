@@ -1,4 +1,4 @@
-import { BadgeCheck, FileSignature, KeyRound, Pencil, RotateCcw, ShieldCheck } from 'lucide-react';
+import { BadgeCheck, FileSignature, RotateCcw, ShieldCheck } from 'lucide-react';
 
 import type { ViewProps } from '../../../models/viewProps';
 
@@ -10,9 +10,42 @@ import { ExperimentWorkbench } from '../ExperimentWorkbench';
 
 import { HexValue } from '../HexValue';
 
+import { ExperimentActionSelect } from '../ExperimentActionSelect';
+
+import type { CryptoTrial } from '../../../models/cryptoExperiment';
+
+import type { OptionChoice } from '../../../components/options/OptionChoices';
+
 import ui from '../ExperimentUI.module.css';
 
 import styles from './SignatureExperimentView.module.css';
+
+const trials: readonly OptionChoice<CryptoTrial>[] = [
+  {
+    id: 'matching',
+    title: ['Ana’s public key', 'Clave pública de Ana'],
+    description: [
+      'Verify the current message with the signer’s key.',
+      'Verificar el mensaje actual con la clave de quien firmó.',
+    ],
+  },
+  {
+    id: 'other',
+    title: ['Bruno’s public key', 'Clave pública de Bruno'],
+    description: [
+      'Try verifying the current message with another person’s key.',
+      'Probar el mensaje actual con la clave de otra persona.',
+    ],
+  },
+  {
+    id: 'tampered',
+    title: ['Modified message', 'Mensaje alterado'],
+    description: [
+      'Change the signed message and verify it with Ana’s key.',
+      'Cambiar el mensaje firmado y verificarlo con la clave de Ana.',
+    ],
+  },
+];
 
 export function SignatureExperimentView({ language }: ViewProps) {
   const p = useSignatureExperimentPresenter();
@@ -38,8 +71,8 @@ export function SignatureExperimentView({ language }: ViewProps) {
         <>
           <p>
             {t([
-              'Ana signs the exact UTF-8 bytes with an ECDSA P-256 private key and SHA-256. Verification uses her corresponding public key. The private key stays non-exportable; the short public-key fingerprint is a SHA-256 digest of its SPKI encoding.',
-              'Ana firma los bytes UTF-8 exactos con una clave privada ECDSA P-256 y SHA-256. La verificación usa su clave pública correspondiente. La privada no se exporta; la huella corta de la pública es un SHA-256 de su codificación SPKI.',
+              'Ana signs the exact UTF-8 bytes with an ECDSA P-256 private key and SHA-256. Verification uses her corresponding public key. The private key stays non-exportable.',
+              'Ana firma los bytes UTF-8 exactos con una clave privada ECDSA P-256 y SHA-256. La verificación usa su clave pública correspondiente. La clave privada no se exporta.',
             ])}
           </p>
           <p>
@@ -71,87 +104,54 @@ export function SignatureExperimentView({ language }: ViewProps) {
           <FileSignature size={16} />
           {t(p.busy ? ['Working…', 'Procesando…'] : ['Sign as Ana', 'Firmar como Ana'])}
         </button>
-        <button className={ui.secondary} disabled={p.busy || !p.packet} onClick={p.verify}>
-          <ShieldCheck size={16} />
-          {t(['Verify signature', 'Verificar firma'])}
-        </button>
-        {p.packet && (
-          <button
-            className={ui.secondary}
-            disabled={p.busy}
-            onClick={changed ? p.restore : p.tamper}
-          >
-            {changed ? <RotateCcw size={14} /> : <Pencil size={14} />}{' '}
-            {t(
-              changed
-                ? ['Restore message', 'Restaurar mensaje']
-                : ['Change message', 'Cambiar mensaje'],
-            )}
+        <ExperimentActionSelect
+          language={language}
+          label={t(['Verify signature', 'Verificar firma'])}
+          title={t(['Try verification', 'Probar verificación'])}
+          icon={ShieldCheck}
+          disabled={p.busy || !p.packet}
+          value={p.trial}
+          options={trials}
+          onSelect={p.verify}
+        />
+        {changed && (
+          <button className={ui.secondary} disabled={p.busy} onClick={p.restore}>
+            <RotateCcw size={14} />
+            {t(['Restore message', 'Restaurar mensaje'])}
           </button>
         )}
       </div>
-      <div className={ui.scene}>
-        <article className={ui.panel}>
-          <h3>
-            <FileSignature size={15} />
-            {t(['Ana’s signature', 'Firma de Ana'])}
-          </h3>
-          <HexValue value={p.signature} label={t(['Digital signature', 'Firma digital'])} />
-          <p className={ui.note}>
-            {p.packet
-              ? t([
-                  'The signed bytes remain unchanged, even if you edit the message.',
-                  'Los bytes firmados se conservan, aunque edites el mensaje.',
-                ])
-              : t([
-                  'Sign to generate the key pair and signature.',
-                  'Firmá para generar las claves y la firma.',
-                ])}
-          </p>
-        </article>
-        <article className={ui.panel}>
-          <h3>
-            <KeyRound size={15} />
-            {t(['Public key to verify', 'Clave pública para verificar'])}
-          </h3>
-          <div
-            className={styles.keys}
-            role="group"
-            aria-label={t(['Verifier key', 'Clave para verificar'])}
-          >
-            {[false, true].map((other) => (
-              <button
-                key={String(other)}
-                aria-pressed={p.otherIdentity === other}
-                disabled={p.busy || !p.packet}
-                onClick={() => p.selectVerifier(other)}
-              >
-                <span>{other ? 'Bruno' : 'Ana'}</span>
-                <small>
-                  {p.packet
-                    ? (other ? p.packet.otherIdentity : p.packet.identity).fingerprint.slice(
-                        0,
-                        16,
-                      ) + '…'
-                    : '—'}
-                </small>
-              </button>
-            ))}
-          </div>
-          <div className={styles.verdict} data-valid={p.verified}>
-            <BadgeCheck size={22} />
-            <strong>
-              {t(
-                p.verified === true
-                  ? ['Signature valid', 'Firma válida']
-                  : p.verified === false
-                    ? ['Signature invalid', 'Firma inválida']
-                    : ['Not verified yet', 'Todavía sin verificar'],
-              )}
-            </strong>
-          </div>
-        </article>
+      <article className={ui.panel}>
+        <h3>
+          <FileSignature size={15} />
+          {t(['Ana’s signature', 'Firma de Ana'])}
+        </h3>
+        <HexValue value={p.signature} label={t(['Digital signature', 'Firma digital'])} />
+        <p className={ui.note}>
+          {p.packet
+            ? t([
+                'The signed bytes remain unchanged, even if you edit the message.',
+                'Los bytes firmados se conservan, aunque edites el mensaje.',
+              ])
+            : t([
+                'Sign to generate the key pair and signature.',
+                'Firmá para generar las claves y la firma.',
+              ])}
+        </p>
+      </article>
+      <div className={styles.verdict} data-valid={p.verified} aria-live="polite">
+        <BadgeCheck size={22} />
+        <strong>
+          {t(
+            p.verified === true
+              ? ['Signature valid', 'Firma válida']
+              : p.verified === false
+                ? ['Signature invalid', 'Firma inválida']
+                : ['Not verified yet', 'Todavía sin verificar'],
+          )}
+        </strong>
       </div>
+
       <p className={ui.feedback} data-error={p.verified === false} aria-live="polite">
         {p.verified === true
           ? t([
@@ -170,8 +170,8 @@ export function SignatureExperimentView({ language }: ViewProps) {
                 ])
               : p.packet
                 ? t([
-                    'Signed. Anyone with Ana’s public key can verify it.',
-                    'Firmado. Cualquiera con la clave pública de Ana puede verificarlo.',
+                    'Signed. Open Verify signature to choose a test.',
+                    'Firmado. Abrí Verificar firma para elegir una prueba.',
                   ])
                 : t([
                     'Start by signing the message as Ana.',
