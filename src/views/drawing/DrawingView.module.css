@@ -301,7 +301,7 @@
   aspect-ratio: 1;
   overflow: auto;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 0;
   max-width: 440px;
 }
 .canvasWrap {
@@ -311,10 +311,9 @@
 .grid-overlay {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  background-image:
-    linear-gradient(to right, #35353126 1px, transparent 1px),
-    linear-gradient(to bottom, #35353126 1px, transparent 1px);
 }
 .zoom {
   display: flex;

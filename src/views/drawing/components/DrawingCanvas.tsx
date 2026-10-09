@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { translate, type Language } from '../../../models/types';
 
 import type { DrawingPresenter } from '../../../presenters/useDrawingPresenter';
@@ -12,6 +14,16 @@ export function DrawingCanvas({
   language: Language;
 }) {
   const size = p.document.size;
+  const checkerCells = size <= 64 ? size : 16;
+  const gridPath = useMemo(
+    () =>
+      Array.from({ length: size - 1 }, (_, index) => {
+        const at = index + 1;
+        return `M${at} 0V${size}M0 ${at}H${size}`;
+      }).join(''),
+    [size],
+  );
+
   return (
     <div>
       <div className={styles.zoom}>
@@ -30,11 +42,17 @@ export function DrawingCanvas({
         <span>{p.zoom}×</span>
       </div>
       <div className={styles.canvasViewport}>
-        <div className={styles.canvasWrap} style={{ width: `${p.zoom * 100}%` }}>
+        <div
+          className={styles.canvasWrap}
+          style={{
+            width: `${p.zoom * 100}%`,
+            backgroundSize: `${200 / checkerCells}% ${200 / checkerCells}%`,
+          }}
+        >
           <canvas
             ref={p.canvasRef}
-            width={Math.max(512, size)}
-            height={Math.max(512, size)}
+            width={size}
+            height={size}
             className={styles.canvas}
             data-tool={p.tool}
             tabIndex={0}
@@ -55,11 +73,20 @@ export function DrawingCanvas({
             }}
           />
           {p.grid && (size <= 64 || p.zoom >= Math.ceil(size / 64)) && (
-            <span
+            <svg
               className={styles.gridOverlay}
+              viewBox={`0 0 ${size} ${size}`}
+              preserveAspectRatio="none"
               aria-hidden="true"
-              style={{ backgroundSize: `${100 / size}% ${100 / size}%` }}
-            />
+            >
+              <path
+                d={gridPath}
+                fill="none"
+                stroke="#35353126"
+                strokeWidth="0.5"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
           )}
           <span
             className={styles.cursor}

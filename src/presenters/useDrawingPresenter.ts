@@ -64,7 +64,7 @@ export function useDrawingPresenter(collection?: SavedDrawingsPresenter) {
       }
     }
     if (canvasRef.current) {
-      renderDrawing(canvasRef.current, history.document, Math.max(512, history.document.size));
+      renderDrawing(canvasRef.current, history.document);
       const preview = previewRef.current;
       if (preview) {
         preview.width = 80;
