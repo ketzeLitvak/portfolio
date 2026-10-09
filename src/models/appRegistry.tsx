@@ -1,3 +1,5 @@
+import { InjectionExperimentView } from '../views/experiments/injection/InjectionExperimentView';
+
 import { RateExperimentView } from '../views/experiments/rate/RateExperimentView';
 
 import { IndexExperimentView } from '../views/experiments/indexes/IndexExperimentView';
@@ -23,6 +25,7 @@ import { QueueExperimentView } from '../views/experiments/events/QueueExperiment
 import { projectIcons } from './projectIcons';
 
 import {
+  Plug,
   Gauge,
   ListOrdered,
   History,
@@ -147,6 +150,12 @@ export const appRegistry: Record<string, AppDefinition> = {
     title: ['Digital signatures', 'Firmas digitales'],
     icon: FileSignature,
     view: SignatureExperimentView,
+    experiment: true,
+  },
+  injection: {
+    title: ['Dependency injection', 'Inyección de dependencias'],
+    icon: Plug,
+    view: InjectionExperimentView,
     experiment: true,
   },
   welcome: {
