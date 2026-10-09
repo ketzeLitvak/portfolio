@@ -184,3 +184,38 @@
   gap: 3px;
   padding: 1px 0;
 }
+
+.app-grid :global(.external_app_icon) {
+  width: 88px;
+  max-width: 100%;
+  justify-self: center;
+}
+
+@media (max-width: 650px) {
+  .app-grid {
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted) var(--bar);
+    row-gap: 12px;
+    align-content: start;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .app-grid :global(.external_app_icon) {
+    touch-action: pan-y;
+    font-size: 11px;
+    line-height: 1.35;
+    gap: 6px;
+    padding: 3px;
+  }
+  .app-grid :global(.external_project_shortcut) > span:last-child,
+  .app-grid :global(.external_experience_shortcut) > span:last-child {
+    font-size: 10px;
+  }
+  .app-grid :global(.external_icon_tile) {
+    border-radius: 13px;
+  }
+}

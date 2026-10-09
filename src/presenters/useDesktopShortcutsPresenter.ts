@@ -21,6 +21,9 @@ const storageKey = 'ketze-desktop-shortcuts';
 function loadPositions(): { desktop: Positions; mobile: Positions } {
   try {
     const saved = JSON.parse(readPreference(storageKey, '{}'));
+    // Older snapshots pinned every automatic slot to the previous grid dimensions.
+    // Start those snapshots from the corrected layout; v2 stores only moved icons.
+    if (saved?.version !== 2) return { desktop: {}, mobile: {} };
 
     const valid = (value: unknown): Positions =>
       value && typeof value === 'object'
@@ -110,9 +113,7 @@ export function useDesktopShortcutsPresenter(
       const next = {
         iconSize: 48,
         columns: mobile
-          ? innerHeight < 600
-            ? 4
-            : 3
+          ? 3
           : Math.max(
               1,
               Math.floor((width + parseFloat(css.columnGap)) / (88 + parseFloat(css.columnGap))),
@@ -127,7 +128,7 @@ export function useDesktopShortcutsPresenter(
       };
       next.rows = Math.max(next.rows, Math.ceil(ids.length / next.columns));
       const rowHeight = (height - (next.rows - 1) * parseFloat(css.rowGap)) / next.rows;
-      next.iconSize = Math.min(48, Math.max(18, Math.floor(rowHeight - 32)));
+      next.iconSize = mobile ? 48 : Math.min(48, Math.max(18, Math.floor(rowHeight - 32)));
       setLayout((previous) =>
         previous.columns === next.columns &&
         previous.rows === next.rows &&
@@ -146,7 +147,7 @@ export function useDesktopShortcutsPresenter(
     return () => observer.disconnect();
   }, [ids.length, experimentCount]);
   useEffect(() => {
-    savePreference(storageKey, JSON.stringify(saved));
+    savePreference(storageKey, JSON.stringify({ version: 2, ...saved }));
   }, [saved]);
   const mode = layout.mobile ? 'mobile' : 'desktop';
   const positions = useMemo(
@@ -181,7 +182,7 @@ export function useDesktopShortcutsPresenter(
     };
 
     const column = track(x - left, widths, gapX),
-      row = track(y - top, heights, gapY);
+      row = track(y - top + grid.scrollTop, heights, gapY);
     if (column < 0 || row < 0) return null;
     return layout.mobile ? row * layout.columns + column : column * layout.rows + row;
   };
@@ -192,7 +193,7 @@ export function useDesktopShortcutsPresenter(
     if (current.moved) {
       suppressClick.current = current.id;
       if (!cancelled && current.target !== null) {
-        const next = { ...positions },
+        const next = { ...saved[mode] },
           previous = positions[current.id];
         const occupant = ids.find((id) => id !== current.id && positions[id] === current.target);
         if (occupant) next[occupant] = previous;
@@ -261,8 +262,8 @@ export function useDesktopShortcutsPresenter(
     reset,
     gridRef,
     gridStyle: {
-      gridTemplateRows: `repeat(${layout.rows}, minmax(0, 1fr))`,
-      gridTemplateColumns: `repeat(${layout.columns}, ${layout.mobile ? 'minmax(0, 1fr)' : '88px'})`,
+      gridTemplateRows: `repeat(${layout.rows}, ${layout.mobile ? '90px' : 'minmax(0, 1fr)'})`,
+      gridTemplateColumns: `repeat(${layout.columns}, minmax(0, 1fr))`,
       '--shortcut-size': `${layout.iconSize}px`,
     } as CSSProperties,
     buttonProps,
