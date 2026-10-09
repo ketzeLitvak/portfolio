@@ -42,8 +42,6 @@ function resolvePositions(
   ids: string[],
   saved: Positions,
   layout: Layout,
-  basicCount: number,
-  projectCount: number,
   experimentCount: number,
 ): Positions {
   const capacity = layout.columns * layout.rows;
@@ -56,8 +54,6 @@ function resolvePositions(
       used.add(slot);
     }
   }
-  const projectStart = Math.ceil(basicCount / layout.rows) * layout.rows;
-  const experienceStart = projectStart + Math.ceil(projectCount / layout.rows) * layout.rows;
   const experimentStart = ids.length - experimentCount;
   const experiments = ids.slice(experimentStart);
   const experimentColumns = Math.ceil(experimentCount / layout.rows);
@@ -87,13 +83,7 @@ function resolvePositions(
     if (result[id] === undefined) {
       const index = ids.indexOf(id);
       const preferred =
-        !layout.mobile && index >= experimentStart
-          ? experimentSlots.get(id)!
-          : layout.mobile || index < basicCount
-            ? index
-            : index < basicCount + projectCount
-              ? projectStart + index - basicCount
-              : experienceStart + index - basicCount - projectCount;
+        !layout.mobile && index >= experimentStart ? experimentSlots.get(id)! : index;
       let slot = preferred < capacity && !used.has(preferred) ? preferred : 0;
       while (used.has(slot)) slot++;
       result[id] = slot;
@@ -104,8 +94,6 @@ function resolvePositions(
 
 export function useDesktopShortcutsPresenter(
   ids: string[],
-  basicCount: number,
-  projectCount: number,
   experimentCount: number,
   open: (id: string) => void,
 ) {
@@ -170,8 +158,8 @@ export function useDesktopShortcutsPresenter(
   }, [saved]);
   const mode = layout.mobile ? 'mobile' : 'desktop';
   const positions = useMemo(
-    () => resolvePositions(ids, saved[mode], layout, basicCount, projectCount, experimentCount),
-    [ids, saved, mode, layout, basicCount, projectCount, experimentCount],
+    () => resolvePositions(ids, saved[mode], layout, experimentCount),
+    [ids, saved, mode, layout, experimentCount],
   );
 
   const cellStyle = (slot: number): CSSProperties => ({

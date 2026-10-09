@@ -87,3 +87,13 @@
 .desktop-avatar:focus-visible {
   outline: none;
 }
+
+.drawing-character {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 5px #0002);
+  flex-shrink: 0;
+}

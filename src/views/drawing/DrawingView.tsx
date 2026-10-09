@@ -1,12 +1,10 @@
-import { Download, Image, RotateCcw, Check, AlertCircle, Paintbrush } from 'lucide-react';
+import { Download, Save, Check, AlertCircle, Paintbrush } from 'lucide-react';
 
 import type { ViewProps } from '../../models/viewProps';
 
 import type { Text } from '../../models/types';
 
 import { translate } from '../../models/types';
-
-import type { DrawingSize } from '../../models/drawing';
 
 import { useDrawingPresenter } from '../../presenters/useDrawingPresenter';
 
@@ -20,8 +18,8 @@ import content from '../../styles/Content.module.css';
 
 import styles from './DrawingView.module.css';
 
-export function DrawingView({ language, wallpaper }: ViewProps) {
-  const p = useDrawingPresenter(wallpaper);
+export function DrawingView({ language, drawingCollection }: ViewProps) {
+  const p = useDrawingPresenter(drawingCollection);
 
   const t = (text: Text) => translate(language, text);
 
@@ -31,11 +29,14 @@ export function DrawingView({ language, wallpaper }: ViewProps) {
       'PNG exported with transparency, without the grid.',
       'PNG exportado con transparencia, sin la grilla.',
     ],
-    wallpaper: [
-      'Your drawing is now the desktop wallpaper.',
-      'Tu dibujo ahora es el fondo del escritorio.',
+    character: [
+      'Character saved. Drag it around the desktop.',
+      'Personaje guardado. Arrastralo por el escritorio.',
     ],
-    restored: ['Original wallpaper restored.', 'Fondo original restaurado.'],
+    resized: [
+      'Canvas resized. Undo restores its previous size and pixels.',
+      'Lienzo redimensionado. Deshacer recupera su tamaño y píxeles anteriores.',
+    ],
     error: [
       'Could not complete the operation. Your drawing is still on the canvas.',
       'No se pudo completar la operación. Tu dibujo sigue en el lienzo.',
@@ -60,18 +61,34 @@ export function DrawingView({ language, wallpaper }: ViewProps) {
             ])}
           </p>
         </div>
-        <label className={styles.size}>
-          {t(['Canvas', 'Lienzo'])}
-          <select
-            aria-label={t(['Canvas size', 'Tamaño del lienzo'])}
-            disabled={p.busy}
-            value={p.document.size}
-            onChange={(event) => p.changeSize(Number(event.target.value) as DrawingSize)}
-          >
-            <option value="16">16 × 16</option>
-            <option value="32">32 × 32</option>
-          </select>
-        </label>
+        <form
+          className={styles.size}
+          onSubmit={(event) => {
+            event.preventDefault();
+            p.changeSize(Number(p.sizeDraft));
+          }}
+        >
+          <label htmlFor="drawing-size">{t(['Side length (pixels)', 'Lado (píxeles)'])}</label>
+          <div>
+            <input
+              id="drawing-size"
+              type="number"
+              min="1"
+              max="1024"
+              step="1"
+              required
+              disabled={p.busy}
+              value={p.sizeDraft}
+              onChange={(event) => p.setSizeDraft(event.target.value)}
+            />
+            <button disabled={p.busy} type="submit">
+              {t(['Resize', 'Aplicar'])}
+            </button>
+          </div>
+          <small>
+            1–1024 · {p.document.size} × {p.document.size}
+          </small>
+        </form>
       </header>
       <DrawingToolbar presenter={p} language={language} />
       <div className={styles.workspace}>
@@ -80,15 +97,13 @@ export function DrawingView({ language, wallpaper }: ViewProps) {
           <DrawingPalette presenter={p} language={language} />
           <div className={styles.preview}>
             <p>{t(['Preview', 'Vista previa'])}</p>
-            <div
+            <canvas
+              ref={p.previewRef}
               className={styles.miniature}
+              width={80}
+              height={80}
               aria-hidden="true"
-              style={{ gridTemplateColumns: `repeat(${p.document.size},1fr)` }}
-            >
-              {p.document.pixels.map((color, index) => (
-                <i key={index} style={{ background: color ?? 'transparent' }} />
-              ))}
-            </div>
+            />
             <span>
               {p.document.size} × {p.document.size} px
             </span>
@@ -111,21 +126,27 @@ export function DrawingView({ language, wallpaper }: ViewProps) {
           {p.cursor.x + 1}, {p.cursor.y + 1}
         </span>
       </div>
+      <label className={styles.characterName}>
+        {t(['Character name (optional)', 'Nombre del personaje (opcional)'])}
+        <input
+          maxLength={24}
+          value={p.characterName}
+          onChange={(event) => p.setCharacterName(event.target.value)}
+          placeholder="Pixel"
+        />
+      </label>
       <div className={styles.actions}>
         <button className={styles.primary} disabled={!p.hasPixels || p.busy} onClick={p.exportPng}>
           <Download size={16} />
           {t(['Export PNG', 'Exportar PNG'])}
         </button>
-        <button disabled={!p.hasPixels || p.busy || !wallpaper} onClick={p.applyWallpaper}>
-          <Image size={16} />
-          {t(['Use as wallpaper', 'Usar como fondo'])}
+        <button
+          disabled={!p.hasPixels || p.busy || !drawingCollection || p.characterCount >= 5}
+          onClick={p.saveCharacter}
+        >
+          <Save size={16} />
+          {t(['Save as character', 'Guardar como personaje'])} · {p.characterCount}/5
         </button>
-        {p.hasWallpaper && (
-          <button onClick={p.restoreWallpaper}>
-            <RotateCcw size={15} />
-            {t(['Restore wallpaper', 'Restaurar fondo'])}
-          </button>
-        )}
       </div>
       <p className={styles.feedback} data-error={p.feedback === 'error'} role="status">
         {t(feedback[p.feedback])}
@@ -134,14 +155,14 @@ export function DrawingView({ language, wallpaper }: ViewProps) {
         <summary>{t(['Keyboard & canvas tips', 'Teclado y consejos'])}</summary>
         <p id="drawing-keyboard-help">
           {t([
-            'P: pencil · E: eraser · F: fill · I: color picker. Focus the canvas, use arrow keys to select a pixel and Space or Enter to apply the tool. Ctrl/⌘ Z undoes a whole stroke; Ctrl/⌘ Shift Z redoes it.',
-            'P: pincel · E: borrador · F: relleno · I: cuentagotas. Enfocá el lienzo, usá las flechas para elegir un píxel y Espacio o Enter para aplicar la herramienta. Ctrl/⌘ Z deshace un trazo completo; Ctrl/⌘ Shift Z lo rehace.',
+            'H: move canvas · P: pencil · E: eraser · F: fill · I: color picker. Focus the canvas, use arrow keys to select a pixel and Space or Enter to apply the tool. Ctrl/⌘ Z undoes a whole stroke; Ctrl/⌘ Shift Z redoes it.',
+            'H: mover lienzo · P: pincel · E: borrador · F: relleno · I: cuentagotas. Enfocá el lienzo, usá las flechas para elegir un píxel y Espacio o Enter para aplicar la herramienta. Ctrl/⌘ Z deshace un trazo completo; Ctrl/⌘ Shift Z lo rehace.',
           ])}
         </p>
         <p>
           {t([
-            'The checkerboard means transparency. Exports are 512 × 512 or 1024 × 1024 pixels, with sharp edges. Changing canvas size starts a new drawing and can be undone. Only the current canvas is saved; undo history lasts while this window is open.',
-            'El damero indica transparencia. Los PNG son de 512 × 512 o 1024 × 1024 píxeles, con bordes nítidos. Cambiar el tamaño inicia un dibujo nuevo y se puede deshacer. Se guarda el lienzo actual; el historial dura mientras esta ventana está abierta.',
+            'The checkerboard means transparency. PNGs use the canvas dimensions you choose, up to 1024 × 1024. Zoom and scroll to work on large drawings. Resizing preserves the top-left area; shrinking crops pixels and can be undone. Drawings saved as characters trim empty margins and can be dragged on the desktop. Undo history is limited by memory and lasts while this window is open.',
+            'El damero indica transparencia. Los PNG usan el tamaño que elegís, hasta 1024 × 1024. Usá zoom y desplazamiento para trabajar en dibujos grandes. Redimensionar conserva la parte superior izquierda; achicar recorta píxeles y se puede deshacer. Los personajes recortan los márgenes vacíos y se pueden arrastrar por el escritorio. El historial se limita según la memoria y dura mientras la ventana está abierta.',
           ])}
         </p>
       </details>

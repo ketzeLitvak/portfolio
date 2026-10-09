@@ -1,12 +1,10 @@
-import { useDesktopWallpaperPresenter } from './useDesktopWallpaperPresenter';
+import { useSavedDrawingsPresenter } from './useSavedDrawingsPresenter';
 
 import { readDirectLink, updateDirectLink, clearDirectLink } from '../models/directLinks';
 
 import { useShareLinkPresenter } from './useShareLinkPresenter';
 
 import {
-  desktopApps,
-  desktopProjects,
   desktopExperiments,
   desktopShortcutIds,
   findDesktopExperience,
@@ -25,7 +23,7 @@ import type { Language, Theme, WindowState, AppOpenOptions } from '../models/typ
 import { readPreference, savePreference } from '../models/types';
 
 export function useDesktopPresenter() {
-  const wallpaper = useDesktopWallpaperPresenter();
+  const drawings = useSavedDrawingsPresenter();
   const avatars = useSavedAvatarsPresenter();
   const [activeMenu, setActiveMenu] = useState<'language' | 'theme' | null>(null);
   useEffect(() => {
@@ -246,8 +244,6 @@ export function useDesktopPresenter() {
   );
   const shortcuts = useDesktopShortcutsPresenter(
     desktopShortcutIds,
-    desktopApps.length,
-    desktopProjects.length,
     desktopExperiments.length,
     openShortcut,
   );
@@ -263,7 +259,7 @@ export function useDesktopPresenter() {
 
   const share = useShareLinkPresenter(language);
   return {
-    wallpaper,
+    drawings,
     share,
     selectExperience,
     shortcuts,

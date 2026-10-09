@@ -11,6 +11,9 @@ import {
   initialDrawingHistory,
   insideDrawing,
   readDrawing,
+  serializeDrawing,
+  resizeDrawing,
+  validDrawingSize,
   type DrawingDocument,
   type DrawingSize,
   type DrawingTool,
@@ -19,35 +22,69 @@ import {
 
 import { readPreference } from '../models/types';
 
-import { downloadDrawing, drawingPng, renderDrawing } from '../utils/drawingCanvas';
+import { downloadDrawing, drawingSpritePng, renderDrawing } from '../utils/drawingCanvas';
 
-import type { DesktopWallpaperPresenter } from './useDesktopWallpaperPresenter';
+import type { SavedDrawingsPresenter } from './useSavedDrawingsPresenter';
 
-export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
+export function useDrawingPresenter(collection?: SavedDrawingsPresenter) {
   const [history, dispatch] = useReducer(drawingReducer, undefined, () =>
     initialDrawingHistory(readDrawing(readPreference(drawingStorageKey, ''))),
   );
   const [tool, setTool] = useState<DrawingTool>('pencil');
   const [color, setColor] = useState('#dc2626');
   const [grid, setGrid] = useState(true);
+  const [zoom, setZoom] = useState(1);
+  const [sizeDraft, setSizeDraft] = useState(String(history.document.size));
+  const [characterName, setCharacterName] = useState('');
+  const previewRef = useRef<HTMLCanvasElement>(null);
   const [saved, setSaved] = useState(true);
   const [feedback, setFeedback] = useState<
-    'ready' | 'exported' | 'wallpaper' | 'restored' | 'error' | 'new'
+    'ready' | 'exported' | 'character' | 'error' | 'new' | 'resized'
   >('ready');
   const [cursor, setCursor] = useState<PixelPoint>({ x: 0, y: 0 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const current = useRef<DrawingDocument>(history.document);
   current.current = history.document;
+  const pan = useRef<{
+    pointer: number;
+    x: number;
+    y: number;
+    left: number;
+    top: number;
+    viewport: HTMLElement;
+  } | null>(null);
   const stroke = useRef<{ pointer: number; previous: PixelPoint | null } | null>(null);
   useEffect(() => {
-    try {
-      localStorage.setItem(drawingStorageKey, JSON.stringify(history.document));
-      setSaved(true);
-    } catch {
-      setSaved(false);
+    if (!history.stroke) {
+      try {
+        localStorage.setItem(drawingStorageKey, serializeDrawing(history.document));
+        setSaved(true);
+      } catch {
+        setSaved(false);
+      }
     }
-    if (canvasRef.current) renderDrawing(canvasRef.current, history.document, 20, grid, true);
-  }, [history.document, grid]);
+    if (canvasRef.current) {
+      renderDrawing(canvasRef.current, history.document, Math.max(512, history.document.size));
+      const preview = previewRef.current;
+      if (preview) {
+        preview.width = 80;
+        preview.height = 80;
+        const context = preview.getContext('2d');
+        if (context) {
+          context.imageSmoothingEnabled = false;
+          context.drawImage(canvasRef.current, 0, 0, 80, 80);
+        }
+      }
+    }
+  }, [history.document, history.stroke]);
+  useEffect(() => {
+    setSizeDraft(String(history.document.size));
+    setCursor((point) => ({
+      x: Math.min(point.x, history.document.size - 1),
+      y: Math.min(point.y, history.document.size - 1),
+    }));
+    setZoom(1);
+  }, [history.document.size]);
 
   const position = (event: PointerEvent<HTMLCanvasElement>): PixelPoint | null => {
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -65,6 +102,7 @@ export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
   };
 
   const single = (point: PixelPoint) => {
+    if (tool === 'pan') return;
     if (tool === 'picker') {
       const picked = current.current.pixels[point.y * current.current.size + point.x];
       if (picked) {
@@ -82,7 +120,23 @@ export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
   };
 
   const pointerDown = (event: PointerEvent<HTMLCanvasElement>) => {
-    if (event.button !== 0 || stroke.current) return;
+    if (event.button !== 0 || stroke.current || pan.current) return;
+    if (tool === 'pan') {
+      const viewport = event.currentTarget.parentElement?.parentElement;
+      if (viewport) {
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        pan.current = {
+          pointer: event.pointerId,
+          x: event.clientX,
+          y: event.clientY,
+          left: viewport.scrollLeft,
+          top: viewport.scrollTop,
+          viewport,
+        };
+      }
+      return;
+    }
     const point = position(event);
     if (!point) return;
     event.preventDefault();
@@ -100,6 +154,12 @@ export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
   };
 
   const pointerMove = (event: PointerEvent<HTMLCanvasElement>) => {
+    const moving = pan.current;
+    if (moving?.pointer === event.pointerId) {
+      moving.viewport.scrollLeft = moving.left + moving.x - event.clientX;
+      moving.viewport.scrollTop = moving.top + moving.y - event.clientY;
+      return;
+    }
     const point = position(event);
     if (point) setCursor(point);
     const active = stroke.current;
@@ -109,6 +169,12 @@ export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
   };
 
   const finishStroke = (event: PointerEvent<HTMLCanvasElement>) => {
+    if (pan.current?.pointer === event.pointerId) {
+      pan.current = null;
+      if (event.currentTarget.hasPointerCapture(event.pointerId))
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      return;
+    }
     if (stroke.current?.pointer !== event.pointerId) return;
     stroke.current = null;
     dispatch({ type: 'finish' });
@@ -121,9 +187,10 @@ export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
   const redo = () => dispatch({ type: 'redo' });
 
   const changeSize = (size: DrawingSize) => {
-    dispatch({ type: 'replace', document: blankDrawing(size) });
+    if (!validDrawingSize(size)) return;
+    dispatch({ type: 'replace', document: resizeDrawing(history.document, size) });
     setCursor({ x: 0, y: 0 });
-    setFeedback('new');
+    setFeedback('resized');
   };
 
   const clear = () => {
@@ -141,6 +208,7 @@ export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
     }
     if (event.ctrlKey || event.metaKey || event.altKey) return;
     const shortcuts: Record<string, DrawingTool> = {
+      h: 'pan',
       p: 'pencil',
       e: 'eraser',
       f: 'fill',
@@ -184,15 +252,15 @@ export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
     }
   };
 
-  const applyWallpaper = () => {
+  const saveCharacter = () => {
     try {
-      setFeedback(wallpaper?.apply(drawingPng(history.document)) ? 'wallpaper' : 'error');
+      setFeedback(
+        collection?.save(drawingSpritePng(history.document), characterName) ? 'character' : 'error',
+      );
     } catch {
       setFeedback('error');
     }
   };
-
-  const restoreWallpaper = () => setFeedback(wallpaper?.restore() ? 'restored' : 'error');
 
   return {
     document: history.document,
@@ -218,10 +286,16 @@ export function useDrawingPresenter(wallpaper?: DesktopWallpaperPresenter) {
     clear,
     changeSize,
     exportPng,
-    applyWallpaper,
-    restoreWallpaper,
+    saveCharacter,
+    previewRef,
+    zoom,
+    setZoom,
+    sizeDraft,
+    setSizeDraft,
+    characterName,
+    setCharacterName,
+    characterCount: collection?.drawings.length ?? 0,
     hasPixels: history.document.pixels.some(Boolean),
-    hasWallpaper: !!wallpaper?.image,
   };
 }
 

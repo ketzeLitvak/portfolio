@@ -7,6 +7,8 @@ import {
   drawingReducer,
   initialDrawingHistory,
   readDrawing,
+  resizeDrawing,
+  serializeDrawing,
 } from '../src/models/drawing.ts';
 
 test('continuous strokes interpolate skipped pointer positions and undo as one operation', () => {
@@ -71,4 +73,22 @@ test('storage accepts valid canvases and rejects invalid sizes, colors or pixel 
     JSON.stringify({ ...drawing, pixels: Array(1024).fill('url(https://invalid)') }),
   ])
     assert.deepEqual(readDrawing(value), blankDrawing());
+});
+
+test('custom 1024 canvas resizes without losing pixels and compresses large empty regions', () => {
+  const small = drawPixelLine(blankDrawing(), { x: 15, y: 15 }, { x: 15, y: 15 }, '#dc2626');
+  const large = resizeDrawing(small, 1024);
+  assert.equal(large.pixels.length, 1024 * 1024);
+  assert.equal(large.pixels[15 * 1024 + 15], '#dc2626');
+  const encoded = serializeDrawing(large);
+  assert.ok(encoded.length < 1000);
+  assert.deepEqual(readDrawing(encoded), large);
+  const cropped = resizeDrawing(large, 37);
+  assert.equal(cropped.pixels[15 * 37 + 15], '#dc2626');
+  assert.equal(resizeDrawing(large, 1025), large);
+  assert.equal(resizeDrawing(large, 1.5), large);
+  assert.deepEqual(
+    readDrawing(JSON.stringify({ version: 2, size: 1024, runs: [[1048577, null]] })),
+    blankDrawing(),
+  );
 });

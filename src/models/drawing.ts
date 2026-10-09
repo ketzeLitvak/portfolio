@@ -1,6 +1,6 @@
 export type PixelColor = string | null;
-export type DrawingSize = 16 | 32;
-export type DrawingTool = 'pencil' | 'eraser' | 'fill' | 'picker';
+export type DrawingSize = number;
+export type DrawingTool = 'pencil' | 'eraser' | 'fill' | 'picker' | 'pan';
 export interface PixelPoint {
   x: number;
   y: number;
@@ -33,23 +33,79 @@ export function blankDrawing(size: DrawingSize = 16): DrawingDocument {
   return { size, pixels: Array<PixelColor>(size * size).fill(null) };
 }
 
+export function validDrawingSize(size: number): boolean {
+  return Number.isInteger(size) && size >= 1 && size <= 1024;
+}
+
+export function serializeDrawing(document: DrawingDocument): string {
+  const runs: [number, PixelColor][] = [];
+  for (const pixel of document.pixels) {
+    const last = runs.at(-1);
+    if (last && last[1] === pixel) last[0]++;
+    else runs.push([1, pixel]);
+  }
+  return JSON.stringify({ version: 2, size: document.size, runs });
+}
+
 export function readDrawing(value: string | null): DrawingDocument {
   try {
     const parsed = JSON.parse(value ?? 'null');
+    if (!validDrawingSize(parsed?.size)) return blankDrawing();
+
+    const validColor = (pixel: unknown) =>
+      pixel === null || (typeof pixel === 'string' && /^#[0-9a-f]{6}$/i.test(pixel));
+
     if (
-      (parsed?.size === 16 || parsed?.size === 32) &&
       Array.isArray(parsed.pixels) &&
       parsed.pixels.length === parsed.size ** 2 &&
-      parsed.pixels.every(
-        (pixel: unknown) =>
-          pixel === null || (typeof pixel === 'string' && /^#[0-9a-f]{6}$/i.test(pixel)),
-      )
+      parsed.pixels.every(validColor)
     )
       return { size: parsed.size, pixels: parsed.pixels };
+    if (
+      parsed.version === 2 &&
+      Array.isArray(parsed.runs) &&
+      parsed.runs.length <= parsed.size ** 2
+    ) {
+      const pixels: PixelColor[] = [];
+      for (const run of parsed.runs) {
+        if (
+          !Array.isArray(run) ||
+          run.length !== 2 ||
+          !Number.isInteger(run[0]) ||
+          run[0] < 1 ||
+          pixels.length + run[0] > parsed.size ** 2 ||
+          !validColor(run[1])
+        )
+          return blankDrawing();
+        for (let index = 0; index < run[0]; index++) pixels.push(run[1]);
+      }
+      if (pixels.length === parsed.size ** 2) return { size: parsed.size, pixels };
+    }
   } catch {
     /* Invalid stored data starts a fresh canvas. */
   }
   return blankDrawing();
+}
+
+export function resizeDrawing(document: DrawingDocument, size: DrawingSize): DrawingDocument {
+  if (!validDrawingSize(size) || size === document.size) return document;
+  const next = blankDrawing(size),
+    edge = Math.min(size, document.size);
+  for (let y = 0; y < edge; y++)
+    for (let x = 0; x < edge; x++)
+      next.pixels[y * size + x] = document.pixels[y * document.size + x];
+  return next;
+}
+
+function retainHistory(documents: DrawingDocument[]): DrawingDocument[] {
+  let pixels = 0;
+  const kept: DrawingDocument[] = [];
+  for (let index = documents.length - 1; index >= 0 && kept.length < 40; index--) {
+    pixels += documents[index].pixels.length;
+    if (pixels > 8_388_608) break;
+    kept.unshift(documents[index]);
+  }
+  return kept;
 }
 
 export function insideDrawing(document: DrawingDocument, point: PixelPoint): boolean {
@@ -150,14 +206,19 @@ export function drawingReducer(state: DrawingHistory, action: DrawingAction): Dr
     case 'finish': {
       if (!state.stroke) return state;
       if (sameDrawing(state.stroke, state.document)) return { ...state, stroke: null };
-      return { ...state, past: [...state.past, state.stroke].slice(-40), future: [], stroke: null };
+      return {
+        ...state,
+        past: retainHistory([...state.past, state.stroke]),
+        future: [],
+        stroke: null,
+      };
     }
     case 'replace':
       return sameDrawing(state.document, action.document)
         ? state
         : {
             document: action.document,
-            past: [...state.past, state.document].slice(-40),
+            past: retainHistory([...state.past, state.document]),
             future: [],
             stroke: null,
           };
@@ -175,7 +236,7 @@ export function drawingReducer(state: DrawingHistory, action: DrawingAction): Dr
         ? state
         : {
             document: state.future[0],
-            past: [...state.past, state.document].slice(-40),
+            past: retainHistory([...state.past, state.document]),
             future: state.future.slice(1),
             stroke: null,
           };

@@ -1,4 +1,14 @@
-import { Pencil, Eraser, PaintBucket, Pipette, Undo2, Redo2, Grid2X2, Trash2 } from 'lucide-react';
+import {
+  Hand,
+  Pencil,
+  Eraser,
+  PaintBucket,
+  Pipette,
+  Undo2,
+  Redo2,
+  Grid2X2,
+  Trash2,
+} from 'lucide-react';
 
 import type { DrawingTool } from '../../../models/drawing';
 
@@ -11,6 +21,7 @@ import type { DrawingPresenter } from '../../../presenters/useDrawingPresenter';
 import styles from '../DrawingView.module.css';
 
 const tools = [
+  { id: 'pan', label: ['Move canvas', 'Mover lienzo'], icon: Hand, key: 'H' },
   { id: 'pencil', label: ['Pencil', 'Pincel'], icon: Pencil, key: 'P' },
   { id: 'eraser', label: ['Eraser', 'Borrador'], icon: Eraser, key: 'E' },
   { id: 'fill', label: ['Fill', 'Relleno'], icon: PaintBucket, key: 'F' },

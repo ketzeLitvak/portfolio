@@ -32,22 +32,16 @@ export function DesktopView({ presenter: p }: { presenter: DesktopPresenter }) {
       <DesktopMenuBar presenter={p} />
       <main className={styles.desktopMain} tabIndex={-1}>
         <div className={styles.wallpaper} aria-hidden="true">
-          {p.wallpaper.image ? (
-            <img src={p.wallpaper.image} alt="" className={styles.customWallpaper} />
-          ) : (
-            <>
-              <div className={styles.wallpaperWord}>
-                KETZE
-                <br />
-                <span>STUDIO.</span>
-              </div>
-              <div className={classNames(styles.orb, styles.orbOne)} />
-              <div className={classNames(styles.orb, styles.orbTwo)} />
-            </>
-          )}
+          <div className={styles.wallpaperWord}>
+            KETZE
+            <br />
+            <span>STUDIO.</span>
+          </div>
+          <div className={classNames(styles.orb, styles.orbOne)} />
+          <div className={classNames(styles.orb, styles.orbTwo)} />
         </div>
         <DesktopShortcuts language={p.language} presenter={p.shortcuts} />
-        <DesktopAvatars collection={p.avatars} language={p.language} />
+        <DesktopAvatars drawings={p.drawings} collection={p.avatars} language={p.language} />
         <section id="windows" aria-label={t('Open windows', 'Ventanas abiertas')}>
           {p.windows.map((state) => (
             <DesktopWindow key={state.id} state={state} desktop={p} focused={state.z === topZ} />

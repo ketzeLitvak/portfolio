@@ -1,11 +1,11 @@
-import type { DesktopWallpaperPresenter } from '../presenters/useDesktopWallpaperPresenter';
+import type { SavedDrawingsPresenter } from '../presenters/useSavedDrawingsPresenter';
 
 import type { SavedAvatarsPresenter } from '../presenters/useSavedAvatarsPresenter';
 
 import type { Language, AppOpenOptions, ExperienceTarget } from './types';
 
 export interface ViewProps {
-  wallpaper?: DesktopWallpaperPresenter;
+  drawingCollection?: SavedDrawingsPresenter;
   language: Language;
   openApp: (id: string, options?: AppOpenOptions) => void;
   experienceTarget?: ExperienceTarget;
