@@ -37,7 +37,7 @@ export function ArchitectureView({ language }: Pick<ViewProps, 'language'>) {
           { id: 'map', label: t('Explore the map', 'Explorar el mapa'), icon: <Map size={15} /> },
           {
             id: 'flow',
-            label: t('Follow a request', 'Seguir una consulta'),
+            label: t('Follow the data', 'Seguir los datos'),
             icon: <Route size={15} />,
           },
         ]}

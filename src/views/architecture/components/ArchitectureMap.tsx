@@ -83,6 +83,7 @@ export function ArchitectureMap({
             <button
               key={node.id}
               data-node={node.id}
+              data-layer={['bronze', 'silver', 'gold'].includes(node.id) ? node.id : undefined}
               data-active={p.activeNodes.includes(node.id)}
               aria-pressed={p.selected === node.id}
               aria-controls="architecture-detail"

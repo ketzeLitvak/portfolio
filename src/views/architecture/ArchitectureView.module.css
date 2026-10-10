@@ -29,7 +29,7 @@
 .map {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 30px 22px;
   isolation: isolate;
 }
@@ -318,5 +318,47 @@
   .node,
   .connections > path {
     transition: none;
+  }
+}
+
+.node[data-layer='bronze'] {
+  border-top: 3px solid #bb8153;
+}
+.node[data-layer='silver'] {
+  border-top: 3px solid #8a9baa;
+}
+.node[data-layer='gold'] {
+  border-top: 3px solid #c4a047;
+}
+.example {
+  margin-top: 15px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.example > small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  margin-bottom: 10px;
+}
+.example > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.example section {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: var(--panel);
+}
+.example b {
+  display: block;
+  font-size: 10px;
+  margin-bottom: 5px;
+}
+@container architecture (max-width: 400px) {
+  .example > div {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

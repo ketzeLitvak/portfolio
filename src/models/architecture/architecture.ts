@@ -21,6 +21,7 @@ export interface ArchitectureEdge {
   bidirectional?: boolean;
 }
 export interface ArchitectureStep {
+  example?: { before: Text; after: Text };
   title: Text;
   description: Text;
   nodes: string[];

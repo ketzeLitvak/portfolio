@@ -35,6 +35,26 @@ export function ArchitectureFlow({
         <h3>{translate(language, p.step.title)}</h3>
         <p>{translate(language, p.step.description)}</p>
       </div>
+      {p.step.example && (
+        <div className={styles.example}>
+          <small>
+            {translate(language, [
+              'Illustrative example · not live data',
+              'Ejemplo ilustrativo · no son datos en vivo',
+            ])}
+          </small>
+          <div>
+            <section>
+              <b>{translate(language, ['Before', 'Antes'])}</b>
+              <p>{translate(language, p.step.example.before)}</p>
+            </section>
+            <section>
+              <b>{translate(language, ['After', 'Después'])}</b>
+              <p>{translate(language, p.step.example.after)}</p>
+            </section>
+          </div>
+        </div>
+      )}
       <div className={styles.flowActions}>
         <button disabled={p.index === 0} onClick={() => p.go(p.index - 1)}>
           <ArrowLeft size={14} />

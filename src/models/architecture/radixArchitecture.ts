@@ -5,8 +5,8 @@ export const radixArchitecture: ArchitectureProject = {
   title: 'Radix',
   logo: './assets/radix-logo.png',
   description: [
-    'From city data to a location score. Explore the components and follow a lookup.',
-    'De los datos de la ciudad al score de un local. Explorá los componentes y seguí una consulta.',
+    'Medallion architecture: raw data in Bronze, reliable data in Silver, and metrics for scoring in Gold. Follow the transformations into the product.',
+    'Arquitectura Medallion: datos crudos en Bronce, datos confiables en Silver y métricas para scoring en Gold. Seguí las transformaciones hasta el producto.',
   ],
   source: [
     'Simplified logical view · Architecture document V1.0 · July 2026',
@@ -36,41 +36,66 @@ export const radixArchitecture: ArchitectureProject = {
       ],
     },
     {
-      id: 'pipeline',
-      icon: 'pipeline',
+      id: 'bronze',
+      icon: 'gold',
       row: 1,
       column: 2,
-      title: ['Data & scoring', 'Datos y scoring'],
-      subtitle: ['Clean, enrich, evaluate', 'Limpiar, enriquecer, evaluar'],
-      technology: ['Python', 'Data engineering'],
+      title: ['Bronze', 'Bronce'],
+      subtitle: ['Raw · Preserve the source', 'Crudos · Conservar la fuente'],
+      technology: ['Medallion', 'Raw data'],
       role: [
-        'The data engineering engine prepares analytical variables. The scoring component uses the prepared data to produce evaluations. This card groups both responsibilities.',
-        'El motor de ingeniería de datos prepara variables analíticas. El componente de scoring usa los datos preparados para producir evaluaciones. Esta tarjeta agrupa ambas responsabilidades.',
+        'Preserves ingested external data in its original form, before analytical cleaning and enrichment.',
+        'Conserva los datos externos ingresados en su forma original, antes de la limpieza y el enriquecimiento analítico.',
       ],
       input: [
-        'Raw data and analytical scoring criteria.',
-        'Datos sin procesar y criterios de evaluación analítica.',
+        'Datasets and API responses with provider-specific formats.',
+        'Datasets y respuestas de APIs con formatos propios de cada proveedor.',
       ],
       output: [
-        'Prepared metrics, features and evaluation results.',
-        'Métricas, features y resultados de evaluación preparados.',
+        'Raw data available for subsequent processing.',
+        'Datos crudos disponibles para el procesamiento posterior.',
       ],
       rationale: [
-        'Analytical processing evolves separately from the transactional backend, so changing data transformations does not require changing the web interface.',
-        'El procesamiento analítico evoluciona separado del backend transaccional: cambiar transformaciones de datos no requiere cambiar la interfaz web.',
+        'Keeping the original input allows transformations to be reviewed and processing to be repeated without losing the source.',
+        'Conservar la entrada original permite revisar transformaciones y repetir el procesamiento sin perder la fuente.',
+      ],
+    },
+    {
+      id: 'silver',
+      icon: 'pipeline',
+      row: 1,
+      column: 3,
+      title: ['Silver', 'Silver'],
+      subtitle: ['Clean · Standardize and validate', 'Limpios · Normalizar y validar'],
+      technology: ['Medallion', 'Python'],
+      role: [
+        'The data engineering stage cleans, normalizes and enriches Bronze data to create consistent analytical inputs.',
+        'La etapa de ingeniería de datos limpia, normaliza y enriquece los datos de Bronce para crear entradas analíticas consistentes.',
+      ],
+      input: [
+        'Raw records with different formats and quality.',
+        'Registros crudos con distintos formatos y calidad.',
+      ],
+      output: [
+        'Validated and normalized data that can be combined across sources.',
+        'Datos validados y normalizados que pueden combinarse entre fuentes.',
+      ],
+      rationale: [
+        'Quality rules belong before aggregation and scoring: comparable inputs make downstream metrics meaningful.',
+        'Las reglas de calidad van antes de la agregación y el scoring: entradas comparables permiten construir métricas útiles.',
       ],
     },
     {
       id: 'gold',
       icon: 'gold',
       row: 1,
-      column: 3,
+      column: 4,
       title: ['Gold layer', 'Capa Gold'],
-      subtitle: ['Consolidated analytical data', 'Datos analíticos consolidados'],
+      subtitle: ['Ready · Metrics and evaluations', 'Listos · Métricas y evaluaciones'],
       technology: ['Analytical persistence'],
       role: [
-        'Stores the final cleaned and enriched datasets, metrics and evaluations produced by the analytical pipeline.',
-        'Guarda los datasets finales, métricas y evaluaciones que produce el pipeline después de limpiar y enriquecer los datos.',
+        'Stores the final cleaned and enriched datasets, metrics and evaluations built from Silver data by the analytical pipeline.',
+        'Guarda los datasets finales, métricas y evaluaciones construidos a partir de Silver: agrega y organiza la información para evaluar locales.',
       ],
       input: ['Consolidated analytical results.', 'Resultados analíticos consolidados.'],
       output: [
@@ -86,7 +111,7 @@ export const radixArchitecture: ArchitectureProject = {
       id: 'workers',
       icon: 'worker',
       row: 2,
-      column: 3,
+      column: 4,
       title: ['Background processing', 'Procesos en segundo plano'],
       subtitle: ['Broker, outbox, workers', 'Broker, outbox, workers'],
       technology: ['Asynchronous processing'],
@@ -111,7 +136,7 @@ export const radixArchitecture: ArchitectureProject = {
       id: 'data',
       icon: 'data',
       row: 2,
-      column: 2,
+      column: 3,
       title: ['Operational data', 'Datos operativos'],
       subtitle: ['Companies, venues, scores', 'Empresas, locales, scores'],
       technology: ['Supabase', 'PostgreSQL'],
@@ -136,7 +161,7 @@ export const radixArchitecture: ArchitectureProject = {
       id: 'api',
       icon: 'api',
       row: 2,
-      column: 1,
+      column: 2,
       title: ['Backend API', 'API de backend'],
       subtitle: ['Permissions & business rules', 'Permisos y reglas de negocio'],
       technology: ['Node.js', 'REST'],
@@ -160,7 +185,7 @@ export const radixArchitecture: ArchitectureProject = {
     {
       id: 'web',
       icon: 'web',
-      row: 3,
+      row: 2,
       column: 1,
       title: ['Web application', 'Aplicación web'],
       subtitle: ['Map, scores, reports', 'Mapa, scores, reportes'],
@@ -181,55 +206,113 @@ export const radixArchitecture: ArchitectureProject = {
     },
   ],
   edges: [
-    { id: 'sources-pipeline', from: 'sources', to: 'pipeline', kind: 'data' },
-    { id: 'pipeline-gold', from: 'pipeline', to: 'gold', kind: 'data' },
+    { id: 'sources-bronze', from: 'sources', to: 'bronze', kind: 'data' },
+    { id: 'bronze-silver', from: 'bronze', to: 'silver', kind: 'data' },
+    { id: 'silver-gold', from: 'silver', to: 'gold', kind: 'data' },
     { id: 'gold-workers', from: 'gold', to: 'workers', kind: 'async' },
     { id: 'workers-data', from: 'workers', to: 'data', kind: 'async', bidirectional: true },
     { id: 'api-data', from: 'api', to: 'data', kind: 'request', bidirectional: true },
     { id: 'web-api', from: 'web', to: 'api', kind: 'request', bidirectional: true },
   ],
   flow: {
-    title: ['Look up a location score', 'Consultar el score de un local'],
+    title: ['From raw data to a location score', 'Del dato crudo al score de un local'],
     steps: [
       {
-        title: ['Choose a location', 'Elegir un local'],
+        title: ['Sources → Bronze: ingest', 'Fuentes → Bronce: ingresar'],
         description: [
-          'The user selects a venue in the web application. The frontend requests its score for the current company.',
-          'El usuario elige un local en la aplicación web. El frontend solicita su score para la empresa actual.',
+          'Collect external data and preserve its original representation. Bronze is the starting point, before cleaning or calculation.',
+          'Ingresar datos externos y conservar su representación original. Bronce es el punto de partida, antes de limpiar o calcular.',
         ],
-        nodes: ['web', 'api'],
-        edges: ['web-api'],
+        nodes: ['sources', 'bronze'],
+        edges: ['sources-bronze'],
+        inspect: 'bronze',
+        example: {
+          before: [
+            'A provider sends a venue record with its own address and category format.',
+            'Un proveedor entrega un local con su formato de dirección y categoría.',
+          ],
+          after: [
+            'The raw record is retained in Bronze for later processing.',
+            'El registro crudo queda en Bronce para procesarlo después.',
+          ],
+        },
+      },
+      {
+        title: ['Bronze → Silver: clean and standardize', 'Bronce → Silver: limpiar y normalizar'],
+        description: [
+          'Apply data quality rules: validate required fields, normalize formats, identify duplicates and prepare compatible data across sources. Silver changes the quality and consistency of the input.',
+          'Aplicar reglas de calidad: validar campos necesarios, normalizar formatos, identificar duplicados y preparar datos compatibles entre fuentes. Silver cambia la calidad y consistencia de la entrada.',
+        ],
+        nodes: ['bronze', 'silver'],
+        edges: ['bronze-silver'],
+        inspect: 'silver',
+        example: {
+          before: [
+            'Two records describe the same venue with different address formats and categories.',
+            'Dos registros describen el mismo local con distintos formatos de dirección y categoría.',
+          ],
+          after: [
+            'A consistent venue record, with a standardized address and category, ready to combine with other data.',
+            'Un registro consistente del local, con dirección y categoría normalizadas, listo para combinar con otros datos.',
+          ],
+        },
+      },
+      {
+        title: ['Silver → Gold: aggregate and evaluate', 'Silver → Gold: agregar y evaluar'],
+        description: [
+          'Combine prepared data to build location metrics and analytical evaluations. Gold organizes information for the business: demographics, mobility, competition and points of interest become inputs for scoring.',
+          'Combinar datos preparados para construir métricas por ubicación y evaluaciones analíticas. Gold organiza la información para el negocio: demografía, movilidad, competencia y puntos de interés se convierten en entradas para el scoring.',
+        ],
+        nodes: ['silver', 'gold'],
+        edges: ['silver-gold'],
+        inspect: 'gold',
+        example: {
+          before: [
+            'Normalized venue, demographic and point-of-interest records.',
+            'Registros normalizados de locales, demografía y puntos de interés.',
+          ],
+          after: [
+            'Location-level metrics, such as nearby competitor counts, and consolidated evaluations for scoring.',
+            'Métricas por ubicación, como cantidad de competidores cercanos, y evaluaciones consolidadas para scoring.',
+          ],
+        },
+      },
+      {
+        title: ['Gold → Operational data: publish', 'Gold → Datos operativos: publicar'],
+        description: [
+          'The scoring worker imports prepared results into the operational database. Gold and the operational store serve different responsibilities; loading results does not create a fourth Medallion layer.',
+          'El worker de scoring importa los resultados preparados a la base operativa. Gold y la base operativa tienen responsabilidades distintas: publicar resultados no crea una cuarta capa Medallion.',
+        ],
+        nodes: ['gold', 'workers', 'data'],
+        edges: ['gold-workers', 'workers-data'],
+        inspect: 'workers',
+        example: {
+          before: [
+            'Analytical results consolidated in Gold.',
+            'Resultados analíticos consolidados en Gold.',
+          ],
+          after: [
+            'Operational scores and components available to the backend.',
+            'Scores operativos y sus componentes disponibles para el backend.',
+          ],
+        },
+      },
+      {
+        title: ['API → Web: consult', 'API → Web: consultar'],
+        description: [
+          'The backend validates access and reads the available score. The web displays its components and calculation date. This request consumes prepared results; it does not run Bronze → Silver → Gold each time.',
+          'El backend valida el acceso y consulta el score disponible. La web muestra sus componentes y fecha de cálculo. Esta consulta consume resultados preparados: no ejecuta Bronce → Silver → Gold cada vez.',
+        ],
+        nodes: ['data', 'api', 'web'],
+        edges: ['api-data', 'web-api'],
         inspect: 'web',
-      },
-      {
-        title: ['Validate access', 'Validar el acceso'],
-        description: [
-          'The backend verifies the session and the user’s permissions within the company before returning protected information.',
-          'El backend valida la sesión y los permisos del usuario dentro de la empresa antes de devolver información protegida.',
-        ],
-        nodes: ['api'],
-        edges: [],
-        inspect: 'api',
-      },
-      {
-        title: ['Read the prepared result', 'Consultar el resultado preparado'],
-        description: [
-          'The API reads the operational score and its components. These results were prepared by the analytical pipeline and imported separately from this lookup.',
-          'La API consulta el score operativo y sus componentes. Estos resultados fueron preparados por el pipeline analítico e importados por separado de esta consulta.',
-        ],
-        nodes: ['api', 'data'],
-        edges: ['api-data'],
-        inspect: 'data',
-      },
-      {
-        title: ['Explain the score', 'Mostrar el score'],
-        description: [
-          'The API returns the result. The web application presents the score, its components and calculation date so the user can assess the venue.',
-          'La API devuelve el resultado. La aplicación web muestra el score, sus componentes y la fecha de cálculo para que el usuario pueda evaluar el local.',
-        ],
-        nodes: ['api', 'web'],
-        edges: ['web-api'],
-        inspect: 'web',
+        example: {
+          before: ['An authorized user chooses a venue.', 'Un usuario autorizado elige un local.'],
+          after: [
+            'The web presents the score and its supporting components.',
+            'La web presenta el score y los componentes que lo explican.',
+          ],
+        },
       },
     ],
   },
