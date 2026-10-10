@@ -1,3 +1,5 @@
+import { ArchitectureView } from '../views/architecture/ArchitectureView';
+
 import { DrawingView } from '../views/drawing/DrawingView';
 
 import { BalanceExperimentView } from '../views/experiments/balance/BalanceExperimentView';
@@ -35,6 +37,7 @@ import { QueueExperimentView } from '../views/experiments/events/QueueExperiment
 import { projectIcons } from './projectIcons';
 
 import {
+  Blocks,
   Network,
   Route,
   DatabaseBackup,
@@ -218,6 +221,12 @@ export const appRegistry: Record<string, AppDefinition> = {
     launcher: true,
   },
   avatar: { title: ['Avatar lab', 'Avatar lab'], icon: Smile, view: AvatarView, launcher: true },
+  architecture: {
+    title: ['Architecture', 'Arquitectura'],
+    icon: Blocks,
+    view: ArchitectureView,
+    launcher: true,
+  },
   drawing: {
     title: ['Pixel Studio', 'Pixel Studio'],
     icon: Paintbrush,

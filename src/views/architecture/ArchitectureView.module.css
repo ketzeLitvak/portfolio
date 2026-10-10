@@ -1,0 +1,357 @@
+.root {
+  container-type: inline-size;
+  container-name: architecture;
+  padding: 25px;
+  --architecture-accent: #245b88;
+}
+:global(.dark) .root {
+  --architecture-accent: #9dc8ed;
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.header > img {
+  width: 47px;
+  height: 47px;
+  object-fit: contain;
+  padding: 5px;
+  background: #fff;
+  border-radius: 10px;
+}
+.header p {
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+.header h2 {
+  font-size: 29px;
+  margin: 0;
+  letter-spacing: -1px;
+}
+.header button {
+  margin-left: auto;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+}
+.description {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 17px 0 22px;
+  max-width: 570px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: 22px;
+  margin-top: 22px;
+  align-items: start;
+}
+.mapHint {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+.map {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px 22px;
+  isolation: isolate;
+}
+.connections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--architecture-accent);
+  z-index: -1;
+}
+.connections > path {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+  opacity: 0.3;
+  transition:
+    opacity 0.2s,
+    stroke 0.2s;
+}
+.connections > path[data-kind='async'] {
+  stroke-dasharray: 5 4;
+}
+.connections > path[data-active='true'] {
+  stroke: var(--architecture-accent);
+  stroke-width: 2;
+  opacity: 1;
+}
+.node {
+  grid-row: var(--node-row);
+  grid-column: var(--node-column);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 13px 11px;
+  min-width: 0;
+  min-height: 95px;
+  text-align: left;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+.node > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.node svg {
+  flex-shrink: 0;
+  color: var(--architecture-accent);
+}
+.node strong {
+  font-size: 11px;
+  line-height: 1.4;
+}
+.node small {
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.node[data-active='true'] {
+  background: color-mix(in srgb, var(--architecture-accent) 7%, var(--panel));
+  border-color: var(--architecture-accent);
+}
+.node[aria-pressed='true'] {
+  box-shadow: 0 0 0 1px var(--architecture-accent);
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: var(--muted);
+  font-size: 9px;
+  margin: 20px 0 0;
+}
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend i {
+  width: 18px;
+  border-top: 1px solid var(--architecture-accent);
+}
+.legend i[data-async] {
+  border-top-style: dashed;
+}
+.details {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 17px;
+  background: var(--bar);
+  font-size: 11px;
+  line-height: 1.7;
+  scroll-margin-top: 15px;
+}
+.details header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--architecture-accent);
+}
+.details h3 {
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0;
+}
+.details > p {
+  color: var(--muted);
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 12px 0;
+}
+.tags span {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 3px 6px;
+  font-size: 9px;
+  background: var(--panel);
+}
+.details dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.details dd {
+  margin: 4px 0 12px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.rationale {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+.rationale h4 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  margin: 0;
+}
+.rationale p {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+.backToMap {
+  display: none;
+}
+.source {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.6;
+  margin-top: 25px;
+  padding-top: 15px;
+}
+.flow {
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--architecture-accent) 5%, var(--panel));
+}
+.flowHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.flowHeading small {
+  font-size: 10px;
+  white-space: nowrap;
+}
+.progress {
+  display: flex;
+  gap: 5px;
+  margin: 12px 0 16px;
+}
+.progress i {
+  height: 3px;
+  flex: 1;
+  border-radius: 3px;
+  background: var(--line);
+}
+.progress i[data-done='true'] {
+  background: var(--architecture-accent);
+}
+.flow h3 {
+  font-size: 16px;
+  margin: 0 0 7px;
+}
+.flow p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0;
+}
+.flowActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  gap: 10px;
+}
+.flowActions button,
+.backToMap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 10px;
+}
+.flowActions button:last-child {
+  border-color: var(--architecture-accent);
+  color: var(--architecture-accent);
+}
+.flowActions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.backToMap {
+  display: none;
+}
+@container architecture (max-width: 700px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .details {
+    margin-top: 2px;
+  }
+}
+@media (max-width: 650px) {
+  .root {
+    padding: 22px 16px;
+  }
+}
+@container architecture (max-width: 550px) {
+  .map {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 18px;
+  }
+  .node {
+    grid-row: auto;
+    grid-column: auto;
+    min-height: 97px;
+    padding: 12px 9px;
+  }
+  .node > span {
+    align-items: start;
+  }
+  .node strong {
+    font-size: 10px;
+  }
+  .node svg {
+    width: 16px;
+    height: 16px;
+  }
+  .backToMap {
+    display: inline-flex;
+    margin-top: 15px;
+  }
+  .source {
+    font-size: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .node,
+  .connections > path {
+    transition: none;
+  }
+}

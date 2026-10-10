@@ -133,8 +133,12 @@ export function useDesktopPresenter() {
       let top = Math.min(35 + count * 24, innerHeight - 260);
       let width = 660;
       let height = 510;
-      if (id === 'drawing' || desktopExperiments.some(([experimentId]) => experimentId === id)) {
-        width = Math.min(820, innerWidth - 80);
+      if (
+        id === 'drawing' ||
+        id === 'architecture' ||
+        desktopExperiments.some(([experimentId]) => experimentId === id)
+      ) {
+        width = Math.min(id === 'architecture' ? 980 : 820, innerWidth - 80);
         height = Math.min(720, innerHeight - 150);
         left = Math.max(24, (innerWidth - width) / 2);
         top = 28;

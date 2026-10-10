@@ -86,3 +86,9 @@ Pointer capture and line interpolation support mouse, pen and touch strokes, wit
 Save up to five drawings as desktop characters, independently of the avatar collection. Sprite images trim transparent margins, retain a name and persist their dragged position. Drawings and FaceShape avatars share the same drag, keyboard movement and close-button component. Avatars retain mouse tracking and blinking. There is no wallpaper customization.
 
 Basic apps, projects and experiences fill the left columns continuously. Experiments fill from the right, leaving any partial column at the left edge of that group. Rate limiting and database indexes remain in the far-right column; explicit dragged positions are preserved.
+
+## Architecture explorer
+
+The architecture app (`#app=architecture`) starts with Radix and is also accessible from its project detail. Seven interactive components describe responsibilities, inputs, outputs and documented design decisions. A manual four-step walkthrough highlights how the web reads a prepared location score through the API and operational data store. The responsive connector map follows the actual card layout; keyboard tabs, English/Spanish content and theme variables are shared with the desktop.
+
+The map represents a simplified logical view from Radix’s architecture document V1.0 (July 2026), not an assertion about current physical deployment. The analytical Gold layer and operational store are distinguished by responsibility. Reports, alerts and score import are grouped as background processing. The explorer has separate model, presenters and scoped feature components; additional projects can supply the same data contract.

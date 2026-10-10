@@ -1,3 +1,5 @@
+import { Blocks } from 'lucide-react';
+
 import styles from './ProjectDetailView.module.css';
 
 import contentStyles from '../../styles/Content.module.css';
@@ -47,6 +49,12 @@ export function ProjectDetailView({ id, language, openApp }: ViewProps & { id: s
           <ExternalLink href={p.url}>{t('Open project', 'Abrir proyecto')}</ExternalLink>
         ) : (
           p.status && <p className={contentStyles.kicker}>{translate(language, p.status)}</p>
+        )}
+        {id === 'radix' && (
+          <OpenButton id="architecture" openApp={openApp}>
+            <Blocks size={14} />
+            {t('Explore the architecture', 'Explorar la arquitectura')}
+          </OpenButton>
         )}
         {p.extra && (
           <OpenButton id={p.extra} openApp={openApp}>
