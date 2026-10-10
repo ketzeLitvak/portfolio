@@ -15,6 +15,7 @@ export function readDirectLink(hash = location.hash): DirectLinkTarget | null {
   const entries = [...new URLSearchParams(hash.replace(/^#/, '')).entries()];
   if (entries.length !== 1) return null;
   const [kind, id] = entries[0];
+  if (kind === 'app' && id === 'architecture') return { id: 'radix' };
   if (kind === 'project' && Object.hasOwn(projects, id)) return { id };
   if (kind === 'experience' && experiences.some((entry) => entry.id === id))
     return { id: 'experience', options: { experience: id } };

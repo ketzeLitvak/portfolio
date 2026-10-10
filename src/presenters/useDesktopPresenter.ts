@@ -135,10 +135,10 @@ export function useDesktopPresenter() {
       let height = 510;
       if (
         id === 'drawing' ||
-        id === 'architecture' ||
+        id === 'radix' ||
         desktopExperiments.some(([experimentId]) => experimentId === id)
       ) {
-        width = Math.min(id === 'architecture' ? 980 : 820, innerWidth - 80);
+        width = Math.min(id === 'radix' ? 980 : 820, innerWidth - 80);
         height = Math.min(720, innerHeight - 150);
         left = Math.max(24, (innerWidth - width) / 2);
         top = 28;

@@ -1,4 +1,4 @@
-import { Map, Route, ArrowUpRight } from 'lucide-react';
+import { Map, Route } from 'lucide-react';
 
 import { radixArchitecture } from '../../models/architecture/radixArchitecture';
 
@@ -18,7 +18,7 @@ import { ArchitectureFlow } from './components/ArchitectureFlow';
 
 import styles from './ArchitectureView.module.css';
 
-export function ArchitectureView({ language, openApp }: ViewProps) {
+export function ArchitectureView({ language }: Pick<ViewProps, 'language'>) {
   const project = radixArchitecture,
     p = useArchitecturePresenter(project);
 
@@ -26,20 +26,6 @@ export function ArchitectureView({ language, openApp }: ViewProps) {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <img src={project.logo} alt="Radix" />
-        <div>
-          <p>{t('ARCHITECTURE EXPLORER', 'EXPLORADOR DE ARQUITECTURA')}</p>
-          <h2>Radix</h2>
-        </div>
-        <button
-          onClick={() => openApp('radix')}
-          aria-label={t('Open Radix project', 'Abrir proyecto Radix')}
-          title={t('Open Radix project', 'Abrir proyecto Radix')}
-        >
-          <ArrowUpRight size={18} />
-        </button>
-      </header>
       <p className={styles.description}>{translate(language, project.description)}</p>
       <Tabs
         label={t('Architecture views', 'Vistas de arquitectura')}

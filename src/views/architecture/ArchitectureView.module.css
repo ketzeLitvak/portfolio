@@ -7,41 +7,6 @@
 :global(.dark) .root {
   --architecture-accent: #9dc8ed;
 }
-.header {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-}
-.header > img {
-  width: 47px;
-  height: 47px;
-  object-fit: contain;
-  padding: 5px;
-  background: #fff;
-  border-radius: 10px;
-}
-.header p {
-  font-size: 9px;
-  letter-spacing: 1.2px;
-  color: var(--muted);
-  margin: 0 0 6px;
-}
-.header h2 {
-  font-size: 29px;
-  margin: 0;
-  letter-spacing: -1px;
-}
-.header button {
-  margin-left: auto;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  color: var(--ink);
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-}
 .description {
   font-size: 12px;
   line-height: 1.7;

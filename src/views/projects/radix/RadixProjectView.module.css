@@ -1,0 +1,9 @@
+.navigation {
+  padding: 20px 25px 0;
+}
+
+@media (max-width: 650px) {
+  .navigation {
+    padding: 20px 16px 0;
+  }
+}
